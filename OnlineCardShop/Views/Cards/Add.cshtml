@@ -1,0 +1,33 @@
+﻿@model AddCardFormModel
+
+@{
+    ViewData["Title"] = "Add card";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 col-sm-12">
+            <h2 class="text-center">Add card</h2>
+            <form method="post">
+              <div class="form-group">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" class="form-control" placeholder="Hyunjin selfie card..">
+              </div>
+              <div class="form-group">
+                <label asp-for="ImageUrl"></label>
+                <input asp-for="ImageUrl" class="form-control" placeholder="https://i.pinimg.com/564x/9d/03/63/9d0363f83b5c53999b5de94e0411c76c.jpg">
+              </div>
+              <div class="form-group">
+                <label asp-for="CategoryId"></label>
+                <select asp-for="CategoryId" class="form-control">
+                        @foreach(var category in Model.Categories)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    </select>
+              </div>
+              <input class="btn btn-primary" type="submit" value="Save"/>
+            </form>
+        </div>
+    </div>
+</div>

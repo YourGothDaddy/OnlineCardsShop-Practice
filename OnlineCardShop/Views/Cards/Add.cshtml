@@ -24,7 +24,16 @@
                         {
                             <option value="@category.Id">@category.Name</option>
                         }
-                    </select>
+                </select>
+              </div>
+              <div class="form-group">
+                <label asp-for="ConditionId"></label>
+                <select asp-for="ConditionId" class="form-control">
+                        @foreach(var condition in Model.Conditions)
+                        {
+                            <option value="@condition.Id">@condition.Name</option>
+                        }
+                </select>
               </div>
               <input class="btn btn-primary" type="submit" value="Save"/>
             </form>

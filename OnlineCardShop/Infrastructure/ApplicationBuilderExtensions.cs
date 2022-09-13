@@ -19,6 +19,7 @@
             data.Database.Migrate();
 
             SeedCategories(data);
+            SeedConditions(data);
             
             return app;
         }
@@ -34,6 +35,22 @@
             {
                 new Category{ Name = "Kpop"},
                 new Category{ Name = "Game"}
+            });
+
+            data.SaveChanges();
+        }
+
+        private static void SeedConditions(OnlineCardShopDbContext data)
+        {
+            if (data.Conditions.Any())
+            {
+                return;
+            }
+
+            data.Conditions.AddRange(new[]
+            {
+                new Condition{ Name = "Perfect"},
+                new Condition{ Name = "Used"}
             });
 
             data.SaveChanges();

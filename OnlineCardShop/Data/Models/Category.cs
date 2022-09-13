@@ -1,6 +1,5 @@
 ﻿namespace OnlineCardShop.Data.Models
 {
-    using OnlineCardShop.Data.Models.Enums;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 

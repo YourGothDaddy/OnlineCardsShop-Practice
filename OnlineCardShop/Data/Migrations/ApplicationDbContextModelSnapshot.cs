@@ -229,7 +229,7 @@ namespace OnlineCardShop.Data.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Condition")
+                    b.Property<int>("ConditionId")
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
@@ -247,6 +247,8 @@ namespace OnlineCardShop.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("ConditionId");
 
                     b.HasIndex("UserId");
 
@@ -267,6 +269,22 @@ namespace OnlineCardShop.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("OnlineCardShop.Data.Models.Condition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Conditions");
                 });
 
             modelBuilder.Entity("OnlineCardShop.Data.Models.User", b =>
@@ -362,6 +380,12 @@ namespace OnlineCardShop.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("OnlineCardShop.Data.Models.Condition", "Condition")
+                        .WithMany("Cards")
+                        .HasForeignKey("ConditionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("OnlineCardShop.Data.Models.User", "User")
                         .WithMany("OwnedCards")
                         .HasForeignKey("UserId")
@@ -370,10 +394,17 @@ namespace OnlineCardShop.Data.Migrations
 
                     b.Navigation("Category");
 
+                    b.Navigation("Condition");
+
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("OnlineCardShop.Data.Models.Category", b =>
+                {
+                    b.Navigation("Cards");
+                });
+
+            modelBuilder.Entity("OnlineCardShop.Data.Models.Condition", b =>
                 {
                     b.Navigation("Cards");
                 });

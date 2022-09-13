@@ -21,14 +21,15 @@
 
             return View(new AddCardFormModel
             {
-                Categories = this.GetCardCategories()
+                Categories = this.GetCardCategories(),
+                Conditions = this.GetCardConditions()
             });
         }
 
         [HttpPost]
         public IActionResult Add(AddCardFormModel card)
         {
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         private IEnumerable<CardCategoryViewModel> GetCardCategories()
@@ -41,6 +42,18 @@
                     Name = c.Name
                 })
                 .ToList();
+        }
+
+        private IEnumerable<CardConditionViewModel> GetCardConditions()
+        {
+            return this.data
+                 .Conditions
+                 .Select(c => new CardConditionViewModel
+                 {
+                     Id = c.Id,
+                     Name = c.Name
+                 })
+                 .ToList();
         }
     }
 }

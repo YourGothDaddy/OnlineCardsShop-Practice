@@ -1,6 +1,5 @@
 ﻿namespace OnlineCardShop.Models.Cards
 {
-    using OnlineCardShop.Data.Models.Enums;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
@@ -11,9 +10,10 @@
         [Display(Name = "Image URL")]
         public string ImageUrl { get; init; }
 
-        public Condition Condition { get; init; }
+        [Display(Name = "Condition")]
+        public int ConditionId { get; init; }
 
-        public int UserId { get; init; }
+        public IEnumerable<CardConditionViewModel> Conditions { get; set; }
 
         [Display(Name="Category")]
         public int CategoryId { get; init; }

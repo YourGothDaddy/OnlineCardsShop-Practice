@@ -2,11 +2,19 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using static OnlineCardShop.Data.DataConstants.Card;
 
     public class AddCardFormModel
     {
+        [Required(ErrorMessage = "The 'Title' field is required!")]
+        [StringLength
+            (MaxTitleLength, 
+            MinimumLength = MinTitleLength, 
+            ErrorMessage = "The title length must be between {2} and {1}.")]
         public string Title { get; init; }
 
+        [Required(ErrorMessage = "The 'Image URL' field is required!")]
+        [Url]
         [Display(Name = "Image URL")]
         public string ImageUrl { get; init; }
 

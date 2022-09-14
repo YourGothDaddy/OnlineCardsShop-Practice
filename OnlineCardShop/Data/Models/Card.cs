@@ -7,6 +7,7 @@
         public int Id { get; set; }
 
         [Required]
+        [MinLength(MinTitleLength)]
         [MaxLength(MaxTitleLength)]
         public string Title { get; set; }
 

@@ -2,7 +2,6 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using OnlineCardShop.Data;
-    using OnlineCardShop.Data.Models;
     using OnlineCardShop.Models.Cards;
     using System.Collections.Generic;
     using System.Linq;
@@ -29,6 +28,15 @@
         [HttpPost]
         public IActionResult Add(AddCardFormModel card)
         {
+            if (!ModelState.IsValid)
+            {
+                //The card object has null the categories and conditions, so I add them again
+                card.Categories = this.GetCardCategories();
+                card.Conditions = this.GetCardConditions();
+
+                return View(card);
+            }
+
             return RedirectToAction("Index", "Home");
         }
 

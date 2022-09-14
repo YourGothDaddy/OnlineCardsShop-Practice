@@ -14,7 +14,8 @@ namespace OnlineCardShop.Data
         {
         }
 
-        public DbSet<User> Users { get; set; }
+        //TODO: Uncomment when time to add users
+        //public DbSet<User> Users { get; set; }
 
         public DbSet<Card> Cards { get; set; }
 
@@ -31,12 +32,13 @@ namespace OnlineCardShop.Data
                 .HasForeignKey(c => c.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder
-                .Entity<Card>()
-                .HasOne(c => c.User)
-                .WithMany(u => u.OwnedCards)
-                .HasForeignKey(c => c.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+            //TODO: Uncomment when time to add users
+            //builder
+            //    .Entity<Card>()
+            //    .HasOne(c => c.User)
+            //    .WithMany(u => u.OwnedCards)
+            //    .HasForeignKey(c => c.UserId)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
 
 

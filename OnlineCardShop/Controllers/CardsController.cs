@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using OnlineCardShop.Data;
+    using OnlineCardShop.Data.Models;
     using OnlineCardShop.Models.Cards;
     using System.Collections.Generic;
     using System.Linq;
@@ -28,6 +29,16 @@
         [HttpPost]
         public IActionResult Add(AddCardFormModel card)
         {
+            if (!this.data.Categories.Any(c => c.Id == card.CategoryId))
+            {
+                this.ModelState.AddModelError(nameof(card.CategoryId), "Category does not exist");
+            }
+
+            if (!this.data.Conditions.Any(c => c.Id == card.ConditionId))
+            {
+                this.ModelState.AddModelError(nameof(card.ConditionId), "Condition does not exist");
+            }
+
             if (!ModelState.IsValid)
             {
                 //The card object has null the categories and conditions, so I add them again
@@ -36,6 +47,18 @@
 
                 return View(card);
             }
+
+            var cardData = new Card
+            {
+                Title = card.Title,
+                ImageUrl = card.ImageUrl,
+                CategoryId = card.CategoryId,
+                ConditionId = card.ConditionId,
+            };
+
+            this.data.Cards.Add(cardData);
+
+            this.data.SaveChanges();
 
             return RedirectToAction("Index", "Home");
         }

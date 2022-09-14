@@ -241,16 +241,11 @@ namespace OnlineCardShop.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("ConditionId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Cards");
                 });
@@ -285,40 +280,6 @@ namespace OnlineCardShop.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Conditions");
-                });
-
-            modelBuilder.Entity("OnlineCardShop.Data.Models.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Age")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("ProfileImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -386,17 +347,9 @@ namespace OnlineCardShop.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OnlineCardShop.Data.Models.User", "User")
-                        .WithMany("OwnedCards")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Category");
 
                     b.Navigation("Condition");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("OnlineCardShop.Data.Models.Category", b =>
@@ -407,11 +360,6 @@ namespace OnlineCardShop.Data.Migrations
             modelBuilder.Entity("OnlineCardShop.Data.Models.Condition", b =>
                 {
                     b.Navigation("Cards");
-                });
-
-            modelBuilder.Entity("OnlineCardShop.Data.Models.User", b =>
-                {
-                    b.Navigation("OwnedCards");
                 });
 #pragma warning restore 612, 618
         }

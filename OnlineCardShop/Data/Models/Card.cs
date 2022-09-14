@@ -18,10 +18,11 @@
 
         public Condition Condition { get; set; }
 
+        //TODO: Uncomment when time to add users
         //[Column("OwnerId")]
-        public int UserId { get; set; }
+        //public int UserId { get; set; }
 
-        public User User { get; set; }
+        //public User User { get; set; }
 
         public int CategoryId { get; set; }
 

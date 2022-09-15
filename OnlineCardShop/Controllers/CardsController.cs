@@ -16,6 +16,23 @@
             this.data = data;
         }
 
+        public IActionResult All()
+        {
+            var cards = this.data.Cards
+                .OrderByDescending(c => c.Id)
+                .Select(c => new CardListingViewModel
+                {
+                    Title = c.Title,
+                    ImageUrl = c.ImageUrl,
+                    Category = c.Category.Name,
+                    Condition = c.Condition.Name
+
+                })
+                .ToList();
+
+            return View(cards);
+        }
+
         public IActionResult Add()
         {
 

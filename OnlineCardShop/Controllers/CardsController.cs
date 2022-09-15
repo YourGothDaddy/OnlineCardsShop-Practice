@@ -16,9 +16,18 @@
             this.data = data;
         }
 
-        public IActionResult All()
+        public IActionResult All(string searchTerm)
         {
-            var cards = this.data.Cards
+            var cardsQuery = this.data.Cards.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                cardsQuery = cardsQuery
+                    .Where(c =>
+                    c.Title.ToLower().Contains(searchTerm.ToLower()));
+            }
+
+            var cards = cardsQuery
                 .OrderByDescending(c => c.Id)
                 .Select(c => new CardListingViewModel
                 {
@@ -30,7 +39,11 @@
                 })
                 .ToList();
 
-            return View(cards);
+            return View(new AllCardsQueryModel
+            {
+                Cards = cards,
+                SearchTerm = searchTerm
+            }); ;
         }
 
         public IActionResult Add()

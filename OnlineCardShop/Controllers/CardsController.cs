@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Mvc;
     using OnlineCardShop.Data;
     using OnlineCardShop.Data.Models;
+    using OnlineCardShop.Data.Models.Enums;
     using OnlineCardShop.Models.Cards;
     using System.Collections.Generic;
     using System.Linq;
@@ -16,7 +17,9 @@
             this.data = data;
         }
 
-        public IActionResult All(string searchTerm)
+        public IActionResult All(
+            CardSorting sorting,
+            string searchTerm)
         {
             var cardsQuery = this.data.Cards.AsQueryable();
 
@@ -27,8 +30,14 @@
                     c.Title.ToLower().Contains(searchTerm.ToLower()));
             }
 
+            cardsQuery = sorting switch
+            {
+                CardSorting.Condition => cardsQuery.OrderBy(c => c.Condition),
+                CardSorting.Category => cardsQuery.OrderByDescending(c => c.Category),
+                _ => cardsQuery.OrderByDescending(c => c.Condition)
+            };
+
             var cards = cardsQuery
-                .OrderByDescending(c => c.Id)
                 .Select(c => new CardListingViewModel
                 {
                     Title = c.Title,
@@ -43,7 +52,8 @@
             return View(new AllCardsQueryModel
             {
                 Cards = cards,
-                SearchTerm = searchTerm
+                SearchTerm = searchTerm,
+                Sorting = sorting
             }); ;
         }
 

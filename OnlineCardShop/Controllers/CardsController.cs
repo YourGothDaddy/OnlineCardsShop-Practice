@@ -32,6 +32,7 @@
                 .Select(c => new CardListingViewModel
                 {
                     Title = c.Title,
+                    Description = c.Description,
                     ImageUrl = c.ImageUrl,
                     Category = c.Category.Name,
                     Condition = c.Condition.Name
@@ -81,6 +82,7 @@
             var cardData = new Card
             {
                 Title = card.Title,
+                Description = card.Description,
                 ImageUrl = card.ImageUrl,
                 CategoryId = card.CategoryId,
                 ConditionId = card.ConditionId,

@@ -1,0 +1,35 @@
+﻿@model AllCardsQueryModel
+
+@{
+    ViewData["Title"] = "All cars";
+}
+
+<form>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="SearchTerm"></label>
+                <input asp-for="SearchTerm" class="form-control" placeholder="Hyunjin, Mingi, etc..">
+              </div>
+        </div>
+    </div>
+</form>
+
+<h1 class="text-center mb-md-5">All cards</h1>
+<div class="row">
+@foreach(var card in Model.Cards)
+{
+  <div class="col-md-4">
+    <div class="card" style="width: 18rem;">
+      <img class="card-img-top" src="@card.ImageUrl" alt="@card.Title">
+      <div class="card-body">
+        <h5 class="card-title">@card.Title</h5>
+        <p class="card-text" style="margin:0"><small class="text-muted">Condition: @card.Condition</small></p>
+        <p class="card-text"><small class="text-muted">Category: @card.Category</small></p>
+        <p class="card-text">@card.Description</p>
+        <a asp-controller="Cards" asp-action="Details" asp-route-id="@card.Id" class="btn btn-primary">View More</a>
+      </div>
+    </div>
+  </div>
+}
+</div>

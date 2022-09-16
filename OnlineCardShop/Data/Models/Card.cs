@@ -14,6 +14,11 @@
         [Required]
         public string ImageUrl { get; set; }
 
+        [Required]
+        [MinLength(MinDescriptionLength)]
+        [MaxLength(MaxDescriptionLength)]
+        public string Description { get; set; }
+
         public int ConditionId { get; set; }
 
         public Condition Condition { get; set; }

@@ -6,6 +6,9 @@
         {
             public const int MinTitleLength = 5;
             public const int MaxTitleLength = 50;
+
+            public const int MinDescriptionLength = 50;
+            public const int MaxDescriptionLength = 200;
         }
 
         public static class User

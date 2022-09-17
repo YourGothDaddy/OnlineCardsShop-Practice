@@ -17,27 +17,29 @@
             this.data = data;
         }
 
-        public IActionResult All(
-            CardSorting sorting,
-            string searchTerm)
+        public IActionResult All([FromQuery]AllCardsQueryModel query)
         {
             var cardsQuery = this.data.Cards.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(searchTerm))
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
                 cardsQuery = cardsQuery
                     .Where(c =>
-                    c.Title.ToLower().Contains(searchTerm.ToLower()));
+                    c.Title.ToLower().Contains(query.SearchTerm.ToLower()));
             }
 
-            cardsQuery = sorting switch
+            cardsQuery = query.Sorting switch
             {
                 CardSorting.Condition => cardsQuery.OrderBy(c => c.Condition),
                 CardSorting.Category => cardsQuery.OrderByDescending(c => c.Category),
                 _ => cardsQuery.OrderByDescending(c => c.Condition)
             };
 
+            var totalCards = cardsQuery.Count();
+
             var cards = cardsQuery
+                .Skip((query.CurrentPage - 1) * AllCardsQueryModel.CardsPerPage)
+                .Take(AllCardsQueryModel.CardsPerPage)
                 .Select(c => new CardListingViewModel
                 {
                     Title = c.Title,
@@ -49,12 +51,9 @@
                 })
                 .ToList();
 
-            return View(new AllCardsQueryModel
-            {
-                Cards = cards,
-                SearchTerm = searchTerm,
-                Sorting = sorting
-            }); ;
+            query.TotalCards = totalCards;
+            query.Cards = cards;
+            return View(query); ;
         }
 
         public IActionResult Add()

@@ -1,10 +1,11 @@
 ﻿@model AllCardsQueryModel
 
 @{
-    ViewData["Title"] = "All cars";
+    ViewData["Title"] = "All cards";
 }
 
-<form>
+
+<form method="get">
     <div class="row">
         <div class="col-md-4">
             <div class="form-group">
@@ -24,12 +25,41 @@
     </div>
 </form>
 
+@{
+    var previousPage = Model.CurrentPage - 1;
+    if(previousPage < 1)
+    {
+        previousPage = 1;
+    }
+
+    var maximumPages = Math.Ceiling((double)Model.TotalCards / AllCardsQueryModel.CardsPerPage);
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <a class="btn btn-primary @(Model.CurrentPage == 1 ? "invisible" : string.Empty)" 
+        asp-controller="Cards" 
+        asp-action="All" 
+        asp-route-currentPage="@previousPage"
+        asp-route-searchTerm="@Model.SearchTerm"
+        asp-route-sorting="@((int)Model.Sorting)"><</a>
+    </div>
+    <div class="col-md-6">
+        <a class="btn btn-primary float-right @(Model.CurrentPage == maximumPages ? "invisible" : string.Empty)"
+        asp-controller="Cards" asp-action="All"
+        asp-route-currentPage="@(Model.CurrentPage + 1)"
+        asp-route-searchTerm="@Model.SearchTerm"
+        asp-route-sorting="@((int)Model.Sorting)"
+        >></a>
+    </div>
+</div>
+
 <h1 class="text-center mb-md-5">All cards</h1>
 <div class="row">
 @foreach(var card in Model.Cards)
 {
   <div class="col-md-4">
-    <div class="card" style="width: 18rem;">
+    <div class="card" style="">
       <img class="card-img-top" src="@card.ImageUrl" alt="@card.Title">
       <div class="card-body">
         <h5 class="card-title">@card.Title</h5>

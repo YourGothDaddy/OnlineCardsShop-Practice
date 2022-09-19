@@ -1,8 +1,32 @@
-﻿@{
+﻿@model AllCategoriesViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row">
+@foreach(var category in @Model.Categories)
+{
+    @if(category.Id == 1)
+        {
+            <div class="col-6">
+                <a class="card bg-dark text-white category" asp-controller="Home" asp-action="Index">
+                  <img class="card-img category" style="height:100%" src="~/kpopCategoryImage.jpg" alt="@category.Name Card image">
+                  <div class="card-img-overlay d-flex justify-content-center align-items-center">
+                    <h5 class="card-title">@(category.Name.ToUpper())</h5>
+                  </div>
+                </a>
+            </div>
+        }
+        else{
+            <div class="col-6">
+                <a class="card bg-dark text-white category" asp-controller="Home" asp-action="Index">
+                  <img class="card-img category" style="height:100%" src="~/gameCategoryImage.jpg" alt="@category.Name Card image">
+                  <div class="card-img-overlay d-flex justify-content-center align-items-center">
+                    <h5 class="card-title">@(category.Name.ToUpper())</h5>
+                  </div>
+                </a>
+            </div>
+        }
+    }
 </div>

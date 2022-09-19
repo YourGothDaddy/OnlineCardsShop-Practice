@@ -17,7 +17,7 @@
             this.data = data;
         }
 
-        public IActionResult All([FromQuery]AllCardsQueryModel query)
+        public IActionResult All([FromQuery]AllCardsQueryModel query, [FromQuery]int currentPage)
         {
             var cardsQuery = this.data.Cards.AsQueryable();
 
@@ -53,6 +53,14 @@
 
             query.TotalCards = totalCards;
             query.Cards = cards;
+            if(currentPage == 0)
+            {
+                ViewBag.CurrentPage = 1;
+            }
+            else
+            {
+                ViewBag.CurrentPage = currentPage;
+            }
             return View(query); ;
         }
 

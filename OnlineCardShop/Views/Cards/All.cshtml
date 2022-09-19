@@ -63,7 +63,7 @@
                         for(double currentPage = totalPages - maxShownPages + 1; currentPage <= maxCurrentlyShownPage; currentPage++)
                         {
                             <li class="page-item">
-                              <a class="page-link" 
+                              <a class="page-link @(Model.CurrentPage == currentPage ? "bg-warning" : string.Empty)" 
                               asp-controller="Cards" 
                               asp-action="All" 
                               asp-route-currentPage="@currentPage" 
@@ -78,7 +78,7 @@
                         @for(int currentPage = ViewBag.CurrentPage; currentPage <= maxCurrentlyShownPage; currentPage++)
                         {
                             <li class="page-item">
-                              <a class="page-link" 
+                              <a class="page-link @(Model.CurrentPage == currentPage ? "bg-warning" : string.Empty)" 
                               asp-controller="Cards" 
                               asp-action="All" 
                               asp-route-currentPage="@currentPage" 
@@ -95,7 +95,7 @@
                     @for(int currentPage = ViewBag.CurrentPage; currentPage <= maxCurrentlyShownPage; currentPage++)
                     {
                         <li class="page-item">
-                          <a class="page-link" 
+                          <a class="page-link  @(Model.CurrentPage == currentPage ? "bg-warning" : string.Empty)" 
                           asp-controller="Cards" 
                           asp-action="All" 
                           asp-route-currentPage="@currentPage" 
@@ -110,7 +110,7 @@
                 @for(int currentPage = 1; currentPage <= totalPages; currentPage++)
                 {
                     <li class="page-item">
-                        <a class="page-link" 
+                        <a class="page-link @(Model.CurrentPage == currentPage ? "bg-warning" : string.Empty)" 
                          asp-controller="Cards" 
                          asp-action="All" 
                          asp-route-currentPage="@currentPage" 

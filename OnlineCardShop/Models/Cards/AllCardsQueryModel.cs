@@ -13,6 +13,8 @@
 
         public CardSorting Sorting { get; init; }
 
+        public SortingOrder Order { get; init; }
+
         public int CurrentPage { get; set; } = 1;
 
         public int TotalCards { get; set; }

@@ -53,8 +53,14 @@
             cardsQuery = query.Sorting switch
             {
                 CardSorting.Condition => cardsQuery.OrderBy(c => c.Condition),
-                CardSorting.Category => cardsQuery.OrderByDescending(c => c.Category),
                 _ => cardsQuery.OrderByDescending(c => c.Condition)
+            };
+
+            cardsQuery = query.Order switch
+            {
+                SortingOrder.BestToWorse => cardsQuery.OrderBy(c => c.Condition),
+                SortingOrder.WorseToBest => cardsQuery.OrderByDescending(c => c.Condition),
+                _ => cardsQuery.OrderBy(c => c.Condition)
             };
 
             var totalCards = cardsQuery.Count();

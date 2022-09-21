@@ -10,20 +10,20 @@
     @if(category.Id == 1)
         {
             <div class="col-6">
-                <a class="card bg-dark text-white category" asp-controller="Home" asp-action="Kpop">
+                <a class="card bg-dark text-white category" asp-controller="Cards" asp-action="Kpop">
                   <img class="card-img category" style="height:100%" src="~/kpopCategoryImage.jpg" alt="@category.Name Card image">
                   <div class="card-img-overlay d-flex justify-content-center align-items-center">
-                    <h5 class="card-title">@(category.Name.ToUpper())</h5>
+                    <h5 class="card-title"  style="background-color:black">@(category.Name.ToUpper())</h5>
                   </div>
                 </a>
             </div>
         }
         else{
             <div class="col-6">
-                <a class="card bg-dark text-white category" asp-controller="Home" asp-action="Kpop">
+                <a class="card bg-dark text-white category" asp-controller="Cards" asp-action="Kpop">
                   <img class="card-img category" style="height:100%" src="~/gameCategoryImage.jpg" alt="@category.Name Card image">
                   <div class="card-img-overlay d-flex justify-content-center align-items-center">
-                    <h5 class="card-title">@(category.Name.ToUpper())</h5>
+                    <h5 class="card-title" style="background-color:black">@(category.Name.ToUpper())</h5>
                   </div>
                 </a>
             </div>

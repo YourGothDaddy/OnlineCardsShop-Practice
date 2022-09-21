@@ -17,6 +17,61 @@
             this.data = data;
         }
 
+        public IActionResult Kpop([FromQuery] AllCardsQueryModel query, [FromQuery] int currentPage)
+        {
+            var cardsQuery = this.data.Cards
+                .Where(c => c.CategoryId == 1)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            {
+                cardsQuery = cardsQuery
+                    .Where(c =>
+                    c.Title.ToLower().Contains(query.SearchTerm.ToLower()));
+            }
+
+            cardsQuery = query.Sorting switch
+            {
+                CardSorting.Condition => cardsQuery.OrderBy(c => c.Condition),
+                _ => cardsQuery.OrderByDescending(c => c.Condition)
+            };
+
+            cardsQuery = query.Order switch
+            {
+                SortingOrder.BestToWorse => cardsQuery.OrderBy(c => c.Condition),
+                SortingOrder.WorseToBest => cardsQuery.OrderByDescending(c => c.Condition),
+                _ => cardsQuery.OrderBy(c => c.Condition)
+            };
+
+            var totalCards = cardsQuery.Count();
+
+            var cards = cardsQuery
+                .Skip((query.CurrentPage - 1) * AllCardsQueryModel.CardsPerPage)
+                .Take(AllCardsQueryModel.CardsPerPage)
+                .Select(c => new CardListingViewModel
+                {
+                    Title = c.Title,
+                    Description = c.Description,
+                    ImageUrl = c.ImageUrl,
+                    Category = c.Category.Name,
+                    Condition = c.Condition.Name
+
+                })
+                .ToList();
+
+            query.TotalCards = totalCards;
+            query.Cards = cards;
+            if (currentPage == 0)
+            {
+                ViewBag.CurrentPage = 1;
+            }
+            else
+            {
+                ViewBag.CurrentPage = currentPage;
+            }
+            return View(query); ;
+        }
+
         public IActionResult All([FromQuery]AllCardsQueryModel query, [FromQuery]int currentPage)
         {
             var cardsQuery = this.data.Cards.AsQueryable();

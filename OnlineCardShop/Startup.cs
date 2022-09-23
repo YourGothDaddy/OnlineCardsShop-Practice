@@ -9,6 +9,8 @@ namespace OnlineCardShop
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using OnlineCardShop.Data;
+    using OnlineCardShop.Services.Cards;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -29,6 +31,8 @@ namespace OnlineCardShop
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<OnlineCardShopDbContext>();
             services.AddControllersWithViews();
+
+            services.AddTransient<ICardService, CardService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

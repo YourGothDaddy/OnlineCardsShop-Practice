@@ -22,48 +22,27 @@
 
         public IActionResult Game([FromQuery] AllCardsQueryModel query, [FromQuery] int currentPage)
         {
-            var cardsQuery = this.data.Cards
-                .Where(c => c.CategoryId == 2)
-                .AsQueryable();
+            var queryResult = this.cards.All(
+                query.SearchTerm,
+                query.Sorting,
+                query.CurrentPage,
+                AllCardsQueryModel.CardsPerPage,
+                2,
+                query.Order);
 
-            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
-            {
-                cardsQuery = cardsQuery
-                    .Where(c =>
-                    c.Title.ToLower().Contains(query.SearchTerm.ToLower()));
-            }
-
-            cardsQuery = query.Sorting switch
-            {
-                CardSorting.Condition => cardsQuery.OrderBy(c => c.Condition),
-                _ => cardsQuery.OrderByDescending(c => c.Condition)
-            };
-
-            cardsQuery = query.Order switch
-            {
-                SortingOrder.BestToWorse => cardsQuery.OrderBy(c => c.Condition),
-                SortingOrder.WorseToBest => cardsQuery.OrderByDescending(c => c.Condition),
-                _ => cardsQuery.OrderBy(c => c.Condition)
-            };
-
-            var totalCards = cardsQuery.Count();
-
-            var cards = cardsQuery
-                .Skip((query.CurrentPage - 1) * AllCardsQueryModel.CardsPerPage)
-                .Take(AllCardsQueryModel.CardsPerPage)
+            query.TotalCards = queryResult.TotalCards;
+            var cardsToAdd = queryResult.Cards
                 .Select(c => new CardListingViewModel
                 {
+                    Id = c.Id,
                     Title = c.Title,
                     Description = c.Description,
                     ImageUrl = c.ImageUrl,
-                    Category = c.Category.Name,
-                    Condition = c.Condition.Name
-
+                    Category = c.Category,
+                    Condition = c.Condition
                 })
                 .ToList();
-
-            query.TotalCards = totalCards;
-            query.Cards = cards;
+            query.Cards = cardsToAdd;
             if (currentPage == 0)
             {
                 ViewBag.CurrentPage = 1;

@@ -31,9 +31,11 @@
                         .Where(c => c.CategoryId == 1)
                         .AsQueryable();
                 }
-                else//TODO: CHANGE WHEN IMPLEMENTING SERVICES FOR GAME CARDS
+                else if(categoryId == 2)//Game
                 {
-                    cardsQuery = this.data.Cards.AsQueryable();
+                    cardsQuery = this.data.Cards
+                        .Where(c => c.CategoryId == 2)
+                        .AsQueryable();
                 }
             }
             else
@@ -50,31 +52,19 @@
 
             if (categoryId != null)
             {
-                if (categoryId == 1)//Kpop
+                cardsQuery = sorting switch
                 {
-                    cardsQuery = sorting switch
-                    {
-                        CardSorting.Condition => cardsQuery.OrderBy(c => c.Condition),
-                        _ => cardsQuery.OrderByDescending(c => c.Condition)
-                    };
+                    CardSorting.Condition => cardsQuery.OrderBy(c => c.Condition),
+                    _ => cardsQuery.OrderByDescending(c => c.Condition)
+                };
 
-                    if (order != null)
-                    {
-                        cardsQuery = order switch
-                        {
-                            SortingOrder.BestToWorse => cardsQuery.OrderBy(c => c.Condition),
-                            SortingOrder.WorseToBest => cardsQuery.OrderByDescending(c => c.Condition),
-                            _ => cardsQuery.OrderBy(c => c.Condition)
-                        };
-                    }
-                }
-                else//TODO: CHANGE WHEN IMPLEMENTING SERVICES FOR GAME CARDS
+                if (order != null)
                 {
-                    cardsQuery = sorting switch
+                    cardsQuery = order switch
                     {
-                        CardSorting.Condition => cardsQuery.OrderBy(c => c.Condition),
-                        CardSorting.Category => cardsQuery.OrderByDescending(c => c.Category),
-                        _ => cardsQuery.OrderByDescending(c => c.Condition)
+                        SortingOrder.BestToWorse => cardsQuery.OrderBy(c => c.Condition),
+                        SortingOrder.WorseToBest => cardsQuery.OrderByDescending(c => c.Condition),
+                        _ => cardsQuery.OrderBy(c => c.Condition)
                     };
                 }
             }

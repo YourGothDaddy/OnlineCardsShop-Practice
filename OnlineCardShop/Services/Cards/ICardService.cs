@@ -8,6 +8,8 @@
             string searchTerm,
             CardSorting sorting,
             int currentPage,
-            int cardsPerPage);
+            int cardsPerPage,
+            int? categoryId,
+            SortingOrder? order);
     }
 }

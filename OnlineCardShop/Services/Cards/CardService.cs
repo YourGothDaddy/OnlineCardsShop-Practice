@@ -1,6 +1,7 @@
 ﻿namespace OnlineCardShop.Services.Cards
 {
     using OnlineCardShop.Data;
+    using OnlineCardShop.Data.Models;
     using OnlineCardShop.Data.Models.Enums;
     using System.Linq;
 
@@ -17,9 +18,28 @@
             string searchTerm, 
             CardSorting sorting, 
             int currentPage,
-            int cardsPerPage)
+            int cardsPerPage,
+            int? categoryId,
+            SortingOrder? order)
         {
             var cardsQuery = this.data.Cards.AsQueryable();
+            if (categoryId != null)
+            {
+                if (categoryId == 1)//Kpop
+                {
+                    cardsQuery = this.data.Cards
+                        .Where(c => c.CategoryId == 1)
+                        .AsQueryable();
+                }
+                else//TODO: CHANGE WHEN IMPLEMENTING SERVICES FOR GAME CARDS
+                {
+                    cardsQuery = this.data.Cards.AsQueryable();
+                }
+            }
+            else
+            {
+                cardsQuery = this.data.Cards.AsQueryable();
+            }
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
@@ -28,12 +48,45 @@
                     c.Title.ToLower().Contains(searchTerm.ToLower()));
             }
 
-            cardsQuery = sorting switch
+            if (categoryId != null)
             {
-                CardSorting.Condition => cardsQuery.OrderBy(c => c.Condition),
-                CardSorting.Category => cardsQuery.OrderByDescending(c => c.Category),
-                _ => cardsQuery.OrderByDescending(c => c.Condition)
-            };
+                if (categoryId == 1)//Kpop
+                {
+                    cardsQuery = sorting switch
+                    {
+                        CardSorting.Condition => cardsQuery.OrderBy(c => c.Condition),
+                        _ => cardsQuery.OrderByDescending(c => c.Condition)
+                    };
+
+                    if (order != null)
+                    {
+                        cardsQuery = order switch
+                        {
+                            SortingOrder.BestToWorse => cardsQuery.OrderBy(c => c.Condition),
+                            SortingOrder.WorseToBest => cardsQuery.OrderByDescending(c => c.Condition),
+                            _ => cardsQuery.OrderBy(c => c.Condition)
+                        };
+                    }
+                }
+                else//TODO: CHANGE WHEN IMPLEMENTING SERVICES FOR GAME CARDS
+                {
+                    cardsQuery = sorting switch
+                    {
+                        CardSorting.Condition => cardsQuery.OrderBy(c => c.Condition),
+                        CardSorting.Category => cardsQuery.OrderByDescending(c => c.Category),
+                        _ => cardsQuery.OrderByDescending(c => c.Condition)
+                    };
+                }
+            }
+            else
+            {
+                cardsQuery = sorting switch
+                {
+                    CardSorting.Condition => cardsQuery.OrderBy(c => c.Condition),
+                    CardSorting.Category => cardsQuery.OrderByDescending(c => c.Category),
+                    _ => cardsQuery.OrderByDescending(c => c.Condition)
+                };
+            }
 
             var totalCards = cardsQuery.Count();
 

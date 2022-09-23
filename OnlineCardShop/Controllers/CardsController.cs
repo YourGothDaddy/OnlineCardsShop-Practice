@@ -58,7 +58,8 @@
                     Description = c.Description,
                     ImageUrl = c.ImageUrl,
                     Category = c.Category,
-                    Condition = c.Condition
+                    Condition = c.Condition,
+                    Price = c.Price
                 })
                 .ToList();
             query.Cards = cardsToAdd;
@@ -127,7 +128,8 @@
                     Description = c.Description,
                     ImageUrl = c.ImageUrl,
                     Category = c.Category,
-                    Condition = c.Condition
+                    Condition = c.Condition,
+                    Price = c.Price
                 })
                 .ToList();
             query.Cards = cardsToAdd;

@@ -135,9 +135,10 @@
             var queryResult = this.cards.All(
                 query.SearchTerm,
                 query.Sorting,
-                currentPage, AllCardsQueryModel.CardsPerPage);
+                query.CurrentPage, 
+                AllCardsQueryModel.CardsPerPage);
 
-            query.TotalCards = queryResult.Cards.Count();
+            query.TotalCards = queryResult.TotalCards;
             var cardsToAdd = queryResult.Cards
                 .Select(c => new CardListingViewModel
                 {

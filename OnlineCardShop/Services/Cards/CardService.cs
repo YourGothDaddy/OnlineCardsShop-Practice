@@ -53,6 +53,7 @@
 
             return new CardQueryServiceModel
             {
+                TotalCards = cardsQuery.Count(),
                 Cards = cards
             };
         }

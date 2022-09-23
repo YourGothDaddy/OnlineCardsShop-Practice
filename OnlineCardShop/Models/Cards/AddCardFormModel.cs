@@ -13,6 +13,9 @@
             ErrorMessage = "The title length must be between {2} and {1}.")]
         public string Title { get; init; }
 
+        [Range(double.MinValue, double.MaxValue)]
+        public double Price { get; init; }
+
         [Required(ErrorMessage = "The 'Description' field is required!")]
         public string Description { get; init; }
 

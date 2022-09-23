@@ -11,6 +11,9 @@
         [MaxLength(MaxTitleLength)]
         public string Title { get; set; }
 
+        [Range(double.MinValue, double.MaxValue)]
+        public double Price { get; set; }
+
         [Required]
         public string ImageUrl { get; set; }
 

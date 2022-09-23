@@ -89,7 +89,8 @@
                     Description = c.Description,
                     ImageUrl = c.ImageUrl,
                     Category = c.Category.Name,
-                    Condition = c.Condition.Name
+                    Condition = c.Condition.Name,
+                    Price = c.Price
 
                 })
                 .ToList();

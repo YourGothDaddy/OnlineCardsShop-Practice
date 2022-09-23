@@ -73,7 +73,8 @@
                     Description = c.Description,
                     ImageUrl = c.ImageUrl,
                     Category = c.Category,
-                    Condition = c.Condition
+                    Condition = c.Condition,
+                    Price = c.Price
                 })
                 .ToList();
             query.Cards = cardsToAdd;
@@ -124,7 +125,6 @@
 
         public IActionResult Add()
         {
-
             return View(new AddCardFormModel
             {
                 Categories = this.GetCardCategories(),
@@ -161,6 +161,7 @@
                 ImageUrl = card.ImageUrl,
                 CategoryId = card.CategoryId,
                 ConditionId = card.ConditionId,
+                Price = card.Price
             };
 
             this.data.Cards.Add(cardData);

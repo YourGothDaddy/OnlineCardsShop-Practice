@@ -12,8 +12,8 @@
 
         public string ImageUrl { get; set; }
 
-        public string Category { get; set; }
+        public string Category { get; init; }
 
-        public string Condition { get; set; }
+        public string Condition { get; init; }
     }
 }

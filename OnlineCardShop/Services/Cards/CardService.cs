@@ -85,6 +85,7 @@
                 .Take(cardsPerPage)
                 .Select(c => new CardServiceModel
                 {
+                    Id = c.Id,
                     Title = c.Title,
                     Description = c.Description,
                     ImageUrl = c.ImageUrl,

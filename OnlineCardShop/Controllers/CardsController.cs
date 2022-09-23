@@ -20,6 +20,25 @@
             this.data = data;
         }
 
+        public IActionResult Details([FromRoute] CardListingViewModel query)
+        {
+            var card = this.data.Cards
+                .Where(c => c.Id == query.Id)
+                .Select(c => new CardListingViewModel
+            {
+                Id = c.Id,
+                Title = c.Title,
+                Price = c.Price,
+                Description = c.Description,
+                ImageUrl = c.ImageUrl,
+                Category = c.Category.Name,
+                Condition = c.Condition.Name
+            })
+                .FirstOrDefault();
+
+            return View(card);
+        }
+
         public IActionResult Game([FromQuery] AllCardsQueryModel query, [FromQuery] int currentPage)
         {
             var queryResult = this.cards.All(

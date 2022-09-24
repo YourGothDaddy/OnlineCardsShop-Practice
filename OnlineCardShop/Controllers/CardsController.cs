@@ -1,9 +1,11 @@
 ﻿namespace OnlineCardShop.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using OnlineCardShop.Data;
     using OnlineCardShop.Data.Models;
     using OnlineCardShop.Data.Models.Enums;
+    using OnlineCardShop.Infrastructure;
     using OnlineCardShop.Models.Cards;
     using OnlineCardShop.Services.Cards;
     using System.Collections.Generic;
@@ -144,8 +146,14 @@
             return View(query); ;
         }
 
+        [Authorize]
         public IActionResult Add()
         {
+            if (!this.UserIsDealer())
+            {
+                return RedirectToAction(nameof(DealersController.Create), "Dealers");
+            }
+
             return View(new AddCardFormModel
             {
                 Categories = this.GetCardCategories(),
@@ -154,8 +162,14 @@
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Add(AddCardFormModel card)
         {
+            if (!this.UserIsDealer())
+            {
+                return RedirectToAction(nameof(DealersController.Create), "Dealers");
+            }
+
             if (!this.data.Categories.Any(c => c.Id == card.CategoryId))
             {
                 this.ModelState.AddModelError(nameof(card.CategoryId), "Category does not exist");
@@ -190,6 +204,13 @@
             this.data.SaveChanges();
 
             return RedirectToAction("Index", "Home");
+        }
+
+        private bool UserIsDealer()
+        {
+            return this.data
+                .Dealers
+                .Any(d => d.UserId == this.User.GetId());
         }
 
         private IEnumerable<CardCategoryViewModel> GetCardCategories()

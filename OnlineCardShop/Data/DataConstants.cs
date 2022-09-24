@@ -21,6 +21,7 @@
         {
             public const int MinNameLength = 2;
             public const int MaxNameLength = 20;
+            public const int PhoneNumberMinLength = 6;
             public const int PhoneNumberMaxLength = 20;
         }
     }

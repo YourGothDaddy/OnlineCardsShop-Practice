@@ -22,6 +22,36 @@
             this.data = data;
         }
 
+        [Authorize]
+        public IActionResult Mine()
+        {
+            var dealerId = this.data
+                .Dealers
+                .Where(d => d.UserId == this.User.GetId())
+                .Select(d => d.Id)
+                .FirstOrDefault();
+
+            var cards = this.data
+                .Cards
+                .Where(c => c.DealerId == dealerId)
+                .Select(c => new CardListingViewModel
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    Price = c.Price,
+                    Description = c.Description,
+                    ImageUrl = c.ImageUrl,
+                    Category = c.Category.Name,
+                    Condition = c.Condition.Name
+                })
+                .ToList();
+
+            MyCardsListingViewModel cardsToModel = new MyCardsListingViewModel();
+            cardsToModel.Cards = cards;
+
+            return View(cardsToModel);
+        }
+
         public IActionResult Details([FromRoute] CardListingViewModel query)
         {
             var card = this.data.Cards

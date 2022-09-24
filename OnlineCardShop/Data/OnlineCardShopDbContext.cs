@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OnlineCardShop.Data.Models;
 using System;
@@ -23,6 +24,7 @@ namespace OnlineCardShop.Data
 
         public DbSet<Condition> Conditions { get; set; }
 
+        public DbSet<Dealer> Dealers { get; init; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder
@@ -30,6 +32,20 @@ namespace OnlineCardShop.Data
                 .HasOne(c => c.Category)
                 .WithMany(c => c.Cards)
                 .HasForeignKey(c => c.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Card>()
+                .HasOne(c => c.Dealer)
+                .WithMany(d => d.Cards)
+                .HasForeignKey(c => c.DealerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Dealer>()
+                .HasOne<IdentityUser>()
+                .WithOne()
+                .HasForeignKey<Dealer>(d => d.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //TODO: Uncomment when time to add users

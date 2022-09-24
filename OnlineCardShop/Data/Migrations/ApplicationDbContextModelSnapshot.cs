@@ -232,6 +232,9 @@ namespace OnlineCardShop.Data.Migrations
                     b.Property<int>("ConditionId")
                         .HasColumnType("int");
 
+                    b.Property<int>("DealerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -254,6 +257,8 @@ namespace OnlineCardShop.Data.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("ConditionId");
+
+                    b.HasIndex("DealerId");
 
                     b.ToTable("Cards");
                 });
@@ -288,6 +293,40 @@ namespace OnlineCardShop.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Conditions");
+                });
+
+            modelBuilder.Entity("OnlineCardShop.Data.Models.Dealer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("Dealers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -355,9 +394,32 @@ namespace OnlineCardShop.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("OnlineCardShop.Data.Models.Dealer", "Dealer")
+                        .WithMany("Cards")
+                        .HasForeignKey("DealerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Category");
 
                     b.Navigation("Condition");
+
+                    b.Navigation("Dealer");
+                });
+
+            modelBuilder.Entity("OnlineCardShop.Data.Models.Dealer", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithOne()
+                        .HasForeignKey("OnlineCardShop.Data.Models.Dealer", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("OnlineCardShop.Data.Models.Category", b =>
@@ -366,6 +428,11 @@ namespace OnlineCardShop.Data.Migrations
                 });
 
             modelBuilder.Entity("OnlineCardShop.Data.Models.Condition", b =>
+                {
+                    b.Navigation("Cards");
+                });
+
+            modelBuilder.Entity("OnlineCardShop.Data.Models.Dealer", b =>
                 {
                     b.Navigation("Cards");
                 });

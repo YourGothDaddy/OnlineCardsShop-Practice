@@ -16,5 +16,12 @@
             public const int MinNameLength = 2;
             public const int MaxNameLength = 20;
         }
+
+        public static class Dealer
+        {
+            public const int MinNameLength = 2;
+            public const int MaxNameLength = 20;
+            public const int PhoneNumberMaxLength = 20;
+        }
     }
 }

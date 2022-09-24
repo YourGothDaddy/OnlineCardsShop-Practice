@@ -165,7 +165,13 @@
         [Authorize]
         public IActionResult Add(AddCardFormModel card)
         {
-            if (!this.UserIsDealer())
+            var dealerId = this.data
+                .Dealers
+                .Where(d => d.UserId == this.User.GetId())
+                .Select(d => d.Id)
+                .FirstOrDefault();
+
+            if (dealerId == 0)
             {
                 return RedirectToAction(nameof(DealersController.Create), "Dealers");
             }
@@ -196,7 +202,8 @@
                 ImageUrl = card.ImageUrl,
                 CategoryId = card.CategoryId,
                 ConditionId = card.ConditionId,
-                Price = card.Price
+                Price = card.Price,
+                DealerId = dealerId
             };
 
             this.data.Cards.Add(cardData);

@@ -134,7 +134,7 @@
               <a class="
               page-link 
               float-right 
-              @(Model.CurrentPage == totalPages ? "invisible" : string.Empty)"
+              @(Model.CurrentPage == totalPages || totalPages == 0 ? "invisible" : string.Empty)"
               asp-controller="Cards" 
               asp-action="Game"
               asp-route-currentPage="@(Model.CurrentPage + 1)"

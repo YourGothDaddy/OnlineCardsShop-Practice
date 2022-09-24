@@ -139,6 +139,10 @@
     </div>
 </div>
 
+@if (!Model.Cards.Any())
+{
+    <h2 class="text-center">No cards found!</h2>
+}else{
 <h1 class="text-center mb-md-5">All Cards</h1>
 <div class="row">
 @foreach(var card in Model.Cards)
@@ -158,3 +162,4 @@
   </div>
 }
 </div>
+}

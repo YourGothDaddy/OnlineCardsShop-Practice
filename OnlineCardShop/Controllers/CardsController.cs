@@ -47,29 +47,10 @@
                 2,
                 query.Order);
 
-            query.TotalCards = queryResult.TotalCards;
-            var cardsToAdd = queryResult.Cards
-                .Select(c => new CardListingViewModel
-                {
-                    Id = c.Id,
-                    Title = c.Title,
-                    Description = c.Description,
-                    ImageUrl = c.ImageUrl,
-                    Category = c.Category,
-                    Condition = c.Condition,
-                    Price = c.Price
-                })
-                .ToList();
-            query.Cards = cardsToAdd;
-            if (currentPage == 0)
-            {
-                ViewBag.CurrentPage = 1;
-            }
-            else
-            {
-                ViewBag.CurrentPage = currentPage;
-            }
-            return View(query); ;
+            CardsToAddOnPage(query, queryResult);
+            SelectCurrentPage(currentPage);
+
+            return View(query);
         }
 
         public IActionResult Kpop([FromQuery] AllCardsQueryModel query, [FromQuery] int currentPage)
@@ -82,28 +63,8 @@
                 1,
                 query.Order);
 
-            query.TotalCards = queryResult.TotalCards;
-            var cardsToAdd = queryResult.Cards
-                .Select(c => new CardListingViewModel
-                {
-                    Id = c.Id,
-                    Title = c.Title,
-                    Description = c.Description,
-                    ImageUrl = c.ImageUrl,
-                    Category = c.Category,
-                    Condition = c.Condition,
-                    Price = c.Price
-                })
-                .ToList();
-            query.Cards = cardsToAdd;
-            if (currentPage == 0)
-            {
-                ViewBag.CurrentPage = 1;
-            }
-            else
-            {
-                ViewBag.CurrentPage = currentPage;
-            }
+            CardsToAddOnPage(query, queryResult);
+            SelectCurrentPage(currentPage);
             return View(query); ;
         }
 
@@ -117,30 +78,9 @@
                 null,
                 null);
 
-            var cardsToAdd = queryResult.Cards
-                .Select(c => new CardListingViewModel
-                {
-                    Id = c.Id,
-                    Title = c.Title,
-                    Description = c.Description,
-                    ImageUrl = c.ImageUrl,
-                    Category = c.Category,
-                    Condition = c.Condition,
-                    Price = c.Price
-                })
-                .ToList();
+            CardsToAddOnPage(query, queryResult);
+            SelectCurrentPage(currentPage);
 
-            query.TotalCards = queryResult.TotalCards;
-            query.Cards = cardsToAdd;
-
-            if(currentPage == 0)
-            {
-                ViewBag.CurrentPage = 1;
-            }
-            else
-            {
-                ViewBag.CurrentPage = currentPage;
-            }
             return View(query); ;
         }
 
@@ -216,6 +156,37 @@
             return this.data
                 .Dealers
                 .Any(d => d.UserId == this.User.GetId());
+        }
+
+        private void SelectCurrentPage(int currentPage)
+        {
+            if (currentPage == 0)
+            {
+                ViewBag.CurrentPage = 1;
+            }
+            else
+            {
+                ViewBag.CurrentPage = currentPage;
+            }
+        }
+
+        private static void CardsToAddOnPage(AllCardsQueryModel query, CardQueryServiceModel queryResult)
+        {
+            var cardsToAdd = queryResult.Cards
+                            .Select(c => new CardListingViewModel
+                            {
+                                Id = c.Id,
+                                Title = c.Title,
+                                Description = c.Description,
+                                ImageUrl = c.ImageUrl,
+                                Category = c.Category,
+                                Condition = c.Condition,
+                                Price = c.Price
+                            })
+                            .ToList();
+
+            query.TotalCards = queryResult.TotalCards;
+            query.Cards = cardsToAdd;
         }
 
         private IEnumerable<CardCategoryViewModel> GetCardCategories()

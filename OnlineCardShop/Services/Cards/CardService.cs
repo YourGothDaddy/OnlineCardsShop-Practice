@@ -3,6 +3,7 @@
     using OnlineCardShop.Data;
     using OnlineCardShop.Data.Models;
     using OnlineCardShop.Data.Models.Enums;
+    using System.Collections.Generic;
     using System.Linq;
 
     public class CardService : ICardService
@@ -101,6 +102,35 @@
                 TotalCards = cardsQuery.Count(),
                 Cards = cards
             };
+        }
+
+        public MyCardsServiceModel ByUser(string userId)
+        {
+            var dealerId = this.data
+                .Dealers
+                .Where(d => d.UserId == userId)
+                .Select(d => d.Id)
+                .FirstOrDefault();
+
+            var cards = this.data
+                .Cards
+                .Where(c => c.DealerId == dealerId)
+                .Select(c => new CardServiceModel
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    Price = c.Price,
+                    Description = c.Description,
+                    ImageUrl = c.ImageUrl,
+                    Category = c.Category.Name,
+                    Condition = c.Condition.Name
+                })
+                .ToList();
+
+            var cardsResult = new MyCardsServiceModel();
+            cardsResult.Cards = cards;
+
+            return cardsResult;
         }
     }
 }

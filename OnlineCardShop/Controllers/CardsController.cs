@@ -25,31 +25,9 @@
         [Authorize]
         public IActionResult Mine()
         {
-            var dealerId = this.data
-                .Dealers
-                .Where(d => d.UserId == this.User.GetId())
-                .Select(d => d.Id)
-                .FirstOrDefault();
+            var myCards = this.cards.ByUser(this.User.GetId());
 
-            var cards = this.data
-                .Cards
-                .Where(c => c.DealerId == dealerId)
-                .Select(c => new CardListingViewModel
-                {
-                    Id = c.Id,
-                    Title = c.Title,
-                    Price = c.Price,
-                    Description = c.Description,
-                    ImageUrl = c.ImageUrl,
-                    Category = c.Category.Name,
-                    Condition = c.Condition.Name
-                })
-                .ToList();
-
-            MyCardsListingViewModel cardsToModel = new MyCardsListingViewModel();
-            cardsToModel.Cards = cards;
-
-            return View(cardsToModel);
+            return View(myCards);
         }
 
         public IActionResult Details([FromRoute] CardListingViewModel query)
@@ -151,7 +129,6 @@
                 null,
                 null);
 
-            query.TotalCards = queryResult.TotalCards;
             var cardsToAdd = queryResult.Cards
                 .Select(c => new CardListingViewModel
                 {
@@ -164,7 +141,10 @@
                     Price = c.Price
                 })
                 .ToList();
+
+            query.TotalCards = queryResult.TotalCards;
             query.Cards = cardsToAdd;
+
             if(currentPage == 0)
             {
                 ViewBag.CurrentPage = 1;

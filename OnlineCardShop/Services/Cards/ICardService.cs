@@ -1,6 +1,7 @@
 ﻿namespace OnlineCardShop.Services.Cards
 {
     using OnlineCardShop.Data.Models.Enums;
+    using System.Collections.Generic;
 
     public interface ICardService
     {
@@ -11,5 +12,8 @@
             int cardsPerPage,
             int? categoryId,
             SortingOrder? order);
+
+        MyCardsServiceModel ByUser(string userId);
+
     }
 }

@@ -10,6 +10,7 @@ namespace OnlineCardShop
     using Microsoft.Extensions.Hosting;
     using OnlineCardShop.Data;
     using OnlineCardShop.Services.Cards;
+    using OnlineCardShop.Services.Dealers;
 
     public class Startup
     {
@@ -40,6 +41,7 @@ namespace OnlineCardShop
             services.AddControllersWithViews();
 
             services.AddTransient<ICardService, CardService>();
+            services.AddTransient<IDealerService, DealerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

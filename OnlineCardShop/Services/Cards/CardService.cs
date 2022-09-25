@@ -132,5 +132,24 @@
 
             return cardsResult;
         }
+
+        public CardServiceModel CardByUser(int id)
+        {
+            var card = this.data.Cards
+                .Where(c => c.Id == id)
+                .Select(c => new CardServiceModel
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    Price = c.Price,
+                    Description = c.Description,
+                    ImageUrl = c.ImageUrl,
+                    Category = c.Category.Name,
+                    Condition = c.Condition.Name
+                })
+                .FirstOrDefault();
+
+            return card;
+        }
     }
 }

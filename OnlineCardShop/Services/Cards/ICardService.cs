@@ -15,5 +15,7 @@
 
         MyCardsServiceModel ByUser(string userId);
 
+        CardServiceModel CardByUser(int id);
+
     }
 }

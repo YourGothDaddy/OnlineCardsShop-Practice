@@ -30,21 +30,9 @@
             return View(myCards);
         }
 
-        public IActionResult Details([FromRoute] CardListingViewModel query)
+        public IActionResult Details([FromRoute] CardServiceModel query)
         {
-            var card = this.data.Cards
-                .Where(c => c.Id == query.Id)
-                .Select(c => new CardListingViewModel
-            {
-                Id = c.Id,
-                Title = c.Title,
-                Price = c.Price,
-                Description = c.Description,
-                ImageUrl = c.ImageUrl,
-                Category = c.Category.Name,
-                Condition = c.Condition.Name
-            })
-                .FirstOrDefault();
+            var card = this.cards.CardByUser(query.Id);
 
             return View(card);
         }

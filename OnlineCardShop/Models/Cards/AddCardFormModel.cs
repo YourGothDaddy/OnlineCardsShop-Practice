@@ -24,7 +24,7 @@
         [Display(Name = "Image URL")]
         public string ImageUrl { get; init; }
 
-        public byte[] Image { get; init; }
+        public byte[] ImageFile { get; init; }
 
         [Display(Name = "Condition")]
         public int ConditionId { get; init; }

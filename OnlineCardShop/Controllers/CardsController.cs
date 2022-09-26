@@ -10,6 +10,8 @@
     using OnlineCardShop.Models.Cards;
     using OnlineCardShop.Services.Cards;
     using System.Collections.Generic;
+    using System.Drawing;
+    using System.Drawing.Imaging;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -113,7 +115,7 @@
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Add(AddCardFormModel card, List<IFormFile> Image)
+        public async Task<IActionResult> Add(AddCardFormModel card, List<IFormFile> ImageFile)
         {
             var dealerId = this.data
                 .Dealers
@@ -145,13 +147,15 @@
                 return View(card);
             }
 
-            foreach (var image in Image)
+            foreach (var image in ImageFile)
             {
                 if (image.Length > 0 || image.Length <= (2 * 1024 * 1024))
                 {
-                    using(var stream = new MemoryStream())
+                    var imagesToBeResized = Image.FromStream(image.OpenReadStream());
+                    var resized = new Bitmap(imagesToBeResized, new Size(250, 350));
+                    using (var stream = new MemoryStream())
                     {
-                        await image.CopyToAsync(stream);
+                        resized.Save(stream, ImageFormat.Jpeg);
 
                         var cardData = new Card
                         {

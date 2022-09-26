@@ -92,7 +92,8 @@
                     ImageUrl = c.ImageUrl,
                     Category = c.Category.Name,
                     Condition = c.Condition.Name,
-                    Price = c.Price
+                    Price = c.Price,
+                    Image = c.Image
 
                 })
                 .ToList();
@@ -145,7 +146,8 @@
                     Description = c.Description,
                     ImageUrl = c.ImageUrl,
                     Category = c.Category.Name,
-                    Condition = c.Condition.Name
+                    Condition = c.Condition.Name,
+                    Image = c.Image
                 })
                 .FirstOrDefault();
 

@@ -1,6 +1,7 @@
 ﻿namespace OnlineCardShop.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using OnlineCardShop.Data;
     using OnlineCardShop.Data.Models;
@@ -9,7 +10,9 @@
     using OnlineCardShop.Models.Cards;
     using OnlineCardShop.Services.Cards;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Threading.Tasks;
 
     public class CardsController : Controller
     {
@@ -101,7 +104,7 @@
 
         [HttpPost]
         [Authorize]
-        public IActionResult Add(AddCardFormModel card)
+        public async Task<IActionResult> Add(AddCardFormModel card, List<IFormFile> Image)
         {
             var dealerId = this.data
                 .Dealers
@@ -133,20 +136,31 @@
                 return View(card);
             }
 
-            var cardData = new Card
+            foreach (var image in Image)
             {
-                Title = card.Title,
-                Description = card.Description,
-                ImageUrl = card.ImageUrl,
-                CategoryId = card.CategoryId,
-                ConditionId = card.ConditionId,
-                Price = card.Price,
-                DealerId = dealerId
-            };
+                if (image.Length > 0 || image.Length <= (2 * 1024 * 1024))
+                {
+                    using(var stream = new MemoryStream())
+                    {
+                        await image.CopyToAsync(stream);
 
-            this.data.Cards.Add(cardData);
+                        var cardData = new Card
+                        {
+                            Title = card.Title,
+                            Description = card.Description,
+                            ImageUrl = card.ImageUrl,
+                            CategoryId = card.CategoryId,
+                            ConditionId = card.ConditionId,
+                            Price = card.Price,
+                            DealerId = dealerId,
+                            Image = stream.ToArray()
+                        };
 
-            this.data.SaveChanges();
+                        this.data.Cards.Add(cardData);
+                        this.data.SaveChanges();
+                    }
+                }
+            }
 
             return RedirectToAction("Index", "Home");
         }
@@ -181,7 +195,8 @@
                                 ImageUrl = c.ImageUrl,
                                 Category = c.Category,
                                 Condition = c.Condition,
-                                Price = c.Price
+                                Price = c.Price,
+                                Image = c.Image
                             })
                             .ToList();
 

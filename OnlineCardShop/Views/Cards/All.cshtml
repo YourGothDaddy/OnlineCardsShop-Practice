@@ -149,7 +149,11 @@
 {
   <div class="col-md-4">
     <div class="card" style="">
-      <img class="card-img-top" src="@card.ImageUrl" alt="@card.Title">
+        @if(card.Image != null){
+            <img class="card-img-top" src="data:image/png;base64,@Convert.ToBase64String(card.Image)" alt="@card.Title">
+        }else{
+            <img class="card-img-top" src="@card.ImageUrl" alt="@card.Title">
+        }
       <div class="card-body">
         <h4 class="card-title">@card.Title</h4>
         <h5 class="card-title">@card.Price€</h5>

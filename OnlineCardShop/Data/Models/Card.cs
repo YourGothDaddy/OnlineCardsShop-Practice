@@ -17,6 +17,8 @@
         [Required]
         public string ImageUrl { get; set; }
 
+        public byte[] Image { get; set; }
+
         [Required]
         [MinLength(MinDescriptionLength)]
         [MaxLength(MaxDescriptionLength)]

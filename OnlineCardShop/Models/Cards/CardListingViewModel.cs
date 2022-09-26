@@ -12,6 +12,8 @@
 
         public string ImageUrl { get; set; }
 
+        public byte[] Image { get; set; }
+
         public string Category { get; init; }
 
         public string Condition { get; init; }

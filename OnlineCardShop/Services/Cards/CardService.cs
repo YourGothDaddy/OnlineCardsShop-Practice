@@ -105,7 +105,7 @@
             };
         }
 
-        public AllCardsServiceModel ByUser(string userId)
+        public AllCardsServiceModel ByUser(string userId, int currentPage, int cardsPerPage)
         {
             var dealerId = this.data
                 .Dealers
@@ -113,8 +113,12 @@
                 .Select(d => d.Id)
                 .FirstOrDefault();
 
+            var totalCards = this.data.Cards.Where(c => c.DealerId == dealerId).Count();
+
             var cards = this.data
                 .Cards
+                .Skip((currentPage - 1) * cardsPerPage)
+                .Take(cardsPerPage)
                 .Where(c => c.DealerId == dealerId)
                 .Select(c => new CardServiceModel
                 {
@@ -124,12 +128,15 @@
                     Description = c.Description,
                     ImageUrl = c.ImageUrl,
                     Category = c.Category.Name,
-                    Condition = c.Condition.Name
+                    Condition = c.Condition.Name,
+                    Image = c.Image
                 })
                 .ToList();
 
             var cardsResult = new AllCardsServiceModel();
             cardsResult.Cards = cards;
+            cardsResult.TotalCards = totalCards;
+            cardsResult.CurrentPage = currentPage;
 
             return cardsResult;
         }

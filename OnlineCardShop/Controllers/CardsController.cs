@@ -26,9 +26,18 @@
         }
 
         [Authorize]
-        public IActionResult Mine()
+        public IActionResult Mine([FromQuery] int currentPage)
         {
-            var myCards = this.cards.ByUser(this.User.GetId());
+            if (currentPage == 0)
+            {
+                currentPage = 1;
+            }
+
+            var myCards = this.cards.ByUser(this.User.GetId(),
+                currentPage,
+                AllCardsServiceModel.CardsPerPage);
+
+            SelectCurrentPage(currentPage);
 
             return View(myCards);
         }

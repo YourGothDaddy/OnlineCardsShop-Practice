@@ -13,7 +13,7 @@
             int? categoryId,
             SortingOrder? order);
 
-        MyCardsServiceModel ByUser(string userId);
+        AllCardsServiceModel ByUser(string userId);
 
         CardServiceModel CardByUser(int id);
 

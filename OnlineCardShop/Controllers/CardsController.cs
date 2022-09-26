@@ -40,13 +40,13 @@
             return View(card);
         }
 
-        public IActionResult Game([FromQuery] AllCardsQueryModel query, [FromQuery] int currentPage)
+        public IActionResult Game([FromQuery] AllCardsServiceModel query, [FromQuery] int currentPage)
         {
             var queryResult = this.cards.All(
                 query.SearchTerm,
                 query.Sorting,
                 query.CurrentPage,
-                AllCardsQueryModel.CardsPerPage,
+                AllCardsServiceModel.CardsPerPage,
                 2,
                 query.Order);
 
@@ -56,13 +56,13 @@
             return View(query);
         }
 
-        public IActionResult Kpop([FromQuery] AllCardsQueryModel query, [FromQuery] int currentPage)
+        public IActionResult Kpop([FromQuery] AllCardsServiceModel query, [FromQuery] int currentPage)
         {
             var queryResult = this.cards.All(
                 query.SearchTerm,
                 query.Sorting,
                 query.CurrentPage,
-                AllCardsQueryModel.CardsPerPage,
+                AllCardsServiceModel.CardsPerPage,
                 1,
                 query.Order);
 
@@ -71,13 +71,13 @@
             return View(query); ;
         }
 
-        public IActionResult All([FromQuery]AllCardsQueryModel query, [FromQuery]int currentPage)
+        public IActionResult All([FromQuery] AllCardsServiceModel query, [FromQuery]int currentPage)
         {
             var queryResult = this.cards.All(
                 query.SearchTerm,
                 query.Sorting,
-                query.CurrentPage, 
-                AllCardsQueryModel.CardsPerPage,
+                query.CurrentPage,
+                AllCardsServiceModel.CardsPerPage,
                 null,
                 null);
 
@@ -184,10 +184,10 @@
             }
         }
 
-        private static void CardsToAddOnPage(AllCardsQueryModel query, CardQueryServiceModel queryResult)
+        private static void CardsToAddOnPage(AllCardsServiceModel query, CardQueryServiceModel queryResult)
         {
             var cardsToAdd = queryResult.Cards
-                            .Select(c => new CardListingViewModel
+                            .Select(c => new CardServiceModel
                             {
                                 Id = c.Id,
                                 Title = c.Title,

@@ -105,7 +105,7 @@
             };
         }
 
-        public MyCardsServiceModel ByUser(string userId)
+        public AllCardsServiceModel ByUser(string userId)
         {
             var dealerId = this.data
                 .Dealers
@@ -128,7 +128,7 @@
                 })
                 .ToList();
 
-            var cardsResult = new MyCardsServiceModel();
+            var cardsResult = new AllCardsServiceModel();
             cardsResult.Cards = cards;
 
             return cardsResult;

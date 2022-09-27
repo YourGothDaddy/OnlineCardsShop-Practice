@@ -16,6 +16,9 @@
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
+    using SixLabors.ImageSharp;
+    using System;
+    using SixLabors.ImageSharp.Processing;
 
     public class CardsController : Controller
     {
@@ -155,13 +158,22 @@
 
             if (imageFile.Length > 0 || imageFile.Length <= (2 * 1024 * 1024))
             {
-                var imageName = imageFile.FileName;
+                var imageName = Path.GetRandomFileName();
 
                 var imagePath = Path.Combine(wwwPath, imageDirectory, imageName);
 
                 var imagePathDb = imageDirectory + "/" + imageName;
 
-                var newImage = new Image { Name = imageName, Path = imagePathDb};
+                var newImage = new Data.Models.Image { Name = imageName, Path = imagePathDb};
+
+                using (var imageResized = SixLabors.ImageSharp.Image.Load(imageFile.OpenReadStream()))
+                {
+                    var imagePathResized = imagePath + "resized" + ".jpeg";
+                    //string newSize = ResizeImage(imageResized, 230, 330);
+                    //string[] aSize = newSize.Split(',');
+                    imageResized.Mutate(h => h.Resize(230, 300));
+                    imageResized.SaveAsJpeg(imagePathResized);
+                }
 
                 using (FileStream fileStream = System.IO.File.Create(imagePath))
                 {
@@ -186,6 +198,23 @@
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public string ResizeImage(SixLabors.ImageSharp.Image img, int maxWidth, int maxHeight)
+        {
+            if (img.Width > maxWidth || img.Height > maxHeight)
+            {
+                double widthRatio = (double)img.Width / (double)maxWidth;
+                double heightRatio = (double)img.Height / (double)maxHeight;
+                double ratio = Math.Max(widthRatio, heightRatio);
+                int newWidth = (int)(img.Width / ratio);
+                int newHeight = (int)(img.Height / ratio);
+                return newHeight.ToString() + "," + newWidth.ToString();
+            }
+            else
+            {
+                return img.Height.ToString() + "," + img.Width.ToString();
+            }
         }
 
         private bool UserIsDealer()

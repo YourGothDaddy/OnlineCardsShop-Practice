@@ -1,5 +1,6 @@
 ﻿namespace OnlineCardShop.Models.Cards
 {
+    using OnlineCardShop.Data.Models;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using static OnlineCardShop.Data.DataConstants.Card;
@@ -19,12 +20,7 @@
         [Required(ErrorMessage = "The 'Description' field is required!")]
         public string Description { get; init; }
 
-        [Required(ErrorMessage = "The 'Image URL' field is required!")]
-        [Url]
-        [Display(Name = "Image URL")]
-        public string ImageUrl { get; init; }
-
-        public byte[] ImageFile { get; init; }
+        public Image ImageFile { get; init; }
 
         [Display(Name = "Condition")]
         public int ConditionId { get; init; }

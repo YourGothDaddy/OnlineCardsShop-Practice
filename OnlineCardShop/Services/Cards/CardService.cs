@@ -89,11 +89,10 @@
                     Id = c.Id,
                     Title = c.Title,
                     Description = c.Description,
-                    ImageUrl = c.ImageUrl,
                     Category = c.Category.Name,
                     Condition = c.Condition.Name,
                     Price = c.Price,
-                    Image = c.Image
+                    Path = c.Image.Path
 
                 })
                 .ToList();
@@ -126,10 +125,9 @@
                     Title = c.Title,
                     Price = c.Price,
                     Description = c.Description,
-                    ImageUrl = c.ImageUrl,
                     Category = c.Category.Name,
                     Condition = c.Condition.Name,
-                    Image = c.Image
+                    Path = c.Image.Path
                 })
                 .ToList();
 
@@ -151,10 +149,8 @@
                     Title = c.Title,
                     Price = c.Price,
                     Description = c.Description,
-                    ImageUrl = c.ImageUrl,
                     Category = c.Category.Name,
-                    Condition = c.Condition.Name,
-                    Image = c.Image
+                    Condition = c.Condition.Name
                 })
                 .FirstOrDefault();
 

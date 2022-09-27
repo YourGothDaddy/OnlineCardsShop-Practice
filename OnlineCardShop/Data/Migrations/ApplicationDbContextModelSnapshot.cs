@@ -240,12 +240,8 @@ namespace OnlineCardShop.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<byte[]>("Image")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ImageId")
+                        .HasColumnType("int");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
@@ -262,6 +258,9 @@ namespace OnlineCardShop.Data.Migrations
                     b.HasIndex("ConditionId");
 
                     b.HasIndex("DealerId");
+
+                    b.HasIndex("ImageId")
+                        .IsUnique();
 
                     b.ToTable("Cards");
                 });
@@ -330,6 +329,28 @@ namespace OnlineCardShop.Data.Migrations
                     b.HasIndex("UserId1");
 
                     b.ToTable("Dealers");
+                });
+
+            modelBuilder.Entity("OnlineCardShop.Data.Models.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CardId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -403,11 +424,19 @@ namespace OnlineCardShop.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("OnlineCardShop.Data.Models.Image", "Image")
+                        .WithOne("Card")
+                        .HasForeignKey("OnlineCardShop.Data.Models.Card", "ImageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Category");
 
                     b.Navigation("Condition");
 
                     b.Navigation("Dealer");
+
+                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("OnlineCardShop.Data.Models.Dealer", b =>
@@ -438,6 +467,11 @@ namespace OnlineCardShop.Data.Migrations
             modelBuilder.Entity("OnlineCardShop.Data.Models.Dealer", b =>
                 {
                     b.Navigation("Cards");
+                });
+
+            modelBuilder.Entity("OnlineCardShop.Data.Models.Image", b =>
+                {
+                    b.Navigation("Card");
                 });
 #pragma warning restore 612, 618
         }

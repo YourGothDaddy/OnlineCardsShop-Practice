@@ -1,5 +1,6 @@
 ﻿namespace OnlineCardShop.Data.Models
 {
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using static DataConstants.Card;
     public class Card
@@ -14,10 +15,8 @@
         [Range(double.MinValue, double.MaxValue)]
         public double Price { get; set; }
 
-        [Required]
-        public string ImageUrl { get; set; }
-
-        public byte[] Image { get; set; }
+        public int ImageId { get; set; }
+        public Image Image { get; set; }
 
         [Required]
         [MinLength(MinDescriptionLength)]

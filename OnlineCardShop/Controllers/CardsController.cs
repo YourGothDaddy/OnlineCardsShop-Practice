@@ -1,6 +1,7 @@
 ﻿namespace OnlineCardShop.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using OnlineCardShop.Data;
@@ -20,11 +21,13 @@
     {
         private readonly ICardService cards;
         private readonly OnlineCardShopDbContext data;
+        private readonly IWebHostEnvironment env;
 
-        public CardsController(ICardService cards, OnlineCardShopDbContext data)
+        public CardsController(ICardService cards, OnlineCardShopDbContext data, IWebHostEnvironment env)
         {
             this.cards = cards;
             this.data = data;
+            this.env = env;
         }
 
         [Authorize]
@@ -115,7 +118,7 @@
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Add(AddCardFormModel card, List<IFormFile> ImageFile)
+        public  async Task<IActionResult> Add(AddCardFormModel card, IFormFile imageFile)
         {
             var dealerId = this.data
                 .Dealers
@@ -147,32 +150,39 @@
                 return View(card);
             }
 
-            foreach (var image in ImageFile)
+            var wwwPath = this.env.WebRootPath;
+            var imageDirectory = "Uploads";
+
+            if (imageFile.Length > 0 || imageFile.Length <= (2 * 1024 * 1024))
             {
-                if (image.Length > 0 || image.Length <= (2 * 1024 * 1024))
+                var imageName = imageFile.FileName;
+
+                var imagePath = Path.Combine(wwwPath, imageDirectory, imageName);
+
+                var imagePathDb = imageDirectory + "/" + imageName;
+
+                var newImage = new Image { Name = imageName, Path = imagePathDb};
+
+                using (FileStream fileStream = System.IO.File.Create(imagePath))
                 {
-                    var imagesToBeResized = Image.FromStream(image.OpenReadStream());
-                    var resized = new Bitmap(imagesToBeResized, new Size(250, 350));
-                    using (var stream = new MemoryStream())
-                    {
-                        resized.Save(stream, ImageFormat.Jpeg);
-
-                        var cardData = new Card
-                        {
-                            Title = card.Title,
-                            Description = card.Description,
-                            ImageUrl = card.ImageUrl,
-                            CategoryId = card.CategoryId,
-                            ConditionId = card.ConditionId,
-                            Price = card.Price,
-                            DealerId = dealerId,
-                            Image = stream.ToArray()
-                        };
-
-                        this.data.Cards.Add(cardData);
-                        this.data.SaveChanges();
-                    }
+                    await imageFile.CopyToAsync(fileStream);
                 }
+
+                this.data.Images.Add(newImage);
+
+                var newCard = new Card
+                    {
+                        Title = card.Title,
+                        Price = card.Price,
+                        Description = card.Description,
+                        CategoryId = card.CategoryId,
+                        ConditionId = card.ConditionId,
+                        DealerId = dealerId,
+                        Image = newImage
+                    };
+
+                this.data.Cards.Add(newCard);
+                this.data.SaveChanges();
             }
 
             return RedirectToAction("Index", "Home");
@@ -205,11 +215,10 @@
                                 Id = c.Id,
                                 Title = c.Title,
                                 Description = c.Description,
-                                ImageUrl = c.ImageUrl,
                                 Category = c.Category,
                                 Condition = c.Condition,
                                 Price = c.Price,
-                                Image = c.Image
+                                Path = c.Path
                             })
                             .ToList();
 

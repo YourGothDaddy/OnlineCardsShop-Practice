@@ -25,6 +25,8 @@ namespace OnlineCardShop.Data
         public DbSet<Condition> Conditions { get; set; }
 
         public DbSet<Dealer> Dealers { get; init; }
+
+        public DbSet<Image> Images { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder
@@ -46,6 +48,13 @@ namespace OnlineCardShop.Data
                 .HasOne<IdentityUser>()
                 .WithOne()
                 .HasForeignKey<Dealer>(d => d.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Image>()
+                .HasOne(i => i.Card)
+                .WithOne(c => c.Image)
+                .HasForeignKey<Card>(i => i.ImageId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //TODO: Uncomment when time to add users

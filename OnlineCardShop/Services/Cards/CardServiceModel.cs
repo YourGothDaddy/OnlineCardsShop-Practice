@@ -1,5 +1,7 @@
 ﻿namespace OnlineCardShop.Services.Cards
 {
+    using OnlineCardShop.Data.Models;
+
     public class CardServiceModel
     {
         public int Id { get; init; }
@@ -10,9 +12,7 @@
 
         public string Description { get; init; }
 
-        public string ImageUrl { get; init; }
-
-        public byte[] Image { get; init; }
+        public string Path { get; set; }
 
         public string Category { get; init; }
 

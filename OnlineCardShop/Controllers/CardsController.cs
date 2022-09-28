@@ -6,13 +6,10 @@
     using Microsoft.AspNetCore.Mvc;
     using OnlineCardShop.Data;
     using OnlineCardShop.Data.Models;
-    using OnlineCardShop.Data.Models.Enums;
     using OnlineCardShop.Infrastructure;
     using OnlineCardShop.Models.Cards;
     using OnlineCardShop.Services.Cards;
     using System.Collections.Generic;
-    using System.Drawing;
-    using System.Drawing.Imaging;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -121,7 +118,7 @@
 
         [HttpPost]
         [Authorize]
-        public  async Task<IActionResult> Add(AddCardFormModel card, IFormFile imageFile)
+        public async Task<IActionResult> Add(AddCardFormModel card, IFormFile imageFile)
         {
             var dealerId = this.data
                 .Dealers
@@ -154,50 +151,66 @@
             }
 
             var wwwPath = this.env.WebRootPath;
-            var imageDirectory = "Uploads";
+            var imageDirectory = ControllersConstants.CardsController.imageDirectory;
 
-            if (imageFile.Length > 0 || imageFile.Length <= (2 * 1024 * 1024))
+            if (ImageIsWithinDesiredSize(imageFile))
             {
-                var imageName = Path.GetRandomFileName();
+                var imageExtension = Path.GetExtension(imageFile.FileName);
+
+                var imageName = Path.GetRandomFileName() + imageExtension;
 
                 var imagePath = Path.Combine(wwwPath, imageDirectory, imageName);
 
-                var imagePathDb = imageDirectory + "/" + imageName;
+                var imagePathForDb = imageDirectory + "/" + "res" + imageName;
 
-                var newImage = new Data.Models.Image { Name = imageName, Path = imagePathDb};
+                var newImage = new Data.Models.Image 
+                { 
+                    Name = imageName,
+                    Path = imagePathForDb
+                };
+
+                this.data.Images.Add(newImage);
 
                 using (var imageResized = SixLabors.ImageSharp.Image.Load(imageFile.OpenReadStream()))
                 {
-                    var imagePathResized = imagePath + "resized" + ".jpeg";
-                    //string newSize = ResizeImage(imageResized, 230, 330);
-                    //string[] aSize = newSize.Split(',');
-                    imageResized.Mutate(h => h.Resize(230, 300));
-                    imageResized.SaveAsJpeg(imagePathResized);
+                    var resizedImagePath = imagePath.Split('\\');
+                    resizedImagePath[resizedImagePath.Length - 1] = "res" + imageName;
+
+                    var imageResizedPath = string.Join('\\', resizedImagePath);
+
+                    imageResized.Mutate(i => i.Resize(
+                        ControllersConstants.CardsController.width,
+                        ControllersConstants.CardsController.height));
+
+                    await imageResized.SaveAsync(imageResizedPath);
                 }
 
-                using (FileStream fileStream = System.IO.File.Create(imagePath))
+                using (var fileStream = System.IO.File.Create(imagePath))
                 {
                     await imageFile.CopyToAsync(fileStream);
                 }
 
-                this.data.Images.Add(newImage);
-
                 var newCard = new Card
-                    {
-                        Title = card.Title,
-                        Price = card.Price,
-                        Description = card.Description,
-                        CategoryId = card.CategoryId,
-                        ConditionId = card.ConditionId,
-                        DealerId = dealerId,
-                        Image = newImage
-                    };
+                {
+                    Title = card.Title,
+                    Price = card.Price,
+                    Description = card.Description,
+                    CategoryId = card.CategoryId,
+                    ConditionId = card.ConditionId,
+                    DealerId = dealerId,
+                    Image = newImage
+                };
 
                 this.data.Cards.Add(newCard);
                 this.data.SaveChanges();
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        private static bool ImageIsWithinDesiredSize(IFormFile imageFile)
+        {
+            return imageFile.Length > 0 || imageFile.Length <= (2 * 1024 * 1024);
         }
 
         public string ResizeImage(SixLabors.ImageSharp.Image img, int maxWidth, int maxHeight)

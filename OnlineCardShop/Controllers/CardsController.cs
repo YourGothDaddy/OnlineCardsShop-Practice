@@ -178,9 +178,9 @@
 
                     var imageResizedPath = string.Join('\\', resizedImagePath);
 
-                    imageResized.Mutate(i => i.Resize(
-                        ControllersConstants.CardsController.width,
-                        ControllersConstants.CardsController.height));
+                    imageResized.Mutate(i => i
+                    .Resize(imageResized.Width/2, imageResized.Height/2)
+                    .Crop(new Rectangle((imageResized.Width - 250) / 2, (imageResized.Height - 300) / 2, 250, 300)));
 
                     await imageResized.SaveAsync(imageResizedPath);
                 }

@@ -1,0 +1,15 @@
+﻿@model AllCardsServiceModel
+
+@{
+    ViewData["Title"] = "My Cards";
+}
+
+<partial name="_CardsPaginationPartial" model="@Model" />
+
+@if (!Model.Cards.Any())
+{
+    <h2 class="text-center">You have no cards!</h2>
+}else{
+<partial name="_CardsListingPartial" model="@Model" />
+}
+

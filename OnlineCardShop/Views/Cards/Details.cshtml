@@ -1,0 +1,20 @@
+﻿@model CardServiceModel
+
+@{
+    ViewData["Title"] = $"View More - {Model.Title}";
+}
+
+<div class="row">
+  <div class="offset-3 col-6">
+    <div class="card" style="">
+      <img class="card-img-top" src="" alt="@Model.Title">
+      <div class="card-body">
+        <h3 class="card-title">@Model.Title</h3>
+        <h4 class="card-title">@Model.Price€</h4>
+        <h6 class="card-text">@Model.Description</h6>
+        <p class="card-text" style="margin:0"><small class="text-muted">Condition: @Model.Condition</small></p>
+        <p class="card-text"><small class="text-muted">Category: @Model.Category</small></p>
+      </div>
+    </div>
+  </div>
+</div>

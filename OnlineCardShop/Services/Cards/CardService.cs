@@ -150,7 +150,8 @@
                     Price = c.Price,
                     Description = c.Description,
                     Category = c.Category.Name,
-                    Condition = c.Condition.Name
+                    Condition = c.Condition.Name,
+                    Path = c.Image.Path.Replace("res", string.Empty)
                 })
                 .FirstOrDefault();
 

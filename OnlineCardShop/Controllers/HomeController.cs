@@ -3,9 +3,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using OnlineCardShop.Data;
-    using OnlineCardShop.Data.Models.Enums;
     using OnlineCardShop.Models;
-    using OnlineCardShop.Models.Cards;
     using OnlineCardShop.Models.Home;
     using OnlineCardShop.Services.Cards;
     using System.Diagnostics;

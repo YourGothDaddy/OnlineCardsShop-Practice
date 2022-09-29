@@ -1,7 +1,5 @@
 ﻿namespace OnlineCardShop.Controllers
 {
-    using Microsoft.AspNetCore.Hosting;
-
     public class ControllersConstants
     {
         public class CardsController

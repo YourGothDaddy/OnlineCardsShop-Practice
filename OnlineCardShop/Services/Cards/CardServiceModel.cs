@@ -17,5 +17,11 @@
         public string Category { get; init; }
 
         public string Condition { get; init; }
+
+        public int DealerId { get; init; }
+
+        public string DealerName { get; init; }
+
+        public string UserId { get; init; }
     }
 }

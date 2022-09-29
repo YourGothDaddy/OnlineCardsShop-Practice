@@ -5,27 +5,25 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using OnlineCardShop.Data;
-    using OnlineCardShop.Data.Models;
     using OnlineCardShop.Infrastructure;
     using OnlineCardShop.Models.Cards;
     using OnlineCardShop.Services.Cards;
-    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using SixLabors.ImageSharp;
-    using System;
     using SixLabors.ImageSharp.Processing;
     using OnlineCardShop.Services.Dealers;
 
     public class CardsController : Controller
     {
-        private readonly ICardService cards;
         private readonly OnlineCardShopDbContext data;
+        private readonly ICardService cards;
         private readonly IWebHostEnvironment env;
         private readonly IDealerService dealers;
 
-        public CardsController(ICardService cards,
+        public CardsController(
+            ICardService cards,
             IDealerService dealers, 
             IWebHostEnvironment env, 
             OnlineCardShopDbContext data)
@@ -218,6 +216,33 @@
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
+        public IActionResult Edit(int id)
+        {
+            var userId = this.User.GetId();
+
+            if (!this.dealers.IsDealer(userId))
+            {
+                return RedirectToAction(nameof(DealersController.Create), "Dealers");
+            }
+
+            var card = this.cards.CardByUser(id);
+
+            if (card.UserId != userId)
+            {
+                return Unauthorized();
+            }
+
+            return View(new AddCardFormModel
+            {
+                Title = card.Title,
+                Price = card.Price,
+                Description = card.Description,
+                Categories = this.cards.GetCardCategories(),
+                Conditions = this.cards.GetCardConditions()
+            });
         }
 
         private async Task ResizeAndCropImage(SixLabors.ImageSharp.Image imageResized, string imageName, string imagePath)

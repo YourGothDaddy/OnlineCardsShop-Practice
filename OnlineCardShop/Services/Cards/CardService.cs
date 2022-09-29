@@ -16,7 +16,9 @@
             this.data = data;
         }
 
-        public Image CreateImage(string imageName, string imagePathForDb)
+        public Image CreateImage(
+            string imageName, 
+            string imagePathForDb)
         {
             return new Image
             {
@@ -25,7 +27,8 @@
             };
         }
 
-        public Card CreateCard(string title,
+        public Card CreateCard(
+            string title,
             double price,
             string description,
             int categoryId,
@@ -134,7 +137,10 @@
             };
         }
 
-        public AllCardsServiceModel ByUser(string userId, int currentPage, int cardsPerPage)
+        public AllCardsServiceModel ByUser(
+            string userId,
+            int currentPage,
+            int cardsPerPage)
         {
             var dealerId = this.data
                 .Dealers
@@ -171,7 +177,8 @@
 
         public CardServiceModel CardByUser(int id)
         {
-            var card = this.data.Cards
+            var card = this.data
+                .Cards
                 .Where(c => c.Id == id)
                 .Select(c => new CardServiceModel
                 {
@@ -181,7 +188,10 @@
                     Description = c.Description,
                     Category = c.Category.Name,
                     Condition = c.Condition.Name,
-                    Path = c.Image.Path.Replace("res", string.Empty)
+                    Path = c.Image.Path.Replace("res", string.Empty),
+                    DealerId = c.DealerId,
+                    DealerName = c.Dealer.Name,
+                    UserId = c.Dealer.UserId
                 })
                 .FirstOrDefault();
 

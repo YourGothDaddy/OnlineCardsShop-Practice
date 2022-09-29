@@ -15,6 +15,36 @@
         {
             this.data = data;
         }
+
+        public Image CreateImage(string imageName, string imagePathForDb)
+        {
+            return new Image
+            {
+                Name = imageName,
+                Path = imagePathForDb
+            };
+        }
+
+        public Card CreateCard(string title,
+            double price,
+            string description,
+            int categoryId,
+            int conditionId,
+            int dealerId,
+            Image newImage)
+        {
+            return new Card
+            {
+                Title = title,
+                Price = price,
+                Description = description,
+                CategoryId = categoryId,
+                ConditionId = conditionId,
+                DealerId = dealerId,
+                Image = newImage
+            };
+        }
+
         public CardQueryServiceModel All(
             string searchTerm, 
             CardSorting sorting, 
@@ -156,6 +186,30 @@
                 .FirstOrDefault();
 
             return card;
+        }
+
+        public IEnumerable<CardCategoryServiceViewModel> GetCardCategories()
+        {
+            return this.data
+                .Categories
+                .Select(c => new CardCategoryServiceViewModel
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .ToList();
+        }
+
+        public IEnumerable<CardConditionServiceViewModel> GetCardConditions()
+        {
+            return this.data
+                 .Conditions
+                 .Select(c => new CardConditionServiceViewModel
+                 {
+                     Id = c.Id,
+                     Name = c.Name
+                 })
+                 .ToList();
         }
     }
 }

@@ -16,18 +16,24 @@
     using SixLabors.ImageSharp;
     using System;
     using SixLabors.ImageSharp.Processing;
+    using OnlineCardShop.Services.Dealers;
 
     public class CardsController : Controller
     {
         private readonly ICardService cards;
         private readonly OnlineCardShopDbContext data;
         private readonly IWebHostEnvironment env;
+        private readonly IDealerService dealers;
 
-        public CardsController(ICardService cards, OnlineCardShopDbContext data, IWebHostEnvironment env)
+        public CardsController(ICardService cards,
+            IDealerService dealers, 
+            IWebHostEnvironment env, 
+            OnlineCardShopDbContext data)
         {
             this.cards = cards;
             this.data = data;
             this.env = env;
+            this.dealers = dealers;
         }
 
         [Authorize]
@@ -111,8 +117,8 @@
 
             return View(new AddCardFormModel
             {
-                Categories = this.GetCardCategories(),
-                Conditions = this.GetCardConditions()
+                Categories = this.cards.GetCardCategories(),
+                Conditions = this.cards.GetCardConditions()
             });
         }
 
@@ -120,11 +126,7 @@
         [Authorize]
         public async Task<IActionResult> Add(AddCardFormModel card, IFormFile imageFile)
         {
-            var dealerId = this.data
-                .Dealers
-                .Where(d => d.UserId == this.User.GetId())
-                .Select(d => d.Id)
-                .FirstOrDefault();
+            var dealerId = this.dealers.GetDealer(this.User.GetId());
 
             if (dealerId == 0)
             {
@@ -141,11 +143,16 @@
                 this.ModelState.AddModelError(nameof(card.ConditionId), "Condition does not exist");
             }
 
+            if (imageFile == null)
+            {
+                this.ModelState.AddModelError(nameof(imageFile), "There is no image selected");
+            }
+
             if (!ModelState.IsValid)
             {
                 //The card object has null the categories and conditions, so I add them again
-                card.Categories = this.GetCardCategories();
-                card.Conditions = this.GetCardConditions();
+                card.Categories = this.cards.GetCardCategories();
+                card.Conditions = this.cards.GetCardConditions();
 
                 return View(card);
             }
@@ -163,26 +170,24 @@
 
                 var imagePathForDb = imageDirectory + "/" + "res" + imageName;
 
-                var newImage = new Data.Models.Image 
-                { 
-                    Name = imageName,
-                    Path = imagePathForDb
-                };
+                var newImage = this.cards.CreateImage(imageName, imagePathForDb);
 
                 this.data.Images.Add(newImage);
 
                 using (var imageResized = SixLabors.ImageSharp.Image.Load(imageFile.OpenReadStream()))
                 {
-                    var resizedImagePath = imagePath.Split('\\');
-                    resizedImagePath[resizedImagePath.Length - 1] = "res" + imageName;
+                    if (!ImageIsWithinDesiredRes(imageResized))
+                    {
+                        this.ModelState.AddModelError(nameof(imageFile), "Image should be at least 1024x1024");
 
-                    var imageResizedPath = string.Join('\\', resizedImagePath);
+                        //The card object has null the categories and conditions, so I add them again
+                        card.Categories = this.cards.GetCardCategories();
+                        card.Conditions = this.cards.GetCardConditions();
 
-                    imageResized.Mutate(i => i
-                    .Resize(imageResized.Width/2, imageResized.Height/2)
-                    .Crop(new Rectangle((imageResized.Width - 250) / 2, (imageResized.Height - 300) / 2, 250, 300)));
+                        return View(card);
+                    }
 
-                    await imageResized.SaveAsync(imageResizedPath);
+                    await ResizeAndCropImage(imageResized, imageName, imagePath);
                 }
 
                 using (var fileStream = System.IO.File.Create(imagePath))
@@ -190,44 +195,58 @@
                     await imageFile.CopyToAsync(fileStream);
                 }
 
-                var newCard = new Card
-                {
-                    Title = card.Title,
-                    Price = card.Price,
-                    Description = card.Description,
-                    CategoryId = card.CategoryId,
-                    ConditionId = card.ConditionId,
-                    DealerId = dealerId,
-                    Image = newImage
-                };
+                var newCard = this.cards.CreateCard(card.Title,
+                    card.Price,
+                    card.Description,
+                    card.CategoryId,
+                    card.ConditionId,
+                    dealerId,
+                    newImage);
 
                 this.data.Cards.Add(newCard);
                 this.data.SaveChanges();
+            }
+            else
+            {
+                this.ModelState.AddModelError(nameof(imageFile), "The image is too big! The max size is 2MB");
+
+                //The card object has null the categories and conditions, so I add them again
+                card.Categories = this.cards.GetCardCategories();
+                card.Conditions = this.cards.GetCardConditions();
+
+                return View(card);
             }
 
             return RedirectToAction("Index", "Home");
         }
 
-        private static bool ImageIsWithinDesiredSize(IFormFile imageFile)
+        private async Task ResizeAndCropImage(SixLabors.ImageSharp.Image imageResized, string imageName, string imagePath)
         {
-            return imageFile.Length > 0 || imageFile.Length <= (2 * 1024 * 1024);
+            var resizedImagePath = imagePath.Split('\\');
+            resizedImagePath[resizedImagePath.Length - 1] = "res" + imageName;
+
+            var imageResizedPath = string.Join('\\', resizedImagePath);
+
+            imageResized.Mutate(i => i
+            .Resize(imageResized.Width / 2, imageResized.Height / 2)
+            .Crop(new Rectangle((imageResized.Width - 348) / 2, (imageResized.Height - 418) / 2, 348, 418)));
+
+            await SaveImage(imageResized, imageResizedPath);
         }
 
-        public string ResizeImage(SixLabors.ImageSharp.Image img, int maxWidth, int maxHeight)
+        private static async Task SaveImage(SixLabors.ImageSharp.Image imageResized, string imageResizedPath)
         {
-            if (img.Width > maxWidth || img.Height > maxHeight)
-            {
-                double widthRatio = (double)img.Width / (double)maxWidth;
-                double heightRatio = (double)img.Height / (double)maxHeight;
-                double ratio = Math.Max(widthRatio, heightRatio);
-                int newWidth = (int)(img.Width / ratio);
-                int newHeight = (int)(img.Height / ratio);
-                return newHeight.ToString() + "," + newWidth.ToString();
-            }
-            else
-            {
-                return img.Height.ToString() + "," + img.Width.ToString();
-            }
+            await imageResized.SaveAsync(imageResizedPath);
+        }
+
+        private static bool ImageIsWithinDesiredSize(IFormFile imageFile)
+        {
+            return imageFile.Length > 0 && imageFile.Length <= (2 * 1024 * 1024);
+        }
+
+        private static bool ImageIsWithinDesiredRes(SixLabors.ImageSharp.Image image)
+        {
+            return image.Height >= 1024 && image.Width >= 1024;
         }
 
         private bool UserIsDealer()
@@ -266,30 +285,6 @@
 
             query.TotalCards = queryResult.TotalCards;
             query.Cards = cardsToAdd;
-        }
-
-        private IEnumerable<CardCategoryViewModel> GetCardCategories()
-        {
-           return this.data
-                .Categories
-                .Select(c => new CardCategoryViewModel
-                {
-                    Id = c.Id,
-                    Name = c.Name
-                })
-                .ToList();
-        }
-
-        private IEnumerable<CardConditionViewModel> GetCardConditions()
-        {
-            return this.data
-                 .Conditions
-                 .Select(c => new CardConditionViewModel
-                 {
-                     Id = c.Id,
-                     Name = c.Name
-                 })
-                 .ToList();
         }
     }
 }

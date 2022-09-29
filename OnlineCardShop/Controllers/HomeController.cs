@@ -7,6 +7,7 @@
     using OnlineCardShop.Models;
     using OnlineCardShop.Models.Cards;
     using OnlineCardShop.Models.Home;
+    using OnlineCardShop.Services.Cards;
     using System.Diagnostics;
     using System.Linq;
 
@@ -25,13 +26,13 @@
         {
             var categories = this.data
                 .Categories
-                .Select(c => new CardCategoryViewModel
+                .Select(c => new CardCategoryServiceViewModel
                 {
                     Id = c.Id,
                     Name = c.Name
                 });
 
-            return View(new AllCategoriesViewModel
+            return View(new AllCategoriesServiceViewModel
             {
                 Categories = categories
             });

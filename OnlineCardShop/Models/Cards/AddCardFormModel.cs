@@ -1,6 +1,7 @@
 ﻿namespace OnlineCardShop.Models.Cards
 {
     using OnlineCardShop.Data.Models;
+    using OnlineCardShop.Services.Cards;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using static OnlineCardShop.Data.DataConstants.Card;
@@ -25,11 +26,11 @@
         [Display(Name = "Condition")]
         public int ConditionId { get; init; }
 
-        public IEnumerable<CardConditionViewModel> Conditions { get; set; }
+        public IEnumerable<CardConditionServiceViewModel> Conditions { get; set; }
 
         [Display(Name="Category")]
         public int CategoryId { get; init; }
 
-        public IEnumerable<CardCategoryViewModel> Categories { get; set; }
+        public IEnumerable<CardCategoryServiceViewModel> Categories { get; set; }
     }
 }

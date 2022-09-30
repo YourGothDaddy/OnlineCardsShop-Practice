@@ -160,15 +160,9 @@
 
             if (ImageIsWithinDesiredSize(imageFile))
             {
-                var imageExtension = Path.GetExtension(imageFile.FileName);
+                string originalImageName, imageName, imagePath, imagePathForDb;
 
-                var originalImageName = imageFile.FileName;
-
-                var imageName = Path.GetRandomFileName() + imageExtension;
-
-                var imagePath = Path.Combine(wwwPath, imageDirectory, imageName);
-
-                var imagePathForDb = imageDirectory + "/" + "res" + imageName;
+                ProcessImageDetails(imageFile, wwwPath, imageDirectory, out originalImageName, out imageName, out imagePath, out imagePathForDb);
 
                 var newImage = this.cards.CreateImage(imageName, imagePathForDb, originalImageName);
 
@@ -290,15 +284,9 @@
 
             if (ImageIsWithinDesiredSize(imageFile))
             {
-                var imageExtension = Path.GetExtension(imageFile.FileName);
+                string originalImageName, imageName, imagePath, imagePathForDb;
 
-                var originalImageName = imageFile.FileName;
-
-                var imageName = Path.GetRandomFileName() + imageExtension;
-
-                var imagePath = Path.Combine(wwwPath, imageDirectory, imageName);
-
-                var imagePathForDb = imageDirectory + "/" + "res" + imageName;
+                ProcessImageDetails(imageFile, wwwPath, imageDirectory, out originalImageName, out imageName, out imagePath, out imagePathForDb);
 
                 newImage = this.cards.CreateImage(imageName, imagePathForDb, originalImageName);
 
@@ -346,6 +334,16 @@
                     newImage);
 
             return RedirectToAction(nameof(All));
+        }
+
+        private static void ProcessImageDetails(IFormFile imageFile, string wwwPath, string imageDirectory, out string originalImageName, out string imageName, out string imagePath, out string imagePathForDb)
+        {
+            var imageExtension = Path.GetExtension(imageFile.FileName);
+
+            originalImageName = imageFile.FileName;
+            imageName = Path.GetRandomFileName() + imageExtension;
+            imagePath = Path.Combine(wwwPath, imageDirectory, imageName);
+            imagePathForDb = imageDirectory + "/" + "res" + imageName;
         }
 
         private async Task ResizeAndCropImage(SixLabors.ImageSharp.Image imageResized, string imageName, string imagePath)

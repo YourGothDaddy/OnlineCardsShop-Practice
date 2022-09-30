@@ -1,0 +1,62 @@
+﻿@model AddCardFormModel
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 col-sm-12">
+            <h2 class="text-center">Add card</h2>
+            <form method="post" enctype="multipart/form-data">
+              <div class="form-group">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" class="form-control" placeholder="Hyunjin selfie card..">
+                <span asp-validation-for="Title" class="small text-danger"></span>
+              </div>
+              <div class="form-group">
+                <label asp-for="Price"></label>
+                <input asp-for="Price" class="form-control" placeholder="20" value="@(Model.Price >= 1 ? Model.Price : string.Empty)">
+                <span asp-validation-for="Price" class="small text-danger"></span>
+              </div>
+              <div class="form-group">
+                <label asp-for="Description"></label>
+                <input asp-for="Description" class="form-control" placeholder="This is a great card">
+                <span asp-validation-for="Description" class="small text-danger"></span>
+              </div>
+              <div class="form-group">
+                  <div class="custom-file">
+                      <input type="file" onchange="changeLabelTextContent(this);" asp-for="ImageFile" class="custom-file-input" id="customFile" placeholder="">
+                      <label asp-for="ImageFile" class="custom-file-label" for="customFile">Choose file</label>
+                      <span asp-validation-for="ImageFile" class="small text-danger"></span>
+                  </div>
+              </div>
+              <div class="form-group">
+                <label asp-for="CategoryId"></label>
+                <select asp-for="CategoryId" class="form-control">
+                        @foreach(var category in Model.Categories)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                </select>
+              </div>
+              <div class="form-group">
+                <label asp-for="ConditionId"></label>
+                <select asp-for="ConditionId" class="form-control">
+                        @foreach(var condition in Model.Conditions)
+                        {
+                            <option value="@condition.Id">@condition.Name</option>
+                        }
+                </select>
+              </div>
+              <input class="btn btn-primary" type="submit" value="Save"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function changeLabelTextContent(myFile){
+        var file = myFile.files[0];
+        
+        var fileLabel = document.getElementsByClassName('custom-file-label');
+
+        fileLabel[0].textContent = file.name;
+    }
+</script>

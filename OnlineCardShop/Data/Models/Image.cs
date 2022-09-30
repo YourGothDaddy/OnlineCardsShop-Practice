@@ -9,6 +9,10 @@
         [Required]
         public string Name { get; set; }
 
+        [Required]
+        public string OriginalName { get; set; }
+
+        [Required]
         public string Path { get; set; }
 
         public int? CardId { get; set; }

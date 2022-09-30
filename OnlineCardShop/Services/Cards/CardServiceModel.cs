@@ -14,6 +14,8 @@
 
         public string Path { get; set; }
 
+        public Image ImageFile { get; set; }
+
         public string Category { get; init; }
 
         public string Condition { get; init; }

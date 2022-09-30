@@ -18,12 +18,14 @@
 
         public Image CreateImage(
             string imageName, 
-            string imagePathForDb)
+            string imagePathForDb,
+            string originalImageName)
         {
             return new Image
             {
                 Name = imageName,
-                Path = imagePathForDb
+                Path = imagePathForDb,
+                OriginalName = originalImageName
             };
         }
 
@@ -46,6 +48,34 @@
                 DealerId = dealerId,
                 Image = newImage
             };
+        }
+
+        public bool EditCard(
+            int id,
+            string title,
+            double price,
+            string description,
+            int categoryId,
+            int conditionId,
+            Image newImage)
+        {
+            var cardData = this.data.Cards.Find(id);
+
+            if(cardData == null)
+            {
+                return false;
+            }
+
+            cardData.Title = title;
+            cardData.Price = price;
+            cardData.Description = description;
+            cardData.CategoryId = categoryId;
+            cardData.ConditionId = conditionId;
+            cardData.Image = newImage;
+
+            this.data.SaveChanges();
+
+            return true;
         }
 
         public CardQueryServiceModel All(
@@ -188,6 +218,7 @@
                     Description = c.Description,
                     Category = c.Category.Name,
                     Condition = c.Condition.Name,
+                    ImageFile = c.Image,
                     Path = c.Image.Path.Replace("res", string.Empty),
                     DealerId = c.DealerId,
                     DealerName = c.Dealer.Name,
@@ -196,6 +227,13 @@
                 .FirstOrDefault();
 
             return card;
+        }
+
+        public bool CardIsByDealer(int cardId, int dealerId)
+        {
+            return this.data
+                .Cards
+                .Any(c => c.Id == cardId && c.DealerId == dealerId);
         }
 
         public IEnumerable<CardCategoryServiceViewModel> GetCardCategories()

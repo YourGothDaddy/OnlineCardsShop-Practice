@@ -8,6 +8,8 @@
 
     public class AddCardFormModel
     {
+        public int id { get; init; }
+
         [Required(ErrorMessage = "The 'Title' field is required!")]
         [StringLength
             (MaxTitleLength, 

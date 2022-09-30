@@ -122,7 +122,7 @@
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Add(AddCardFormModel card, IFormFile imageFile)
+        public async Task<IActionResult> AddAsync(AddCardFormModel card, IFormFile imageFile)
         {
             var dealerId = this.dealers.GetDealer(this.User.GetId());
 
@@ -162,13 +162,15 @@
             {
                 var imageExtension = Path.GetExtension(imageFile.FileName);
 
+                var originalImageName = imageFile.FileName;
+
                 var imageName = Path.GetRandomFileName() + imageExtension;
 
                 var imagePath = Path.Combine(wwwPath, imageDirectory, imageName);
 
                 var imagePathForDb = imageDirectory + "/" + "res" + imageName;
 
-                var newImage = this.cards.CreateImage(imageName, imagePathForDb);
+                var newImage = this.cards.CreateImage(imageName, imagePathForDb, originalImageName);
 
                 this.data.Images.Add(newImage);
 
@@ -243,6 +245,107 @@
                 Categories = this.cards.GetCardCategories(),
                 Conditions = this.cards.GetCardConditions()
             });
+        }
+
+        [HttpPost]
+        [Authorize]
+
+        public async Task<IActionResult> EditAsync(int id, AddCardFormModel card, IFormFile imageFile)
+        {
+            var dealerId = this.dealers.GetDealer(this.User.GetId());
+
+            if (dealerId == 0)
+            {
+                return RedirectToAction(nameof(DealersController.Create), "Dealers");
+            }
+
+            if (!this.data.Categories.Any(c => c.Id == card.CategoryId))
+            {
+                this.ModelState.AddModelError(nameof(card.CategoryId), "Category does not exist");
+            }
+
+            if (!this.data.Conditions.Any(c => c.Id == card.ConditionId))
+            {
+                this.ModelState.AddModelError(nameof(card.ConditionId), "Condition does not exist");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                //The card object has null the categories and conditions, so I add them again
+                card.Categories = this.cards.GetCardCategories();
+                card.Conditions = this.cards.GetCardConditions();
+
+                return View(card);
+            }
+
+            if (!this.cards.CardIsByDealer(id, dealerId))
+            {
+                return BadRequest();
+            }
+
+            var wwwPath = this.env.WebRootPath;
+            var imageDirectory = ControllersConstants.CardsController.imageDirectory;
+
+            OnlineCardShop.Data.Models.Image newImage;
+
+            if (ImageIsWithinDesiredSize(imageFile))
+            {
+                var imageExtension = Path.GetExtension(imageFile.FileName);
+
+                var originalImageName = imageFile.FileName;
+
+                var imageName = Path.GetRandomFileName() + imageExtension;
+
+                var imagePath = Path.Combine(wwwPath, imageDirectory, imageName);
+
+                var imagePathForDb = imageDirectory + "/" + "res" + imageName;
+
+                newImage = this.cards.CreateImage(imageName, imagePathForDb, originalImageName);
+
+                this.data.Images.Add(newImage);
+
+                using (var imageResized = SixLabors.ImageSharp.Image.Load(imageFile.OpenReadStream()))
+                {
+                    if (!ImageIsWithinDesiredRes(imageResized))
+                    {
+                        this.ModelState.AddModelError(nameof(imageFile), "Image should be at least 1024x1024");
+
+                        //The card object has null the categories and conditions, so I add them again
+                        card.Categories = this.cards.GetCardCategories();
+                        card.Conditions = this.cards.GetCardConditions();
+
+                        return View(card);
+                    }
+
+                    await ResizeAndCropImage(imageResized, imageName, imagePath);
+                }
+
+                using (var fileStream = System.IO.File.Create(imagePath))
+                {
+                    await imageFile.CopyToAsync(fileStream);
+                }
+            }
+
+            else
+            {
+                this.ModelState.AddModelError(nameof(imageFile), "The image is too big! The max size is 2MB");
+
+                //The card object has null the categories and conditions, so I add them again
+                card.Categories = this.cards.GetCardCategories();
+                card.Conditions = this.cards.GetCardConditions();
+
+                return View(card);
+            }
+
+            this.cards.EditCard(card.id,
+                    card.Title,
+                    card.Price,
+                    card.Description,
+                    card.CategoryId,
+                    card.ConditionId,
+                    newImage);
+
+            return RedirectToAction(nameof(All));
         }
 
         private async Task ResizeAndCropImage(SixLabors.ImageSharp.Image imageResized, string imageName, string imagePath)

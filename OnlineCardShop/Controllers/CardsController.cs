@@ -280,60 +280,75 @@
             var wwwPath = this.env.WebRootPath;
             var imageDirectory = ControllersConstants.CardsController.imageDirectory;
 
-            OnlineCardShop.Data.Models.Image newImage;
+            Data.Models.Image newImage;
 
-            if (ImageIsWithinDesiredSize(imageFile))
+            if (imageFile != null)
             {
-                string originalImageName, imageName, imagePath, imagePathForDb;
-
-                ProcessImageDetails(imageFile, wwwPath, imageDirectory, out originalImageName, out imageName, out imagePath, out imagePathForDb);
-
-                newImage = this.cards.CreateImage(imageName, imagePathForDb, originalImageName);
-
-                this.data.Images.Add(newImage);
-
-                using (var imageResized = SixLabors.ImageSharp.Image.Load(imageFile.OpenReadStream()))
+                if (ImageIsWithinDesiredSize(imageFile))
                 {
-                    if (!ImageIsWithinDesiredRes(imageResized))
+                    string originalImageName, imageName, imagePath, imagePathForDb;
+
+                    ProcessImageDetails(imageFile, wwwPath, imageDirectory, out originalImageName, out imageName, out imagePath, out imagePathForDb);
+
+                    newImage = this.cards.CreateImage(imageName, imagePathForDb, originalImageName);
+
+                    this.data.Images.Add(newImage);
+
+                    using (var imageResized = Image.Load(imageFile.OpenReadStream()))
                     {
-                        this.ModelState.AddModelError(nameof(imageFile), "Image should be at least 1024x1024");
+                        if (!ImageIsWithinDesiredRes(imageResized))
+                        {
+                            this.ModelState.AddModelError(nameof(imageFile), "Image should be at least 1024x1024");
 
-                        //The card object has null the categories and conditions, so I add them again
-                        card.Categories = this.cards.GetCardCategories();
-                        card.Conditions = this.cards.GetCardConditions();
+                            //The card object has null the categories and conditions, so I add them again
+                            card.Categories = this.cards.GetCardCategories();
+                            card.Conditions = this.cards.GetCardConditions();
 
-                        return View(card);
+                            return View(card);
+                        }
+
+                        await ResizeAndCropImage(imageResized, imageName, imagePath);
                     }
 
-                    await ResizeAndCropImage(imageResized, imageName, imagePath);
+                    using (var fileStream = System.IO.File.Create(imagePath))
+                    {
+                        await imageFile.CopyToAsync(fileStream);
+                    }
                 }
 
-                using (var fileStream = System.IO.File.Create(imagePath))
+                else
                 {
-                    await imageFile.CopyToAsync(fileStream);
-                }
-            }
+                    this.ModelState.AddModelError(nameof(imageFile), "The image is too big! The max size is 2MB");
 
+                    //The card object has null the categories and conditions, so I add them again
+                    card.Categories = this.cards.GetCardCategories();
+                    card.Conditions = this.cards.GetCardConditions();
+
+                    return View(card);
+                }
+
+                this.cards.EditCard(card.id,
+                        card.Title,
+                        card.Price,
+                        card.Description,
+                        card.CategoryId,
+                        card.ConditionId,
+                        newImage);
+
+                return RedirectToAction(nameof(All));
+            }
             else
             {
-                this.ModelState.AddModelError(nameof(imageFile), "The image is too big! The max size is 2MB");
+                this.cards.EditCard(card.id,
+                        card.Title,
+                        card.Price,
+                        card.Description,
+                        card.CategoryId,
+                        card.ConditionId,
+                        null);
 
-                //The card object has null the categories and conditions, so I add them again
-                card.Categories = this.cards.GetCardCategories();
-                card.Conditions = this.cards.GetCardConditions();
-
-                return View(card);
+                return RedirectToAction(nameof(All));
             }
-
-            this.cards.EditCard(card.id,
-                    card.Title,
-                    card.Price,
-                    card.Description,
-                    card.CategoryId,
-                    card.ConditionId,
-                    newImage);
-
-            return RedirectToAction(nameof(All));
         }
 
         private static void ProcessImageDetails(IFormFile imageFile, string wwwPath, string imageDirectory, out string originalImageName, out string imageName, out string imagePath, out string imagePathForDb)

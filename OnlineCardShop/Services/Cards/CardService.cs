@@ -57,7 +57,7 @@
             string description,
             int categoryId,
             int conditionId,
-            Image newImage)
+            Image? newImage)
         {
             var cardData = this.data.Cards.Find(id);
 
@@ -71,7 +71,11 @@
             cardData.Description = description;
             cardData.CategoryId = categoryId;
             cardData.ConditionId = conditionId;
-            cardData.Image = newImage;
+
+            if (newImage != null)
+            {
+                cardData.Image = newImage;
+            }
 
             this.data.SaveChanges();
 

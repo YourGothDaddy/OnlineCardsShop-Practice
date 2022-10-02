@@ -24,7 +24,7 @@
 
         Card CreateCard(string title, double price, string description, int categoryId, int conditionId, int dealerId, Image newImage);
 
-        bool EditCard(int cardId, string title, double price, string description, int categoryId, int conditionId, Image newImage);
+        bool EditCard(int cardId, string title, double price, string description, int categoryId, int conditionId, Image? newImage);
 
         IEnumerable<CardCategoryServiceViewModel> GetCardCategories();
 

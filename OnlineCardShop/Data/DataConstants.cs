@@ -13,8 +13,10 @@
 
         public static class User
         {
-            public const int MinNameLength = 2;
-            public const int MaxNameLength = 20;
+            public const int MinNameLength = 5;
+            public const int MaxNameLength = 40;
+            public const int PasswordMaxLength = 100;
+            public const int PasswordMinLength = 6;
         }
 
         public static class Dealer

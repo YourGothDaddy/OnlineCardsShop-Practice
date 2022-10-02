@@ -21,7 +21,7 @@
         [Required]
         public string UserId { get; set; }
 
-        public virtual IdentityUser User { get; set; }
+        public virtual User User { get; set; }
 
         public IEnumerable<Card> Cards { get; init; } = new List<Card>();
     }

@@ -9,6 +9,7 @@ namespace OnlineCardShop
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using OnlineCardShop.Data;
+    using OnlineCardShop.Data.Models;
     using OnlineCardShop.Services.Cards;
     using OnlineCardShop.Services.Dealers;
 
@@ -29,7 +30,7 @@ namespace OnlineCardShop
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options =>
+            services.AddDefaultIdentity<User>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.Password.RequireDigit = false;
@@ -37,6 +38,7 @@ namespace OnlineCardShop
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
             })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<OnlineCardShopDbContext>();
             services.AddControllersWithViews();
 

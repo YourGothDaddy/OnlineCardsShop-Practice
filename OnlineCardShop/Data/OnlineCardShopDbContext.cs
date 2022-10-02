@@ -8,15 +8,12 @@ using System.Text;
 
 namespace OnlineCardShop.Data
 {
-    public class OnlineCardShopDbContext : IdentityDbContext
+    public class OnlineCardShopDbContext : IdentityDbContext<User>
     {
         public OnlineCardShopDbContext(DbContextOptions<OnlineCardShopDbContext> options)
             : base(options)
         {
         }
-
-        //TODO: Uncomment when time to add users
-        //public DbSet<User> Users { get; set; }
 
         public DbSet<Card> Cards { get; set; }
 
@@ -45,7 +42,7 @@ namespace OnlineCardShop.Data
 
             builder
                 .Entity<Dealer>()
-                .HasOne<IdentityUser>()
+                .HasOne<User>()
                 .WithOne()
                 .HasForeignKey<Dealer>(d => d.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
@@ -56,16 +53,6 @@ namespace OnlineCardShop.Data
                 .WithOne(c => c.Image)
                 .HasForeignKey<Card>(i => i.ImageId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            //TODO: Uncomment when time to add users
-            //builder
-            //    .Entity<Card>()
-            //    .HasOne(c => c.User)
-            //    .WithMany(u => u.OwnedCards)
-            //    .HasForeignKey(c => c.UserId)
-            //    .OnDelete(DeleteBehavior.Restrict);
-
-
 
             base.OnModelCreating(builder);
         }

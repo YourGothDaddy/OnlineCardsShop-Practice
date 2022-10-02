@@ -1,8 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using OnlineCardShop.Data.Models
 @using OnlineCardShop.Infrastructure
 @using OnlineCardShop.Services.Dealers
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 @inject IDealerService Dealers
 
 <ul class="navbar-nav">

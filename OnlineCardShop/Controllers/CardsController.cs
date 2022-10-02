@@ -361,7 +361,7 @@
             imagePathForDb = imageDirectory + "/" + "res" + imageName;
         }
 
-        private async Task ResizeAndCropImage(SixLabors.ImageSharp.Image imageResized, string imageName, string imagePath)
+        private async Task ResizeAndCropImage(Image imageResized, string imageName, string imagePath)
         {
             var resizedImagePath = imagePath.Split('\\');
             resizedImagePath[resizedImagePath.Length - 1] = "res" + imageName;
@@ -375,7 +375,7 @@
             await SaveImage(imageResized, imageResizedPath);
         }
 
-        private static async Task SaveImage(SixLabors.ImageSharp.Image imageResized, string imageResizedPath)
+        private static async Task SaveImage(Image imageResized, string imageResizedPath)
         {
             await imageResized.SaveAsync(imageResizedPath);
         }
@@ -385,7 +385,7 @@
             return imageFile.Length > 0 && imageFile.Length <= (2 * 1024 * 1024);
         }
 
-        private static bool ImageIsWithinDesiredRes(SixLabors.ImageSharp.Image image)
+        private static bool ImageIsWithinDesiredRes(Image image)
         {
             return image.Height >= 1024 && image.Width >= 1024;
         }

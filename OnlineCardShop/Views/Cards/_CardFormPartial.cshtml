@@ -21,6 +21,7 @@
                 <span asp-validation-for="Description" class="small text-danger"></span>
               </div>
               <div class="form-group">
+                  <label asp-for="ImageFile"></label>
                   <div class="custom-file">
                       <input type="file" onchange="changeLabelTextContent(this);" asp-for="ImageFile" class="custom-file-input" id="customFile" placeholder="">
                       <label asp-for="ImageFile" class="custom-file-label" for="customFile">Choose file</label>

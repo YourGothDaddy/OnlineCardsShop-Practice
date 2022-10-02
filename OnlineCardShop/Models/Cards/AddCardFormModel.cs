@@ -23,6 +23,7 @@
         [Required(ErrorMessage = "The 'Description' field is required!")]
         public string Description { get; init; }
 
+        [Display(Name = "Image")]
         public Image ImageFile { get; init; }
 
         [Display(Name = "Condition")]

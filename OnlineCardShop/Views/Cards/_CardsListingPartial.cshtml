@@ -8,7 +8,9 @@
 
   <div class="col-md-4">
     <div class="card" style="">
-      <img class="card-img-top" src="@fullPath" alt="@card.Title">
+        <a asp-controller="Cards" asp-action="Details" asp-route-id="@card.Id">
+          <img class="card-img-top" src="@fullPath" alt="@card.Title">
+        </a>
       <div class="card-body">
         <h4 class="card-title">@card.Title</h4>
         <h5 class="card-title">@card.Price€</h5>

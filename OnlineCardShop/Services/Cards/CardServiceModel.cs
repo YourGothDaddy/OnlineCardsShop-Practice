@@ -27,5 +27,7 @@
         public string UserId { get; init; }
 
         public bool IsPublic { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

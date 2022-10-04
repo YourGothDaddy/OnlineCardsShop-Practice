@@ -15,6 +15,8 @@
     using SixLabors.ImageSharp.Processing;
     using OnlineCardShop.Services.Dealers;
 
+    using static WebConstants;
+
     public class CardsController : Controller
     {
         private readonly OnlineCardShopDbContext data;
@@ -211,7 +213,19 @@
                 return View(card);
             }
 
+            TempData[GlobalMessage] = "You have sucessfully added the card!";
+
             return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
+        public IActionResult Delete([FromRoute]int id)
+        {
+            this.cards.DeleteCard(id);
+
+            TempData[GlobalMessage] = "You have successfully deleted the card!";
+
+            return RedirectToAction("All", "Cards");
         }
 
         [Authorize]
@@ -327,6 +341,7 @@
                     return View(card);
                 }
 
+
                 this.cards.EditCard(card.id,
                         card.Title,
                         card.Price,
@@ -334,6 +349,8 @@
                         card.CategoryId,
                         card.ConditionId,
                         newImage);
+
+                TempData[GlobalMessage] = "You have sucessfully edited the card!";
 
                 return RedirectToAction(nameof(All));
             }
@@ -346,6 +363,8 @@
                         card.CategoryId,
                         card.ConditionId,
                         null);
+
+                TempData[GlobalMessage] = "You have sucessfully edited the card!";
 
                 return RedirectToAction(nameof(All));
             }

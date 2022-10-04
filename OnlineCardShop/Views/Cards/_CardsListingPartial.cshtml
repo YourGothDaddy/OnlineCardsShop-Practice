@@ -1,6 +1,13 @@
 ﻿@using OnlineCardShop.Infrastructure
 @model AllCardsServiceModel
 
+@if (TempData.ContainsKey(WebConstants.GlobalMessage))
+{
+    <div class="alert alert-success" role="alert">
+        @TempData[WebConstants.GlobalMessage]
+    </div>
+}
+
 <h1 class="text-center mb-md-5">All Cards</h1>
 <div class="row">
 @foreach(var card in Model.Cards)

@@ -51,6 +51,19 @@
             };
         }
 
+        public void DeleteCard(int id)
+        {
+            var card = this.data
+                .Cards
+                .Where(c => c.Id == id)
+                .FirstOrDefault();
+
+            card.IsDeleted = true;
+            card.IsPublic = false;
+
+            this.data.SaveChanges();
+        }
+
         public bool EditCard(
             int id,
             string title,
@@ -93,7 +106,7 @@
         {
             var cardsQuery = this.data
                 .Cards
-                .Where(c => c.IsPublic != false)
+                .Where(c => c.IsPublic != false && c.IsDeleted != true)
                 .AsQueryable();
 
             if (cardsQuery.Count() != 0)

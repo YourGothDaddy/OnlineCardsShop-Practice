@@ -8,8 +8,10 @@ namespace OnlineCardShop
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using OnlineCardShop.Areas.Admin.Services;
     using OnlineCardShop.Data;
     using OnlineCardShop.Data.Models;
+    using OnlineCardShop.Infrastructure;
     using OnlineCardShop.Services.Cards;
     using OnlineCardShop.Services.Dealers;
 
@@ -44,6 +46,7 @@ namespace OnlineCardShop
 
             services.AddTransient<ICardService, CardService>();
             services.AddTransient<IDealerService, DealerService>();
+            services.AddTransient<IAdminCardService, AdminCardService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,9 +75,8 @@ namespace OnlineCardShop
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapDefaultAreaRoute();
+                endpoints.MapDefaultControllerRoute();
                 endpoints.MapRazorPages();
             });
         }

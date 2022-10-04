@@ -46,7 +46,8 @@
                 CategoryId = categoryId,
                 ConditionId = conditionId,
                 DealerId = dealerId,
-                Image = newImage
+                Image = newImage,
+                IsPublic = false
             };
         }
 
@@ -90,63 +91,73 @@
             int? categoryId,
             SortingOrder? order)
         {
-            var cardsQuery = this.data.Cards.AsQueryable();
-            if (categoryId != null)
-            {
-                if (categoryId == 1)//Kpop
-                {
-                    cardsQuery = this.data.Cards
-                        .Where(c => c.CategoryId == 1)
-                        .AsQueryable();
-                }
-                else if(categoryId == 2)//Game
-                {
-                    cardsQuery = this.data.Cards
-                        .Where(c => c.CategoryId == 2)
-                        .AsQueryable();
-                }
-            }
-            else
-            {
-                cardsQuery = this.data.Cards.AsQueryable();
-            }
+            var cardsQuery = this.data
+                .Cards
+                .Where(c => c.IsPublic != false)
+                .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(searchTerm))
+            if (cardsQuery.Count() != 0)
             {
-                cardsQuery = cardsQuery
-                    .Where(c =>
-                    c.Title.ToLower().Contains(searchTerm.ToLower()));
-            }
-
-            if (categoryId != null)
-            {
-                cardsQuery = sorting switch
+                if (categoryId != null)
                 {
-                    CardSorting.Condition => cardsQuery.OrderBy(c => c.Condition),
-                    _ => cardsQuery.OrderByDescending(c => c.Condition)
-                };
-
-                if (order != null)
-                {
-                    cardsQuery = order switch
+                    if (categoryId == 1)//Kpop
                     {
-                        SortingOrder.BestToWorse => cardsQuery.OrderBy(c => c.Condition),
-                        SortingOrder.WorseToBest => cardsQuery.OrderByDescending(c => c.Condition),
-                        _ => cardsQuery.OrderBy(c => c.Condition)
+                        cardsQuery = cardsQuery
+                            .Where(c => c.CategoryId == 1)
+                            .AsQueryable();
+                    }
+                    else if (categoryId == 2)//Game
+                    {
+                        cardsQuery = cardsQuery
+                            .Where(c => c.CategoryId == 2)
+                            .AsQueryable();
+                    }
+                }
+                else
+                {
+                    cardsQuery = this.data
+                    .Cards
+                    .Where(c => c.IsPublic != false)
+                    .AsQueryable();
+                }
+
+                if (!string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    cardsQuery = cardsQuery
+                        .Where(c =>
+                        c.Title.ToLower().Contains(searchTerm.ToLower()));
+                }
+
+                if (categoryId != null)
+                {
+                    cardsQuery = sorting switch
+                    {
+                        CardSorting.Condition => cardsQuery.OrderBy(c => c.Condition),
+                        _ => cardsQuery.OrderByDescending(c => c.Condition)
+                    };
+
+                    if (order != null)
+                    {
+                        cardsQuery = order switch
+                        {
+                            SortingOrder.BestToWorse => cardsQuery.OrderBy(c => c.Condition),
+                            SortingOrder.WorseToBest => cardsQuery.OrderByDescending(c => c.Condition),
+                            _ => cardsQuery.OrderBy(c => c.Condition)
+                        };
+                    }
+                }
+                else
+                {
+                    cardsQuery = sorting switch
+                    {
+                        CardSorting.Condition => cardsQuery.OrderBy(c => c.Condition),
+                        CardSorting.Category => cardsQuery.OrderByDescending(c => c.Category),
+                        _ => cardsQuery.OrderByDescending(c => c.Condition)
                     };
                 }
-            }
-            else
-            {
-                cardsQuery = sorting switch
-                {
-                    CardSorting.Condition => cardsQuery.OrderBy(c => c.Condition),
-                    CardSorting.Category => cardsQuery.OrderByDescending(c => c.Category),
-                    _ => cardsQuery.OrderByDescending(c => c.Condition)
-                };
-            }
 
-            var totalCards = cardsQuery.Count();
+                var totalCards = cardsQuery.Count();
+            }
 
             var cards = cardsQuery
                 .Skip((currentPage - 1) * cardsPerPage)
@@ -159,7 +170,8 @@
                     Category = c.Category.Name,
                     Condition = c.Condition.Name,
                     Price = c.Price,
-                    Path = c.Image.Path
+                    Path = c.Image.Path,
+                    IsPublic = c.IsPublic
 
                 })
                 .ToList();
@@ -191,13 +203,14 @@
                 .Where(c => c.DealerId == dealerId)
                 .Select(c => new CardServiceModel
                 {
-                    Id = c.Id,
+                    Id = c.Id, 
                     Title = c.Title,
                     Price = c.Price,
                     Description = c.Description,
                     Category = c.Category.Name,
                     Condition = c.Condition.Name,
-                    Path = c.Image.Path
+                    Path = c.Image.Path,
+                    IsPublic = c.IsPublic
                 })
                 .ToList();
 

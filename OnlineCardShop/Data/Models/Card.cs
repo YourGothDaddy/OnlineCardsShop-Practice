@@ -27,12 +27,6 @@
 
         public Condition Condition { get; set; }
 
-        //TODO: Uncomment when time to add users
-        //[Column("OwnerId")]
-        //public int UserId { get; set; }
-
-        //public User User { get; set; }
-
         public int CategoryId { get; set; }
 
         public Category Category { get; init; }
@@ -40,5 +34,7 @@
         public int DealerId { get; set; }
 
         public Dealer Dealer { get; set; }
+
+        public bool IsPublic { get; set; }
     }
 }

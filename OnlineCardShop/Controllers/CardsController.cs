@@ -168,7 +168,7 @@
 
                 this.data.Images.Add(newImage);
 
-                using (var imageResized = SixLabors.ImageSharp.Image.Load(imageFile.OpenReadStream()))
+                using (var imageResized = Image.Load(imageFile.OpenReadStream()))
                 {
                     if (!ImageIsWithinDesiredRes(imageResized))
                     {
@@ -219,14 +219,14 @@
         {
             var userId = this.User.GetId();
 
-            if (!this.dealers.IsDealer(userId))
+            if (!this.dealers.IsDealer(userId) && !User.IsAdmin())
             {
                 return RedirectToAction(nameof(DealersController.Create), "Dealers");
             }
 
             var card = this.cards.CardByUser(id);
 
-            if (card.UserId != userId)
+            if (card.UserId != userId && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -248,7 +248,7 @@
         {
             var dealerId = this.dealers.GetDealer(this.User.GetId());
 
-            if (dealerId == 0)
+            if (dealerId == 0 && !User.IsAdmin())
             {
                 return RedirectToAction(nameof(DealersController.Create), "Dealers");
             }
@@ -272,7 +272,7 @@
                 return View(card);
             }
 
-            if (!this.cards.CardIsByDealer(id, dealerId))
+            if (!this.cards.CardIsByDealer(id, dealerId) && !User.IsAdmin())
             {
                 return BadRequest();
             }
@@ -420,7 +420,8 @@
                                 Category = c.Category,
                                 Condition = c.Condition,
                                 Price = c.Price,
-                                Path = c.Path
+                                Path = c.Path,
+                                IsPublic = c.IsPublic
                             })
                             .ToList();
 

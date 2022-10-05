@@ -21,7 +21,8 @@
                     Id = c.Id,
                     Title = c.Title,
                     DealerId = c.DealerId,
-                    IsDeleted = c.IsDeleted
+                    IsDeleted = c.IsDeleted,
+                    IsPublic = c.IsPublic
                 })
                 .ToList();
 
@@ -52,6 +53,18 @@
                 .FirstOrDefault();
 
             card.IsDeleted = true;
+            card.IsPublic = false;
+
+            this.data.SaveChanges();
+        }
+
+        public void HideCard(int id)
+        {
+            var card = this.data
+                .Cards
+                .Where(c => c.Id == id)
+                .FirstOrDefault();
+
             card.IsPublic = false;
 
             this.data.SaveChanges();

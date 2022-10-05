@@ -7,7 +7,7 @@
 }
 
 <div class="row">
-  <div class="col-10 offset-1 text-center">
+  <div class="col text-center">
     <h1 style="margin-bottom:5%;">Administration</h1>
 @if (TempData.ContainsKey(GlobalMessage))
 {
@@ -20,7 +20,8 @@
       <thead class="thead-dark">
         <tr>
           <th scope="col">Id</th>
-          <th scope="col">Status</th>
+          <th scope="col">Deletion Status</th>
+          <th scope="col">Activity Status</th>
           <th scope="col">Title</th>
           <th scope="col">Id Of Dealer</th>
           <th scope="col">Actions</th>
@@ -30,14 +31,23 @@
           @foreach(var card in Model.Cards){
               <tr>
                   <th scope="row">@card.Id</th>
-                  <td>@(@card.IsDeleted ? "Deleted" : "Active")</td>
+                  <td>@(@card.IsDeleted ? "Deleted" : "Public")</td>
+                  <td>@(@card.IsPublic ? "Active" : "Inactive")</td>
                   <td>@card.Title</td>
                   <td>@card.DealerId</td>
                   <td>
                       <a asp-area="" asp-controller="Cards" asp-action="Details" asp-route-id="@card.Id" class="btn btn-primary" style="color:white;">View More</a>
                       <a asp-area="" asp-controller="Cards" asp-action="Edit" asp-route-id="@card.Id" class="btn btn-warning">Edit</a>
-                      <a asp-controller="Cards" asp-action="Approve" asp-route-id="@card.Id" class="btn btn-success">Approve</a>
-                      <a asp-controller="Cards" asp-action="Delete" asp-route-id="@card.Id" class="btn btn-danger">Delete</a>
+                      @if(card.IsPublic == false && card.IsDeleted == false)
+                      {
+                          <a asp-controller="Cards" asp-action="Approve" asp-route-id="@card.Id" class="btn btn-success">Approve</a>
+                      }else if(card.IsPublic == true && card.IsDeleted == false){
+                          <a asp-controller="Cards" asp-action="Hide" asp-route-id="@card.Id" class="btn btn-info">Hide</a>
+                      }
+
+                      @if(!card.IsDeleted){
+                          <a asp-controller="Cards" asp-action="Delete" asp-route-id="@card.Id" class="btn btn-danger">Delete</a>
+                      }
                   </td>
               </tr>
           }

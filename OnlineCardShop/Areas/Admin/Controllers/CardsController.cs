@@ -34,5 +34,14 @@
 
             return RedirectToAction("Index", "Cards");
         }
+
+        public IActionResult Hide([FromRoute] int id)
+        {
+            this.cards.HideCard(id);
+
+            TempData[WebConstants.GlobalMessage] = "You have hid the card!";
+
+            return RedirectToAction("Index", "Cards");
+        }
     }
 }

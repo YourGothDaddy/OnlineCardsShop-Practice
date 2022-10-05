@@ -9,5 +9,7 @@
         void DeleteCard(int id);
 
         void ApproveCard(int id);
+
+        void HideCard(int id);
     }
 }

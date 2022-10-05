@@ -9,5 +9,7 @@
         public int DealerId { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public bool IsPublic { get; set; }
     }
 }

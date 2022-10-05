@@ -8,6 +8,11 @@
     {
         public static string GetId(this ClaimsPrincipal user)
         {
+            if(!user.Identity.IsAuthenticated)
+            {
+                return string.Empty;
+            }
+
             return user.FindFirst(ClaimTypes.NameIdentifier).Value;
         }
 

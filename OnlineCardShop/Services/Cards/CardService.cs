@@ -85,6 +85,7 @@
             cardData.Description = description;
             cardData.CategoryId = categoryId;
             cardData.ConditionId = conditionId;
+            cardData.IsPublic = false;
 
             if (newImage != null)
             {
@@ -201,6 +202,7 @@
             int currentPage,
             int cardsPerPage)
         {
+
             var dealerId = this.data
                 .Dealers
                 .Where(d => d.UserId == userId)
@@ -223,7 +225,8 @@
                     Category = c.Category.Name,
                     Condition = c.Condition.Name,
                     Path = c.Image.Path,
-                    IsPublic = c.IsPublic
+                    IsPublic = c.IsPublic,
+                    IsDeleted = c.IsDeleted
                 })
                 .ToList();
 
@@ -235,7 +238,7 @@
             return cardsResult;
         }
 
-        public CardServiceModel CardByUser(int id)
+        public CardServiceModel CardByUser(int id, string requestingUserId)
         {
             var card = this.data
                 .Cards
@@ -252,11 +255,32 @@
                     Path = c.Image.Path.Replace("res", string.Empty),
                     DealerId = c.DealerId,
                     DealerName = c.Dealer.Name,
-                    UserId = c.Dealer.UserId
+                    UserId = c.Dealer.UserId,
+                    IsDeleted = c.IsDeleted
                 })
                 .FirstOrDefault();
 
+            if (card.IsDeleted == true)//IsDeleted
+            {
+                if(CheckIfUserHasAccess(card, requestingUserId))
+                {
+                    return card;
+                }
+
+                return null;
+            }
+
             return card;
+        }
+
+        public bool CheckIfUserHasAccess(CardServiceModel card, string requestingUserId)
+        {
+            if(card.UserId != requestingUserId)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public bool CardIsByDealer(int cardId, int dealerId)

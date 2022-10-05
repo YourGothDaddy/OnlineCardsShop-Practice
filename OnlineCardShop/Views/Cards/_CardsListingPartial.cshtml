@@ -21,8 +21,10 @@
         </a>
       <div class="card-body">
         <h4 class="card-title">@card.Title</h4>
-        @if(card.IsPublic == false){
-            <h5 class="card-text" style="color:red;">Not approved</h5>
+        @if(card.IsPublic == false && card.IsDeleted == false){
+            <h5 class="card-text" style="color:red;">Not Approved</h5>
+        }else if(card.IsDeleted == true){
+            <h5 class="card-text" style="color:red;">Deleted By Administrator</h5>
         }
         <h5 class="card-title">@card.Price€</h5>
         <p class="card-text" style="margin:0"><small class="text-muted">Condition: @card.Condition</small></p>

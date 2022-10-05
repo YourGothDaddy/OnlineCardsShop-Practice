@@ -55,7 +55,14 @@
 
         public IActionResult Details([FromRoute] CardServiceModel query)
         {
-            var card = this.cards.CardByUser(query.Id);
+            var requestingUserId = this.User.GetId();
+
+            var card = this.cards.CardByUser(query.Id, requestingUserId);
+
+            if(card == null)
+            {
+                return View("~/Views/Shared/_userError.cshtml");
+            }
 
             return View(card);
         }
@@ -215,7 +222,7 @@
 
             TempData[GlobalMessage] = "You have sucessfully added the card!";
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("All", "Cards");
         }
 
         [Authorize]
@@ -238,7 +245,7 @@
                 return RedirectToAction(nameof(DealersController.Create), "Dealers");
             }
 
-            var card = this.cards.CardByUser(id);
+            var card = this.cards.CardByUser(id, userId);
 
             if (card.UserId != userId && !User.IsAdmin())
             {

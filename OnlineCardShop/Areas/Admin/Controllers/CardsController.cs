@@ -2,6 +2,8 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using OnlineCardShop.Areas.Admin.Services;
+    using OnlineCardShop.Areas.Admin.Services.Cards;
+    using System.Linq;
 
     public class CardsController : AdminController
     {
@@ -11,9 +13,12 @@
         {
             this.cards = cards;
         }
-        public IActionResult Index()
+        public IActionResult Index([FromQuery] AllCardsServiceModel query, [FromQuery] int currentPage)
         {
-            var cards = this.cards.All();
+            var cards = this.cards.All(query.CurrentPage, AllCardsServiceModel.CardsPerPage);
+
+            CardsToAddOnPage(query, cards);
+            SelectCurrentPage(currentPage);
 
             return View(cards);
         }
@@ -42,6 +47,35 @@
             TempData[WebConstants.GlobalMessage] = "You have hid the card!";
 
             return RedirectToAction("Index", "Cards");
+        }
+
+        private void SelectCurrentPage(int currentPage)
+        {
+            if (currentPage == 0)
+            {
+                ViewBag.CurrentPage = 1;
+            }
+            else
+            {
+                ViewBag.CurrentPage = currentPage;
+            }
+        }
+
+        private static void CardsToAddOnPage(AllCardsServiceModel query, AllCardsServiceModel queryResult)
+        {
+            var cardsToAdd = queryResult.Cards
+                            .Select(c => new CardServiceModel
+                            {
+                                Id = c.Id,
+                                Title = c.Title,
+                                DealerId = c.DealerId,
+                                IsPublic = c.IsPublic,
+                                IsDeleted = c.IsDeleted
+                            })
+                            .ToList();
+
+            query.TotalCards = queryResult.TotalCards;
+            query.Cards = cardsToAdd;
         }
     }
 }

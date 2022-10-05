@@ -12,10 +12,13 @@
         {
             this.data = data;
         }
-        public CardQueryServiceModel All()
+        public AllCardsServiceModel All(int currentPage, int cardsPerPage)
         {
-            var cardsQuery = this.data
-                .Cards
+            var totalCards = this.data.Cards;
+
+            var cardsQuery = totalCards
+                .Skip((currentPage - 1) * cardsPerPage)
+                .Take(cardsPerPage)
                 .Select(c => new CardServiceModel
                 {
                     Id = c.Id,
@@ -26,9 +29,11 @@
                 })
                 .ToList();
 
-            var cards = new CardQueryServiceModel();
+            var cards = new AllCardsServiceModel();
 
             cards.Cards = cardsQuery;
+            cards.TotalCards = totalCards.Count();
+            cards.CurrentPage = currentPage;
 
             return cards;
         }

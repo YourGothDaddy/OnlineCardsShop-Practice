@@ -4,7 +4,7 @@
 
     public interface IAdminCardService
     {
-        CardQueryServiceModel All();
+        AllCardsServiceModel All(int currentPage, int cardsPerPage);
 
         void DeleteCard(int id);
 

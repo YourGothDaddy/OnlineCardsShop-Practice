@@ -1,0 +1,47 @@
+﻿@using static OnlineCardShop.WebConstants;
+@model OnlineCardShop.Areas.Admin.Services.Cards.CardQueryServiceModel;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+  <div class="col-10 offset-1 text-center">
+    <h1 style="margin-bottom:5%;">Administration</h1>
+@if (TempData.ContainsKey(GlobalMessage))
+{
+    <div class="alert alert-success" role="alert">
+        @TempData[GlobalMessage]
+    </div>
+}
+    <h2 style="margin-bottom:2%;">Cards</h2>
+    <table class="table table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Status</th>
+          <th scope="col">Title</th>
+          <th scope="col">Id Of Dealer</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+          @foreach(var card in Model.Cards){
+              <tr>
+                  <th scope="row">@card.Id</th>
+                  <td>@(@card.IsDeleted ? "Deleted" : "Active")</td>
+                  <td>@card.Title</td>
+                  <td>@card.DealerId</td>
+                  <td>
+                      <a asp-area="" asp-controller="Cards" asp-action="Details" asp-route-id="@card.Id" class="btn btn-primary" style="color:white;">View More</a>
+                      <a asp-area="" asp-controller="Cards" asp-action="Edit" asp-route-id="@card.Id" class="btn btn-warning">Edit</a>
+                      <a asp-controller="Cards" asp-action="Approve" asp-route-id="@card.Id" class="btn btn-success">Approve</a>
+                      <a asp-controller="Cards" asp-action="Delete" asp-route-id="@card.Id" class="btn btn-danger">Delete</a>
+                  </td>
+              </tr>
+          }
+      </tbody>
+    </table>
+  </div>
+</div>

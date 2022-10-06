@@ -299,6 +299,33 @@ namespace OnlineCardShop.Data.Migrations
                     b.ToTable("Images");
                 });
 
+            modelBuilder.Entity("OnlineCardShop.Data.Models.ProfileImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OriginalName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProfileImages");
+                });
+
             modelBuilder.Entity("OnlineCardShop.Data.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -345,6 +372,9 @@ namespace OnlineCardShop.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("ProfileImageId")
+                        .HasColumnType("int");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -364,6 +394,10 @@ namespace OnlineCardShop.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("ProfileImageId")
+                        .IsUnique()
+                        .HasFilter("[ProfileImageId] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -469,6 +503,16 @@ namespace OnlineCardShop.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("OnlineCardShop.Data.Models.User", b =>
+                {
+                    b.HasOne("OnlineCardShop.Data.Models.ProfileImage", "ProfileImage")
+                        .WithOne("User")
+                        .HasForeignKey("OnlineCardShop.Data.Models.User", "ProfileImageId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("ProfileImage");
+                });
+
             modelBuilder.Entity("OnlineCardShop.Data.Models.Category", b =>
                 {
                     b.Navigation("Cards");
@@ -487,6 +531,11 @@ namespace OnlineCardShop.Data.Migrations
             modelBuilder.Entity("OnlineCardShop.Data.Models.Image", b =>
                 {
                     b.Navigation("Card");
+                });
+
+            modelBuilder.Entity("OnlineCardShop.Data.Models.ProfileImage", b =>
+                {
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

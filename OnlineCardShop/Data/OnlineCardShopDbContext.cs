@@ -24,6 +24,8 @@ namespace OnlineCardShop.Data
         public DbSet<Dealer> Dealers { get; init; }
 
         public DbSet<Image> Images { get; set; }
+
+        public DbSet<ProfileImage> ProfileImages { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder
@@ -52,6 +54,13 @@ namespace OnlineCardShop.Data
                 .HasOne(i => i.Card)
                 .WithOne(c => c.Image)
                 .HasForeignKey<Card>(i => i.ImageId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<ProfileImage>()
+                .HasOne(pi => pi.User)
+                .WithOne(u => u.ProfileImage)
+                .HasForeignKey<User>(pi => pi.ProfileImageId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);

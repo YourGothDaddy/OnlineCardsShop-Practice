@@ -9,5 +9,9 @@
     {
         [MaxLength(MaxNameLength)]
         public string FullName { get; set; }
+
+        public int? ProfileImageId { get; set; }
+
+        public ProfileImage ProfileImage { get; set; }
     }
 }

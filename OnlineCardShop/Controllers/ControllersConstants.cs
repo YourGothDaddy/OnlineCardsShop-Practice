@@ -7,6 +7,7 @@
             public const int width = 250;
             public const int height = 300;
             public const string imageDirectory = "Uploads";
+            public const string profileImageDirectory = "ProfileImages";
         }
     }
 }

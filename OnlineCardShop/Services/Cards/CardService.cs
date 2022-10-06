@@ -29,6 +29,19 @@
             };
         }
 
+        public ProfileImage CreateProfileImage(
+            string imageName,
+            string imagePathForDb,
+            string originalImageName)
+        {
+            return new ProfileImage
+            {
+                Name = imageName,
+                Path = imagePathForDb,
+                OriginalName = originalImageName
+            };
+        }
+
         public Card CreateCard(
             string title,
             double price,

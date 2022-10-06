@@ -8,7 +8,7 @@
 
 <div class="row">
     <div class="col-md-4 offset-md-4">
-        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <form asp-route-returnUrl="@Model.ReturnUrl" enctype="multipart/form-data" method="post">
             <h4 class="text-center">Create a new account.</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -23,6 +23,14 @@
                 <span asp-validation-for="Input.FullName" class="text-danger"></span>
             </div>
             <div class="form-group">
+                  <label asp-for="Input.ProfileImage"></label>
+                  <div class="custom-file">
+                      <input type="file" onchange="changeLabelTextContent(this);" asp-for="Input.ProfileImage" class="custom-file-input" id="customFile" placeholder="">
+                      <label asp-for="Input.ProfileImage" class="custom-file-label" for="customFile">Choose file</label>
+                      <span asp-validation-for="Input.ProfileImage" class="small text-danger"></span>
+                  </div>
+              </div>
+            <div class="form-group">
                 <label asp-for="Input.Password"></label>
                 <input asp-for="Input.Password" class="form-control" />
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
@@ -36,6 +44,16 @@
         </form>
     </div>
 </div>
+
+<script>
+    function changeLabelTextContent(myFile){
+        var file = myFile.files[0];
+        
+        var fileLabel = document.getElementsByClassName('custom-file-label');
+
+        fileLabel[0].textContent = file.name;
+    }
+</script>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

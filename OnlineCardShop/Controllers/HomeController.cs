@@ -11,12 +11,10 @@
 
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly OnlineCardShopDbContext data;
 
-        public HomeController(ILogger<HomeController> logger, OnlineCardShopDbContext data)
+        public HomeController(OnlineCardShopDbContext data)
         {
-            _logger = logger;
             this.data = data;
         }
 

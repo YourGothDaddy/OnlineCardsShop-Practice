@@ -22,7 +22,7 @@
       <div class="card-body">
         <h4 class="card-title">@card.Title</h4>
         @if(card.IsPublic == false && card.IsDeleted == false){
-            <h5 class="card-text" style="color:red;">Not Approved</h5>
+            <h5 class="card-text" style="color:red;">Awaiting Approval</h5>
         }else if(card.IsDeleted == true){
             <h5 class="card-text" style="color:red;">Deleted By Administrator</h5>
         }

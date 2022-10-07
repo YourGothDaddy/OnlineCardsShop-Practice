@@ -220,7 +220,7 @@
                 return View(card);
             }
 
-            TempData[GlobalMessage] = "You have sucessfully added the card!";
+            TempData[GlobalMessage] = "You card will be public after an Administrator approves it!";
 
             return RedirectToAction("All", "Cards");
         }
@@ -394,9 +394,26 @@
 
             var imageResizedPath = string.Join('\\', resizedImagePath);
 
-            imageResized.Mutate(i => i
+            if((imageResized.Width < 1024 || imageResized.Height < 1024) &&
+                (imageResized.Width >= 696 || imageResized.Height >= 836))
+            {
+                var heightFormula = (imageResized.Height - 418) / 2;
+                var widthFormula = (imageResized.Width - 348) / 2;
+
+                var isUnderWidth = (imageResized.Width - 348) / 2 < 348;
+                var isUnderHeight = (imageResized.Height - 418) / 2 < 418;
+
+                var isUnderWidthR = (imageResized.Width / 2) < 348;
+
+                imageResized.Mutate(i => i
+                .Resize(418,348));
+            }
+            else
+            {
+                imageResized.Mutate(i => i
             .Resize(imageResized.Width / 2, imageResized.Height / 2)
             .Crop(new Rectangle((imageResized.Width - 348) / 2, (imageResized.Height - 418) / 2, 348, 418)));
+            }
 
             await SaveImage(imageResized, imageResizedPath);
         }
@@ -413,7 +430,7 @@
 
         private static bool ImageIsWithinDesiredRes(Image image)
         {
-            return image.Height >= 1024 && image.Width >= 1024;
+            return image.Height >= 836 && image.Width >= 696;
         }
 
         private bool UserIsDealer()

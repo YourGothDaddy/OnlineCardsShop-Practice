@@ -15,7 +15,7 @@
     var userId = User.GetId();
     var userIsDealer = Dealers.IsDealer(userId);
     var userIsAdmin = User.IsAdmin();
-    var currentUserProfileImageId = this.data
+    var currentUserProfileImagePath = this.data
     .Users
     .Select(user => new 
     { 
@@ -23,7 +23,7 @@
     })
     .FirstOrDefault();
 
-        var test = currentUserProfileImageId.path.Replace("res", string.Empty);
+        var imagePath = currentUserProfileImagePath.path.Replace("res", string.Empty);
 
     if(!userIsDealer && !userIsAdmin){
         <li class="nav-item">
@@ -52,7 +52,7 @@
             </form>
         </li>
         <li>
-            <img class="rounded-circle z-depth-2" style="height:70px; width:70px;" src="/@test" data-holder-rendered="true">
+            <img class="rounded-circle z-depth-2" style="height:70px; width:70px;" src="@(!userIsAdmin ? '/' + imagePath :"/ProfileImages/admin.png")" data-holder-rendered="true">
         </li>
     }
 else

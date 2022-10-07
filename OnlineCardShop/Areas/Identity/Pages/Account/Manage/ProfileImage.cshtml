@@ -1,0 +1,38 @@
+﻿@page
+@model OnlineCardShop.Areas.Identity.Pages.Account.Manage.ProfileImage
+@{
+    ViewData["Title"] = "Profile Image";
+    ViewData["ActivePage"] = ManageNavPages.ProfileImage;
+}
+
+<h4>@ViewData["Title"]</h4>
+<div class="row" style="margin-bottom:3%;">
+  <div class="col-md-6">
+    <form method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <div class="custom-file">
+          <input type="file" 
+          onchange="changeLabelTextContent(this);"
+          class="custom-file-input" 
+          id="customFile" placeholder="">
+          <label class="custom-file-label" for="customFile">Choose file</label>
+        </div>
+      </div>
+      <input class="btn btn-primary" type="submit" value="Save">
+    </form>
+  </div>
+</div>
+
+<script>
+    function changeLabelTextContent(myFile){
+        var file = myFile.files[0];
+        
+        var fileLabel = document.getElementsByClassName('custom-file-label');
+
+        fileLabel[0].textContent = file.name;
+    }
+</script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

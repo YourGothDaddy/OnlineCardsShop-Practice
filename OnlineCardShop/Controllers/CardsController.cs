@@ -397,13 +397,6 @@
             if((imageResized.Width < 1024 || imageResized.Height < 1024) &&
                 (imageResized.Width >= 696 || imageResized.Height >= 836))
             {
-                var heightFormula = (imageResized.Height - 418) / 2;
-                var widthFormula = (imageResized.Width - 348) / 2;
-
-                var isUnderWidth = (imageResized.Width - 348) / 2 < 348;
-                var isUnderHeight = (imageResized.Height - 418) / 2 < 418;
-
-                var isUnderWidthR = (imageResized.Width / 2) < 348;
 
                 imageResized.Mutate(i => i
                 .Resize(418,348));

@@ -273,6 +273,19 @@
                 })
                 .FirstOrDefault();
 
+            var cardUser = this.data
+                .Users
+                .Where(u => u.Id == card.UserId)
+                .Select(u => new
+                {
+                    path = u.ProfileImage.Path
+
+                })
+                .FirstOrDefault()
+                .ToString();
+
+            card.cardUser = cardUser;
+
             if (card.IsDeleted == true)//IsDeleted
             {
                 if(CheckIfUserHasAccess(card, requestingUserId))

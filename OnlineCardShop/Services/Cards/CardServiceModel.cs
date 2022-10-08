@@ -29,5 +29,7 @@
         public bool IsPublic { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public string cardUser { get; set; }
     }
 }

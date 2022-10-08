@@ -16,6 +16,7 @@
     using OnlineCardShop.Services.Dealers;
 
     using static WebConstants;
+    using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 
     public class CardsController : Controller
     {
@@ -133,7 +134,7 @@
         [Authorize]
         public async Task<IActionResult> AddAsync(AddCardFormModel card, IFormFile imageFile)
         {
-            var dealerId = this.dealers.GetDealer(this.User.GetId());
+            var dealerId = this.dealers.GetDealerId(this.User.GetId());
 
             if (dealerId == 0)
             {
@@ -267,7 +268,7 @@
 
         public async Task<IActionResult> EditAsync(int id, AddCardFormModel card, IFormFile imageFile)
         {
-            var dealerId = this.dealers.GetDealer(this.User.GetId());
+            var dealerId = this.dealers.GetDealerId(this.User.GetId());
 
             if (dealerId == 0 && !User.IsAdmin())
             {
@@ -394,12 +395,24 @@
 
             var imageResizedPath = string.Join('\\', resizedImagePath);
 
-            if((imageResized.Width < 1024 || imageResized.Height < 1024) &&
-                (imageResized.Width >= 696 || imageResized.Height >= 836))
+            if(imageResized.Width < 1024 || imageResized.Height < 1024)
             {
+                IExifValue exifOrientation = imageResized.Metadata?.ExifProfile?.GetValue(ExifTag.Orientation);
 
-                imageResized.Mutate(i => i
-                .Resize(418,348));
+                if(exifOrientation != null)
+                {
+                    var exifValue = exifOrientation.GetValue().ToString();
+                    if (exifValue == "8")
+                    {
+                        imageResized.Mutate(i => i
+                        .Resize(418, 348));
+                    }
+                }
+                else
+                {
+                    imageResized.Mutate(i => i
+                    .Resize(348, 418));
+                }
             }
             else
             {

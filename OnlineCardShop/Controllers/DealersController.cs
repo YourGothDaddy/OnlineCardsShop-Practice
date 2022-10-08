@@ -6,15 +6,19 @@
     using OnlineCardShop.Data.Models;
     using OnlineCardShop.Infrastructure;
     using OnlineCardShop.Models.Dealers;
+    using OnlineCardShop.Services.Dealers;
     using System.Linq;
 
     public class DealersController : Controller
     {
         private readonly OnlineCardShopDbContext data;
+        private readonly IDealerService dealers;
 
-        public DealersController(OnlineCardShopDbContext data)
+        public DealersController(OnlineCardShopDbContext data,
+            IDealerService dealers)
         {
             this.data = data;
+            this.dealers = dealers;
         }
 
         [Authorize]
@@ -54,6 +58,16 @@
             this.data.SaveChanges();
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
+        public IActionResult Dealer([FromRoute] string id)
+        {
+            var cardDealerId = this.dealers.GetDealerId(id);
+
+            var cardDealer = this.dealers.GetDealer(cardDealerId);
+
+            return View(cardDealer);
         }
 
         public bool IsDealer(string userId)

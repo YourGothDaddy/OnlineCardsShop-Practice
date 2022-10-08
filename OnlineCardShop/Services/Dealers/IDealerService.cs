@@ -6,6 +6,8 @@
     {
         public bool IsDealer(string userId);
 
-        public int GetDealer(string userId);
+        public int GetDealerId(string userId);
+
+        public DealerServiceViewModel GetDealer(int dealerId);
     }
 }

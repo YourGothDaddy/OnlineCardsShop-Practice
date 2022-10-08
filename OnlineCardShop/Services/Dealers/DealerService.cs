@@ -13,7 +13,20 @@
             this.data = data;
         }
 
-        public int GetDealer(string userId)
+        public DealerServiceViewModel GetDealer(int dealerId)
+        {
+            return this.data
+                .Dealers
+                .Where(d => d.Id == dealerId)
+                .Select(d => new DealerServiceViewModel
+                {
+                    Name = d.Name,
+                    PhoneNumber = d.PhoneNumber
+                })
+                .FirstOrDefault();
+        }
+
+        public int GetDealerId(string userId)
         {
             return this.data
                 .Dealers

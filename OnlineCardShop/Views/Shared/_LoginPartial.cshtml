@@ -17,6 +17,7 @@
     var userIsAdmin = User.IsAdmin();
     var currentUserProfileImagePath = this.data
     .Users
+    .Where(u => u.Id == userId)
     .Select(user => new 
     { 
         path = user.ProfileImage.Path

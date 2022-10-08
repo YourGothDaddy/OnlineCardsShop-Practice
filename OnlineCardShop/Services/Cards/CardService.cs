@@ -226,9 +226,9 @@
 
             var cards = this.data
                 .Cards
+                .Where(c => c.DealerId == dealerId)
                 .Skip((currentPage - 1) * cardsPerPage)
                 .Take(cardsPerPage)
-                .Where(c => c.DealerId == dealerId)
                 .Select(c => new CardServiceModel
                 {
                     Id = c.Id, 
@@ -264,6 +264,7 @@
                     Category = c.Category.Name,
                     Condition = c.Condition.Name,
                     Path = c.Image.Path.Replace("res", string.Empty),
+                    DealerId = c.DealerId,
                     DealerName = c.Dealer.Name,
                     UserId = c.Dealer.UserId
                 })
@@ -282,7 +283,7 @@
 
             card.cardUser = cardUser;
 
-            if (card.IsDeleted == true)//IsDeleted
+            if (card.IsDeleted == true)
             {
                 if(CheckIfUserHasAccess(card, requestingUserId))
                 {

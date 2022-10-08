@@ -53,7 +53,7 @@
             return View(myCards);
         }
 
-        public IActionResult Details([FromRoute] CardServiceModel query)
+        public IActionResult Details([FromRoute] CardDetailsServiceModel query)
         {
             var requestingUserId = this.User.GetId();
 

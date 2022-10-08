@@ -16,7 +16,7 @@
 
         AllCardsServiceModel ByUser(string userId, int currentPage, int cardsPerPage);
 
-        CardServiceModel CardByUser(int id, string requestingUserId);
+        CardDetailsServiceModel CardByUser(int id, string requestingUserId);
 
         bool CardIsByDealer(int cardId, int dealerId);
 

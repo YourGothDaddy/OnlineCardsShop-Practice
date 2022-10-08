@@ -326,6 +326,29 @@ namespace OnlineCardShop.Data.Migrations
                     b.ToTable("ProfileImages");
                 });
 
+            modelBuilder.Entity("OnlineCardShop.Data.Models.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reviews");
+                });
+
             modelBuilder.Entity("OnlineCardShop.Data.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -377,6 +400,12 @@ namespace OnlineCardShop.Data.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TotalRaters")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalRating")
+                        .HasColumnType("int");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -503,6 +532,16 @@ namespace OnlineCardShop.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("OnlineCardShop.Data.Models.Review", b =>
+                {
+                    b.HasOne("OnlineCardShop.Data.Models.User", "User")
+                        .WithMany("Reviews")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("OnlineCardShop.Data.Models.User", b =>
                 {
                     b.HasOne("OnlineCardShop.Data.Models.ProfileImage", "ProfileImage")
@@ -536,6 +575,11 @@ namespace OnlineCardShop.Data.Migrations
             modelBuilder.Entity("OnlineCardShop.Data.Models.ProfileImage", b =>
                 {
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OnlineCardShop.Data.Models.User", b =>
+                {
+                    b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618
         }

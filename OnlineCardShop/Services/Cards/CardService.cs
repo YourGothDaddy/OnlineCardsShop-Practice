@@ -251,25 +251,21 @@
             return cardsResult;
         }
 
-        public CardServiceModel CardByUser(int id, string requestingUserId)
+        public CardDetailsServiceModel CardByUser(int id, string requestingUserId)
         {
             var card = this.data
                 .Cards
                 .Where(c => c.Id == id)
-                .Select(c => new CardServiceModel
+                .Select(c => new CardDetailsServiceModel
                 {
-                    Id = c.Id,
                     Title = c.Title,
                     Price = c.Price,
                     Description = c.Description,
                     Category = c.Category.Name,
                     Condition = c.Condition.Name,
-                    ImageFile = c.Image,
                     Path = c.Image.Path.Replace("res", string.Empty),
-                    DealerId = c.DealerId,
                     DealerName = c.Dealer.Name,
-                    UserId = c.Dealer.UserId,
-                    IsDeleted = c.IsDeleted
+                    UserId = c.Dealer.UserId
                 })
                 .FirstOrDefault();
 
@@ -299,7 +295,7 @@
             return card;
         }
 
-        public bool CheckIfUserHasAccess(CardServiceModel card, string requestingUserId)
+        public bool CheckIfUserHasAccess(CardDetailsServiceModel card, string requestingUserId)
         {
             if(card.UserId != requestingUserId)
             {

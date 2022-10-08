@@ -1,13 +1,12 @@
-﻿@model CardServiceModel
+﻿@model CardDetailsServiceModel
 
 @{
     ViewData["Title"] = $"View More - {Model.Title}";
 
-    var imagePathFirst = @Model.cardUser.Replace("{ path = ", string.Empty);
-
-    var imagePathSecond = imagePathFirst.Replace(" }", string.Empty);
-
-    var imagePath = imagePathSecond.Replace("res", string.Empty);
+    var imagePath = @Model.cardUser
+    .Replace("{ path = ", string.Empty)
+    .Replace(" }", string.Empty)
+    .Replace("res", string.Empty);
 }
 
 <div class="row">
@@ -26,7 +25,11 @@
   <div class="col-2 text-left" style="margin-left:5%;">
       <div class="text-center">
           <h3 style="margin-bottom:5%;">@Model.DealerName</h3>
-          <img class="rounded-circle z-depth-2" style="height:150px; width:150px;" src="/@imagePath" data-holder-rendered="true">
+          <a asp-controller="Users" asp-action="Index" asp-route-id="@Model.UserId">
+              <img class="rounded-circle z-depth-2" style="height:150px; width:150px;" src="/@imagePath" data-holder-rendered="true">
+          </a>
+
+          <h3 style="margin-top:10%;">Reviews</h3>
       </div>
   </div>
 </div>

@@ -9,6 +9,8 @@
     using OnlineCardShop.Services.Dealers;
     using System.Linq;
 
+    using static WebConstants;
+
     public class DealersController : Controller
     {
         private readonly OnlineCardShopDbContext data;
@@ -67,7 +69,37 @@
 
             var cardDealer = this.dealers.GetDealer(cardDealerId);
 
+            var currentDealerReviews = this.dealers.GetReviews(id);
+
+            cardDealer.Reviews = currentDealerReviews;
+
             return View(cardDealer);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Dealer(DealerServiceViewModel ratingFormData, [FromRoute] string id)
+        {
+            if (string.IsNullOrEmpty(ratingFormData.Description))
+            {
+                this.ModelState.AddModelError(nameof(ratingFormData.Description), "There is no review!");
+            }
+
+            if (ratingFormData.Rating <= 0)
+            {
+                this.ModelState.AddModelError(nameof(ratingFormData.Description), "There is no rating!");
+            }
+
+            if(!ModelState.IsValid)
+            {
+                return View(ratingFormData);
+            }
+
+            this.dealers.AddReview(ratingFormData.Description, ratingFormData.Rating, id);
+            this.dealers.UpdateRatings(id);
+
+            TempData[GlobalMessage] = "Your rating was submitted! Thank you!";
+            return RedirectToAction("Dealer", "Dealers");
         }
 
         public bool IsDealer(string userId)

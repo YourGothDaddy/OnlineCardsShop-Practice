@@ -223,7 +223,7 @@
 
             TempData[GlobalMessage] = "You card will be public after an Administrator approves it!";
 
-            return RedirectToAction("All", "Cards");
+            return RedirectToAction("Mine", "Cards");
         }
 
         [Authorize]

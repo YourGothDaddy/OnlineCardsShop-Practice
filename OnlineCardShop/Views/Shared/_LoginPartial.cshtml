@@ -15,16 +15,24 @@
     var userId = User.GetId();
     var userIsDealer = Dealers.IsDealer(userId);
     var userIsAdmin = User.IsAdmin();
-    var currentUserProfileImagePath = this.data
-    .Users
-    .Where(u => u.Id == userId)
-    .Select(user => new 
-    { 
-        path = user.ProfileImage.Path
-    })
-    .FirstOrDefault();
 
-        var imagePath = currentUserProfileImagePath.path.Replace("res", string.Empty);
+    var currentUserProfileImagePath = new { path = string.Empty };
+    string imagePath;
+
+    if(!userIsAdmin){
+        currentUserProfileImagePath = this.data
+        .Users
+        .Where(u => u.Id == userId)
+        .Select(user => new 
+        { 
+            path = user.ProfileImage.Path
+        })
+        .FirstOrDefault();
+
+        imagePath = currentUserProfileImagePath.path.Replace("res", string.Empty);
+    }else{
+        imagePath = "ProfileImages/admin.png";
+    }
 
     if(!userIsDealer && !userIsAdmin){
         <li class="nav-item">
@@ -37,12 +45,12 @@
         <li class="nav-item">
           <a class="nav-link text-dark" asp-area="" asp-controller="Cards" asp-action="Add">Add Card</a>
         </li>
-        }else if (userIsAdmin)
-        {
-            <li class="nav-item">
-                <a  class="nav-link text-dark" asp-area="Admin" asp-controller="Cards" asp-action="Index">Administration</a>
-            </li>
-        }
+    }else if (userIsAdmin)
+    {
+        <li class="nav-item">
+            <a  class="nav-link text-dark" asp-area="Admin" asp-controller="Cards" asp-action="Index">Administration</a>
+        </li>
+    }
 
         <li class="nav-item">
             <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account</a>
@@ -53,7 +61,7 @@
             </form>
         </li>
         <li>
-            <img class="rounded-circle z-depth-2" style="height:70px; width:70px;" src="@(!userIsAdmin ? '/' + imagePath :"/ProfileImages/admin.png")" data-holder-rendered="true">
+            <img class="rounded-circle z-depth-2" style="height:70px; width:70px;" src="/@imagePath" data-holder-rendered="true">
         </li>
     }
 else

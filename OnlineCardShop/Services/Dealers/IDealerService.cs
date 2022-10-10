@@ -16,7 +16,11 @@
 
         public void UpdateRatings(string userId);
 
-        public IEnumerable<User> GetSubmitters(IEnumerable<Review> reviews);
+        public int GetTotalRating(string userId);
+
+        public int GetTotalRaters(string userId);
+
+        public IEnumerable<DetailsUserServiceModel> GetSubmitters(IEnumerable<Review> reviews);
 
         public IEnumerable<Review> GetReviews(string userId);
     }

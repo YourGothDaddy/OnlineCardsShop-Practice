@@ -16,8 +16,12 @@
         [Required]
         public int Rating { get; set; }
 
+        public int TotalRating { get; set; }
+
+        public int TotalRaters { get; set; }
+
         public IEnumerable<Review> Reviews { get; set; }
 
-        public IEnumerable<User> Submitters { get; set; }
+        public IEnumerable<DetailsUserServiceModel> Submitters { get; set; }
     }
 }

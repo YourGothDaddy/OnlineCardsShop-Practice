@@ -88,8 +88,6 @@ namespace OnlineCardShop.Services.Dealers
                 .Select(r => r.Rating)
                 .ToList();
 
-            //var countOfRatings = allUserRatings.Count();
-
             var currentUser = this.data
                 .Users
                 .Where(u => u.Id == userId)
@@ -99,6 +97,24 @@ namespace OnlineCardShop.Services.Dealers
             currentUser.TotalRaters = totalReviewsCount;
 
             this.data.SaveChanges();
+        }
+
+        public int GetTotalRating(string userId)
+        {
+            return this.data
+                .Users
+                .Where(u => u.Id == userId)
+                .Select(u => u.TotalRating)
+                .FirstOrDefault();
+        }
+
+        public int GetTotalRaters(string userId)
+        {
+            return this.data
+                .Users
+                .Where(u => u.Id == userId)
+                .Select(u => u.TotalRaters)
+                .FirstOrDefault();
         }
 
         public IEnumerable<Review> GetReviews(string userId)
@@ -111,11 +127,7 @@ namespace OnlineCardShop.Services.Dealers
 
             var reviewsToSkip = 3;
 
-            if(totalReviewsCount <= reviewsToSkip)
-            {
-                reviewsToSkip = 0;
-                totalReviewsCount = 0;
-            }
+            CheckHowManyReviewsCanBeSkipped(ref totalReviewsCount, ref reviewsToSkip);
 
             var mostRecentReviews = this.data
                 .Reviews
@@ -129,18 +141,25 @@ namespace OnlineCardShop.Services.Dealers
             return mostRecentReviews;
         }
 
-        public IEnumerable<User> GetSubmitters(IEnumerable<Review> reviews)
+        public IEnumerable<DetailsUserServiceModel> GetSubmitters(IEnumerable<Review> reviews)
         {
             var mostRecentReviewsSubmitters = reviews
                 .Select(r => r.SubmitterId)
+                .OrderBy(id => id)
                 .ToList();
 
             var allUsers = this.data
                 .Users
                 .Include(x => x.ProfileImage)
+                .Select(u => new DetailsUserServiceModel
+                {
+                    Id = u.Id,
+                    FullName = u.FullName,
+                    ProfileImagePath = u.ProfileImage.Path.Replace("res", string.Empty)
+                })
                 .ToList();
 
-            var usersResult = new List<User>();
+            var usersResult = new List<DetailsUserServiceModel>();
 
             foreach (var user in allUsers)
             {
@@ -167,6 +186,15 @@ namespace OnlineCardShop.Services.Dealers
             return this.data
                 .Dealers
                 .Any(d => d.UserId == userId);
+        }
+
+        private static void CheckHowManyReviewsCanBeSkipped(ref int totalReviewsCount, ref int reviewsToSkip)
+        {
+            if (totalReviewsCount <= reviewsToSkip)
+            {
+                reviewsToSkip = 0;
+                totalReviewsCount = 0;
+            }
         }
     }
 }

@@ -75,6 +75,7 @@
 
             cardDealer.Reviews = currentDealerReviews;
             cardDealer.Submitters = submitters;
+            cardDealer.TotalRating = this.dealers.GetTotalRating(id); 
 
             return View(cardDealer);
         }

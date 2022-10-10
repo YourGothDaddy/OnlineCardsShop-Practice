@@ -71,7 +71,10 @@
 
             var currentDealerReviews = this.dealers.GetReviews(id);
 
+            var submitters = this.dealers.GetSubmitters(currentDealerReviews);
+
             cardDealer.Reviews = currentDealerReviews;
+            cardDealer.Submitters = submitters;
 
             return View(cardDealer);
         }
@@ -95,7 +98,7 @@
                 return View(ratingFormData);
             }
 
-            this.dealers.AddReview(ratingFormData.Description, ratingFormData.Rating, id);
+            this.dealers.AddReview(ratingFormData.Description, ratingFormData.Rating, id, User);
             this.dealers.UpdateRatings(id);
 
             TempData[GlobalMessage] = "Your rating was submitted! Thank you!";

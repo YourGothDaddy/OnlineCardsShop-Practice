@@ -8,6 +8,8 @@
 
         public int Rating { get; set; }
 
+        public string SubmitterId { get; set; }
+
         public string UserId { get; set; }
 
         public User User { get; set; }

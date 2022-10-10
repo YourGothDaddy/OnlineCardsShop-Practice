@@ -1,5 +1,9 @@
 ﻿@model DealerServiceViewModel
 
+@using OnlineCardShop.Data
+
+@inject OnlineCardShopDbContext data;
+
 @{
     ViewData["Title"] = "Current Dealer";
     if (TempData.ContainsKey(WebConstants.GlobalMessage))
@@ -8,19 +12,43 @@
             @TempData[WebConstants.GlobalMessage]
         </div>
     };
+
+    var y = 0;
+
+    var submittersProfileImagePaths = @Model
+    .Submitters
+    .ToList();
 }
 
 <div class="row text-center">
     <div class="offset-3 col-6">
-        <h3>Reviews</h3>
+        <h3 style="margin-bottom:9%;">Most Recent Reviews</h3>
 
         @foreach(var review in @Model.Reviews)
         {
-            <div style="margin-bottom:5%;">
-                <h4>@review.Description</h4>
-                <h5>@review.Rating</h5>
-                <h4>@review.User.FullName</h4>
-            </div>
+                <div class="card" style="margin-top:5%;">
+                  <div class="card-body m-3">
+                    <div class="row">
+                      <div class="col-lg-4 d-flex justify-content-center align-items-center mb-4 mb-lg-0">
+                            @{
+                                var currentSubmitter = review.SubmitterId;
+                                var reviewSubmitterFullName = @Model.
+                                Submitters.
+                                Where(x => x.Id == currentSubmitter)
+                                .Select(x => x.FullName)
+                                .FirstOrDefault();
+                            }
+                          <img src="/@submittersProfileImagePaths[y].ProfileImage.Path.Replace("res", string.Empty)" class="rounded-circle img-fluid shadow-1" style="height:135px; width:135px;"></div>
+                      <div class="col-lg-8">
+                        <p class="text-muted fw-light mb-4">@review.Description</p>
+                        <p class="fw-bold lead mb-2"><strong>@reviewSubmitterFullName</strong></p>
+                        <p class="fw-bold mb-0" style="color:gold; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;"><strong>@review.Rating☆</strong></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                y++;
         }
     </div>
     <div class="col text-left">

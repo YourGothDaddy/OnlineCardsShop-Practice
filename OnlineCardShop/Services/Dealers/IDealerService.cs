@@ -2,6 +2,7 @@
 {
     using OnlineCardShop.Data.Models;
     using System.Collections.Generic;
+    using System.Security.Claims;
 
     public interface IDealerService
     {
@@ -11,9 +12,11 @@
 
         public DealerServiceViewModel GetDealer(int dealerId);
 
-        public void AddReview(string description, int rating, string userId);
+        public void AddReview(string description, int rating, string userId, ClaimsPrincipal user);
 
         public void UpdateRatings(string userId);
+
+        public IEnumerable<User> GetSubmitters(IEnumerable<Review> reviews);
 
         public IEnumerable<Review> GetReviews(string userId);
     }

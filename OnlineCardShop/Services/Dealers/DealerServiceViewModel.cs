@@ -17,5 +17,7 @@
         public int Rating { get; set; }
 
         public IEnumerable<Review> Reviews { get; set; }
+
+        public IEnumerable<User> Submitters { get; set; }
     }
 }

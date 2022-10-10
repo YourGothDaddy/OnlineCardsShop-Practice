@@ -1,0 +1,49 @@
+﻿@model DealerServiceViewModel
+
+@{
+    ViewData["Title"] = "Current Dealer";
+    if (TempData.ContainsKey(WebConstants.GlobalMessage))
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData[WebConstants.GlobalMessage]
+        </div>
+    };
+}
+
+<div class="row text-center">
+    <div class="offset-3 col-6">
+        <h3>Reviews</h3>
+
+        @foreach(var review in @Model.Reviews)
+        {
+            <div style="margin-bottom:5%;">
+                <h4>@review.Description</h4>
+                <h5>@review.Rating</h5>
+                <h4>@review.User.FullName</h4>
+            </div>
+        }
+    </div>
+    <div class="col text-left">
+        <div class="text-center">
+            <h3>@Model.Name</h3>
+            <h4>@Model.PhoneNumber</h4>
+            <hr />
+            <h4 style="margin-top:10%; margin-bottom:5%;">Do you have experience with this dealer?</h4>
+            <h5>Share it!</h5>
+            <form method="post">
+                 <div class="rating">
+                    @for(var i = 5; i >= 1; i--)
+                    {
+                        <input asp-for="Rating" type="radio" name="rating" value="@i" id="@i" />
+                        <label for="@i">☆</label>
+                    }
+                </div>
+                <div class="form-outline">
+                  <textarea asp-for="Description" class="form-control" style="resize:none;" rows="8"></textarea>
+                  <span asp-validation-for="Description" class="small text-danger"></span>
+                </div>
+                <input class="btn btn-primary" style="margin-top:5%;" type="submit" value="Submit"/>
+            </form>
+        </div>
+    </div>
+</div>

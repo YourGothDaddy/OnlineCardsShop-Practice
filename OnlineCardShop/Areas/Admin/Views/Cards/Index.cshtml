@@ -3,17 +3,18 @@
 
 @{
     ViewData["Title"] = "Home Page";
-}
 
-<div class="row">
-  <div class="col text-center">
-    <h1 style="margin-bottom:5%;">Administration</h1>
-@if (TempData.ContainsKey(GlobalMessage))
+    @if (TempData.ContainsKey(GlobalMessage))
 {
     <div class="alert alert-success" role="alert">
         @TempData[GlobalMessage]
     </div>
 }
+}
+
+<div class="row">
+  <div class="col text-center">
+    <h1 style="margin-bottom:5%;">Administration</h1>
 
 <partial name="_CardsPaginationPartial" model="@Model" />
 

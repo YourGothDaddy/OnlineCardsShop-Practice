@@ -1,5 +1,6 @@
 ﻿namespace OnlineCardShop.Services.Dealers
 {
+    using Microsoft.EntityFrameworkCore;
     using OnlineCardShop.Data;
     using OnlineCardShop.Data.Models;
     using System;
@@ -46,6 +47,7 @@
         {
             var allUserRatings = this.data
                 .Reviews
+                .Include(x => x.User)
                 .Where(r => r.UserId == userId)
                 .Select(r => r.Rating)
                 .ToList();
@@ -68,6 +70,7 @@
         {
             var allReviews = this.data
                 .Reviews
+                .Include(x => x.User)
                 .Where(r => r.UserId == userId)
                 .ToList();
 

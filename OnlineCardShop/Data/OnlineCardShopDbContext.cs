@@ -28,6 +28,10 @@ namespace OnlineCardShop.Data
         public DbSet<ProfileImage> ProfileImages { get; set; }
 
         public DbSet<Review> Reviews { get; set; }
+
+        public DbSet<Chat> Chats { get; set; }
+
+        public DbSet<Message> Messages { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder
@@ -70,6 +74,38 @@ namespace OnlineCardShop.Data
                 .HasOne(r => r.User)
                 .WithMany(u => u.Reviews)
                 .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Message>()
+                .HasOne(m => m.Chat)
+                .WithMany(c => c.Messages)
+                .HasForeignKey(m => m.ChatId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Message>()
+                .HasOne(m => m.User)
+                .WithMany(u => u.Messages)
+                .HasForeignKey(m => m.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<UserChat>()
+                .HasKey(uc => new { uc.UserId, uc.ChatId });
+
+            builder
+                .Entity<UserChat>()
+                .HasOne<User>(u => u.User)
+                .WithMany(c => c.UserChats)
+                .HasForeignKey(uc => uc.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<UserChat>()
+                .HasOne<Chat>(uc => uc.Chat)
+                .WithMany(c => c.UserChats)
+                .HasForeignKey(uc => uc.ChatId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);

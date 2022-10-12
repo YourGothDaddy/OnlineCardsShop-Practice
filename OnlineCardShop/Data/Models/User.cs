@@ -20,5 +20,11 @@
         public int? ProfileImageId { get; set; }
 
         public ProfileImage ProfileImage { get; set; }
+
+        public IEnumerable<Message> Messages { get; set; }
+
+        public IEnumerable<Chat> Chats { get; set; }
+
+        public IEnumerable<UserChat> UserChats { get; set; }
     }
 }

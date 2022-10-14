@@ -13,13 +13,10 @@ namespace OnlineCardShop.Services.Dealers
     public class DealerService : IDealerService
     {
         private readonly OnlineCardShopDbContext data;
-        private readonly UserManager<User> userManager;
 
-        public DealerService(OnlineCardShopDbContext data,
-            UserManager<User> userManager)
+        public DealerService(OnlineCardShopDbContext data)
         {
             this.data = data;
-            this.userManager = userManager;
         }
 
         public DealerServiceViewModel GetDealer(int dealerId)
@@ -133,8 +130,8 @@ namespace OnlineCardShop.Services.Dealers
                 .Reviews
                 .Include(x => x.User)
                 .Include(x => x.User.ProfileImage)
-                .Skip(totalReviewsCount - reviewsToSkip)
                 .Where(r => r.UserId == userId)
+                .Skip(totalReviewsCount - reviewsToSkip)
                 .OrderBy(r => r.SubmitterId)
                 .ToList();
 

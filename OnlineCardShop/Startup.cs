@@ -15,6 +15,7 @@ namespace OnlineCardShop
     using OnlineCardShop.Infrastructure;
     using OnlineCardShop.Services.Cards;
     using OnlineCardShop.Services.Dealers;
+    using OnlineCardShop.Services.Users;
 
     public class Startup
     {
@@ -45,11 +46,15 @@ namespace OnlineCardShop
                 .AddEntityFrameworkStores<OnlineCardShopDbContext>();
             services.AddControllersWithViews();
 
-            services.AddSignalR();
+            services.AddSignalR(x =>
+            {
+                x.EnableDetailedErrors = true;
+            });
 
             services.AddTransient<ICardService, CardService>();
             services.AddTransient<IDealerService, DealerService>();
             services.AddTransient<IAdminCardService, AdminCardService>();
+            services.AddTransient<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

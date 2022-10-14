@@ -11,6 +11,7 @@ namespace OnlineCardShop
     using OnlineCardShop.Areas.Admin.Services;
     using OnlineCardShop.Data;
     using OnlineCardShop.Data.Models;
+    using OnlineCardShop.Hubs;
     using OnlineCardShop.Infrastructure;
     using OnlineCardShop.Services.Cards;
     using OnlineCardShop.Services.Dealers;
@@ -44,6 +45,8 @@ namespace OnlineCardShop
                 .AddEntityFrameworkStores<OnlineCardShopDbContext>();
             services.AddControllersWithViews();
 
+            services.AddSignalR();
+
             services.AddTransient<ICardService, CardService>();
             services.AddTransient<IDealerService, DealerService>();
             services.AddTransient<IAdminCardService, AdminCardService>();
@@ -75,6 +78,7 @@ namespace OnlineCardShop
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<ChatHub>("/chat");
                 endpoints.MapDefaultAreaRoute();
                 endpoints.MapControllerRoute(
                     name: "default",

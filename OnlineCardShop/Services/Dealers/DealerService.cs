@@ -26,6 +26,7 @@ namespace OnlineCardShop.Services.Dealers
                 .Where(d => d.Id == dealerId)
                 .Select(d => new DealerServiceViewModel
                 {
+                    Id = d.UserId,
                     Name = d.Name,
                     PhoneNumber = d.PhoneNumber
                 })

@@ -106,11 +106,6 @@
             return RedirectToAction("Dealer", "Dealers");
         }
 
-        public IActionResult Chat()
-        {
-            return View();
-        }
-
         public bool IsDealer(string userId)
         {
             return this.data

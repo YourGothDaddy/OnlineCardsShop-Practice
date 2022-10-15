@@ -11,6 +11,8 @@
         [MaxLength(MaxNameLength)]
         public string FullName { get; set; }
 
+        public string AboutMe { get; set; }
+
         public int TotalRating { get; set; }
 
         public int TotalRaters { get; set; }

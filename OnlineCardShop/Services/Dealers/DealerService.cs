@@ -162,7 +162,11 @@ namespace OnlineCardShop.Services.Dealers
             {
                 if (mostRecentReviewsSubmitters.Any(mrrs => mrrs == user.Id))
                 {
-                    usersResult.Add(user);
+                    var repeatingSubmitters = mostRecentReviewsSubmitters.FindAll(x => x.Equals(user.Id));
+                    foreach (var submitter in repeatingSubmitters)
+                    {
+                        usersResult.Add(user);
+                    }
                 }
             }
 

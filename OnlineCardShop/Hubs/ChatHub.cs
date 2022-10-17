@@ -50,11 +50,7 @@
 
             var messages = this.chats.GetMessagesHistory(chatName);
 
-            //var test = this.chats.GetUsersAndMessages(messages);
-
-            await Clients.Client(Context.ConnectionId).SendAsync("ShowHistory", messages);
-
-            //await Clients.Group(chatName).SendAsync("ShowHistory", messages);
+            await Clients.Client(Context.ConnectionId).SendAsync("ShowHistory", messages, receiverId);
         }
 
         public void CreateGroup(string receiverId)

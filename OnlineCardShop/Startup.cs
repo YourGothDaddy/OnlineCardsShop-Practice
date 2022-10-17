@@ -14,8 +14,10 @@ namespace OnlineCardShop
     using OnlineCardShop.Hubs;
     using OnlineCardShop.Infrastructure;
     using OnlineCardShop.Services.Cards;
+    using OnlineCardShop.Services.Chats;
     using OnlineCardShop.Services.Dealers;
     using OnlineCardShop.Services.Users;
+    using System.Text.Json.Serialization;
 
     public class Startup
     {
@@ -55,6 +57,7 @@ namespace OnlineCardShop
             services.AddTransient<IDealerService, DealerService>();
             services.AddTransient<IAdminCardService, AdminCardService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IChatService, ChatService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

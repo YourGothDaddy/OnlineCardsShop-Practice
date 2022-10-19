@@ -35,7 +35,7 @@
 
             this.chats.SaveMessage(chatName, userId, message);
 
-            await Clients.Group(chatName).SendAsync("ReceiveMessage", userFullName, message);
+            await Clients.Group(chatName).SendAsync("ReceiveMessage", userId, userFullName, message, receiverId);
         }
 
         public async Task RetrieveChatHistory(string receiverId)

@@ -5,7 +5,13 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/chat").build();
 //Disable send button until connection is established
 document.getElementById("sendButton").disabled = true;
 
-connection.on("ReceiveMessage", function (user, message) {
+connection.on("ReceiveMessage", function (userId, userFullName, message, receiverId, messagesCounter, messagesCount) {
+
+    //Uncomment if I decide to load the messages on parts
+
+    //var lastMessageEl = document.getElementById("lastMessage");
+    //lastMessageEl.style.backgroundColor = "#fff";
+    //lastMessageEl.removeAttribute("id");
 
     var ulElement = document.getElementById("messagesList");
 
@@ -16,6 +22,20 @@ connection.on("ReceiveMessage", function (user, message) {
 
     var cardDiv = document.createElement("div");
     cardDiv.classList.add("card");
+
+    if (userId != receiverId) {
+        cardDiv.style.color = "red";
+    }
+
+    if (messagesCounter == messagesCount) {
+        ulElement.scrollTo(0, ulElement.scrollHeight);
+    }
+
+    //Uncomment if I decide to load the messages on parts
+
+    //if (messagesCounter == messagesCount) {
+    //    cardDiv.setAttribute("id", "lastMessage");
+    //}
 
     var usernameDiv = document.createElement("div");
     usernameDiv.classList.add("card-header");
@@ -50,14 +70,34 @@ connection.on("ReceiveMessage", function (user, message) {
 
     ulElement.appendChild(liElement);
 
-    usernameP.textContent = `${user}`;
+    usernameP.textContent = `${userFullName}`;
     messageP.textContent = `${message}`;
+
+    //Uncomment if I decide to load the messages on parts
+
+    //var lastMessageEl = document.getElementById("lastMessage");
+
+    //var test = document.getElementById("messagesList");
+
+    //$(test).scroll(function () {
+    //    var hT = $('#lastMessage').offset().top,
+    //        hH = $('#lastMessage').outerHeight(),
+    //        wH = $(test).height(),
+    //        wS = $(this).scrollTop();
+    //    if (wS > (hT + hH - wH)) {
+    //        if (lastMessageEl != null) {
+    //            $(test).off('scroll');
+    //            lastMessageEl.style.backgroundColor = "yellow";
+    //        }
+    //    }
+    //});
 });
 
 connection.on("ShowHistory", function (messages, idFromUrl) {
 
-    messages.forEach(message => ShowChatHistory(message, idFromUrl));
-
+    for (let i = 0; i <= messages.length; i++) {
+        ShowChatHistory(messages[i], idFromUrl, i, messages.length - 1)
+    }
 });
 
 connection.start().then(function () {
@@ -89,12 +129,9 @@ document.getElementById("sendButton").addEventListener("click", function (event)
     event.preventDefault();
 });
 
-function ShowChatHistory(message, idFromUrl) {
+function ShowChatHistory(message, idFromUrl, messagesCounter, messagesCount) {
 
     var stringifiedMessage = JSON.parse(JSON.stringify(message));
-
-    console.log(stringifiedMessage.userId);
-    console.log(idFromUrl);
 
     var ulElement = document.getElementById("messagesList");
 
@@ -109,6 +146,16 @@ function ShowChatHistory(message, idFromUrl) {
     if (stringifiedMessage.userId != idFromUrl) {
         cardDiv.style.color = "red";
     }
+
+    if (messagesCounter == messagesCount) {
+        ulElement.scrollTo(0, ulElement.scrollHeight);
+    }
+
+    //Uncomment if I decide to load the messages on parts
+
+    //if (messagesCounter == messagesCount) {
+    //    cardDiv.setAttribute("id", "lastMessage");
+    //}
 
     var usernameDiv = document.createElement("div");
     usernameDiv.classList.add("card-header");
@@ -145,4 +192,23 @@ function ShowChatHistory(message, idFromUrl) {
 
     usernameP.textContent = `${stringifiedMessage.user.fullName}`;
     messageP.textContent = `${stringifiedMessage.content}`;
+
+    //Uncomment if I decide to load the messages on parts
+
+    //var lastMessageEl = document.getElementById("lastMessage");
+
+    //var test = document.getElementById("messagesList");
+
+    //$(test).scroll(function () {
+    //    var hT = $('#lastMessage').offset().top,
+    //        hH = $('#lastMessage').outerHeight(),
+    //        wH = $(test).height(),
+    //        wS = $(this).scrollTop();
+    //    if (wS > (hT + hH - wH)) {
+    //        if (lastMessageEl != null) {
+    //            $(test).off('scroll');
+    //            lastMessageEl.style.backgroundColor = "yellow";
+    //        }
+    //    }
+    //});
 }

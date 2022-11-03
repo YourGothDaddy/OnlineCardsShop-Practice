@@ -19,7 +19,7 @@
             return View(userDetails);
         }
 
-        public IActionResult Chat()
+        public IActionResult Chat([FromRoute]string id)
         {
             return View();
         }

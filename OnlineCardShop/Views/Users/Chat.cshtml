@@ -1,0 +1,30 @@
+﻿<section style="background-color: #eee;">
+  <div class="container py-5">
+    <div class="row">
+        @*Left Side 'Member'*@
+      <div class="col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0" id="recentMessages">
+        @*<h5 class="font-weight-bold mb-3 text-center text-lg-start">Chats</h5>*@
+      </div>
+      @*Left Side 'Member'*@
+      @*Right Side Chat*@
+      <div class="col-md-6 col-lg-7 col-xl-8">
+        <ul class="list-unstyled" id="messagesList" style="overflow-y:scroll; height:500px;">
+          @*Bottom Message*@
+          @*Bottom Message*@
+        </ul>
+
+        <div class="bg-white mb-3">
+            <div class="form-outline">
+              <input class="form-control" id="messageInput" />
+            </div>
+          </div>
+        <button type="button" class="btn btn-info btn-rounded float-end" id="sendButton">Send</button>
+      </div>
+      @*Right Side Chat*@
+    </div>
+  </div>
+</section>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js"></script>

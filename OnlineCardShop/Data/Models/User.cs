@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Text.Json.Serialization;
+
     using static DataConstants.User;
 
     public class User : IdentityUser
@@ -26,10 +27,6 @@
         public ProfileImage ProfileImage { get; set; }
 
         [JsonIgnore]
-        public IEnumerable<Message> Messages { get; set; }
-
-        public IEnumerable<Chat> Chats { get; set; }
-
-        public IEnumerable<UserChat> UserChats { get; set; }
+        public ICollection<Chat> Chats { get; set; } = new List<Chat>();
     }
 }

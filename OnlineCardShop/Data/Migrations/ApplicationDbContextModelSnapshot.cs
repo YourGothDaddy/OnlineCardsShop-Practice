@@ -498,21 +498,6 @@ namespace OnlineCardShop.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("OnlineCardShop.Data.Models.UserChat", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ChatId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "ChatId");
-
-                    b.HasIndex("ChatId");
-
-                    b.ToTable("UserChat");
-                });
-
             modelBuilder.Entity("ChatUser", b =>
                 {
                     b.HasOne("OnlineCardShop.Data.Models.Chat", null)
@@ -638,9 +623,8 @@ namespace OnlineCardShop.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("OnlineCardShop.Data.Models.User", "User")
-                        .WithMany("Messages")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .WithMany()
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Chat");
 
@@ -667,25 +651,6 @@ namespace OnlineCardShop.Data.Migrations
                     b.Navigation("ProfileImage");
                 });
 
-            modelBuilder.Entity("OnlineCardShop.Data.Models.UserChat", b =>
-                {
-                    b.HasOne("OnlineCardShop.Data.Models.Chat", "Chat")
-                        .WithMany("UserChats")
-                        .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("OnlineCardShop.Data.Models.User", "User")
-                        .WithMany("UserChats")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Chat");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("OnlineCardShop.Data.Models.Category", b =>
                 {
                     b.Navigation("Cards");
@@ -694,8 +659,6 @@ namespace OnlineCardShop.Data.Migrations
             modelBuilder.Entity("OnlineCardShop.Data.Models.Chat", b =>
                 {
                     b.Navigation("Messages");
-
-                    b.Navigation("UserChats");
                 });
 
             modelBuilder.Entity("OnlineCardShop.Data.Models.Condition", b =>
@@ -720,11 +683,7 @@ namespace OnlineCardShop.Data.Migrations
 
             modelBuilder.Entity("OnlineCardShop.Data.Models.User", b =>
                 {
-                    b.Navigation("Messages");
-
                     b.Navigation("Reviews");
-
-                    b.Navigation("UserChats");
                 });
 #pragma warning restore 612, 618
         }

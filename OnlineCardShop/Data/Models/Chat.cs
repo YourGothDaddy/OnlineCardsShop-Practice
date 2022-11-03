@@ -8,10 +8,9 @@
 
         public string Name { get; set; }
 
-        public IEnumerable<Message> Messages { get; set; }
+        public ICollection<Message> Messages { get; set; } = new List<Message>();
+
 
         public ICollection<User> Users { get; set; } = new List<User>();
-
-        public IEnumerable<UserChat> UserChats { get; set; }
     }
 }

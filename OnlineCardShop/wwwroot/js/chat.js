@@ -7,12 +7,6 @@ document.getElementById("sendButton").disabled = true;
 
 connection.on("ReceiveMessage", function (userId, userFullName, message, receiverId, messagesCounter, messagesCount) {
 
-    //Uncomment if I decide to load the messages on parts
-
-    //var lastMessageEl = document.getElementById("lastMessage");
-    //lastMessageEl.style.backgroundColor = "#fff";
-    //lastMessageEl.removeAttribute("id");
-
     var ulElement = document.getElementById("messagesList");
 
     var liElement = document.createElement("li");
@@ -21,21 +15,6 @@ connection.on("ReceiveMessage", function (userId, userFullName, message, receive
     liElement.classList.add("mb-4");
 
     var cardDiv = document.createElement("div");
-    cardDiv.classList.add("card");
-
-    if (userId != receiverId) {
-        cardDiv.style.color = "red";
-    }
-
-    if (messagesCounter == messagesCount) {
-        ulElement.scrollTo(0, ulElement.scrollHeight);
-    }
-
-    //Uncomment if I decide to load the messages on parts
-
-    //if (messagesCounter == messagesCount) {
-    //    cardDiv.setAttribute("id", "lastMessage");
-    //}
 
     var usernameDiv = document.createElement("div");
     usernameDiv.classList.add("card-header");
@@ -55,42 +34,34 @@ connection.on("ReceiveMessage", function (userId, userFullName, message, receive
     var cardBodyDiv = document.createElement("div");
     cardBodyDiv.classList.add("card-body");
 
-    var messageP = document.createElement("p");
-    messageP.classList.add("mb-0");
+    var messageDiv = document.createElement("p");
+    messageDiv.classList.add("mb-0");
+
+    if (userId != receiverId) {
+        messageDiv.style.color = "#212529";
+        messageDiv.style.backgroundColor = "#d6d6d6";
+        messageDiv.style.padding = "1rem";
+        messageDiv.style.borderRadius = "5px";
+    }
 
     liElement.appendChild(cardDiv);
 
-    cardDiv.appendChild(usernameDiv);
+    if (userId == receiverId) {
+        cardDiv.appendChild(usernameDiv);
+        usernameDiv.appendChild(usernameP);
+        usernameDiv.appendChild(sentTimeAgoP);
+    }
     usernameDiv.appendChild(usernameP);
     usernameDiv.appendChild(sentTimeAgoP);
 
     liElement.appendChild(cardBodyDiv);
 
-    cardBodyDiv.appendChild(messageP);
+    cardBodyDiv.appendChild(messageDiv);
 
     ulElement.appendChild(liElement);
 
     usernameP.textContent = `${userFullName}`;
-    messageP.textContent = `${message}`;
-
-    //Uncomment if I decide to load the messages on parts
-
-    //var lastMessageEl = document.getElementById("lastMessage");
-
-    //var test = document.getElementById("messagesList");
-
-    //$(test).scroll(function () {
-    //    var hT = $('#lastMessage').offset().top,
-    //        hH = $('#lastMessage').outerHeight(),
-    //        wH = $(test).height(),
-    //        wS = $(this).scrollTop();
-    //    if (wS > (hT + hH - wH)) {
-    //        if (lastMessageEl != null) {
-    //            $(test).off('scroll');
-    //            lastMessageEl.style.backgroundColor = "yellow";
-    //        }
-    //    }
-    //});
+    messageDiv.textContent = `${message}`;
 });
 
 connection.on("ShowHistory", function (messages, idFromUrl) {
@@ -98,6 +69,22 @@ connection.on("ShowHistory", function (messages, idFromUrl) {
     for (let i = 0; i <= messages.length; i++) {
         ShowChatHistory(messages[i], idFromUrl, i, messages.length - 1)
     }
+});
+
+connection.on("ShowRecentChats", function (chats, timePassedSinceLastMessage, userFullName) {
+
+    var recentMessagesDiv = document.getElementById("recentMessages");
+    recentMessagesDiv.innerHTML = '';
+
+    let i = -1;
+
+    chats.forEach((chat) => {
+        i++;
+        if (chat.users.length > 0) {
+            ShowRecentChats(chat, timePassedSinceLastMessage[i], userFullName);
+        }
+    });
+    
 });
 
 connection.start().then(function () {
@@ -112,6 +99,16 @@ connection.start().then(function () {
     connection.invoke("RetrieveChatHistory", idFromUrl).catch(function (err) {
         return console.error(err.toString());
     });
+
+    connection.invoke("RetrieveRecentChats").catch(function (err) {
+        return console.error(err.toString());
+    });
+
+    connection.invoke("OnConnected").catch(function (err) {
+        return console.error(err.toString());
+    });
+
+
 }).catch(function (err) {
 
     return console.error(err.toString());
@@ -123,6 +120,19 @@ document.getElementById("sendButton").addEventListener("click", function (event)
     var idFromUrl = location.pathname.split('/')[3];
 
     connection.invoke("SendMessage", message, idFromUrl).catch(function (err) {
+        return console.error(err.toString());
+    });
+
+    var recentMessagesDiv = document.getElementById("recentMessages");
+    while (recentMessagesDiv.firstChild) {
+        recentMessagesDiv.removeChild(recentMessagesDiv.lastChild);
+    }
+
+    connection.invoke("RetrieveRecentChats").catch(function (err) {
+        return console.error(err.toString());
+    });
+
+    connection.invoke("RetrieveRecentChatsOfUser", idFromUrl).catch(function (err) {
         return console.error(err.toString());
     });
 
@@ -141,21 +151,11 @@ function ShowChatHistory(message, idFromUrl, messagesCounter, messagesCount) {
     liElement.classList.add("mb-4");
 
     var cardDiv = document.createElement("div");
-    cardDiv.classList.add("card");
-
-    if (stringifiedMessage.userId != idFromUrl) {
-        cardDiv.style.color = "red";
-    }
+    cardDiv.style.backgroundColor = "white";
 
     if (messagesCounter == messagesCount) {
         ulElement.scrollTo(0, ulElement.scrollHeight);
     }
-
-    //Uncomment if I decide to load the messages on parts
-
-    //if (messagesCounter == messagesCount) {
-    //    cardDiv.setAttribute("id", "lastMessage");
-    //}
 
     var usernameDiv = document.createElement("div");
     usernameDiv.classList.add("card-header");
@@ -175,40 +175,142 @@ function ShowChatHistory(message, idFromUrl, messagesCounter, messagesCount) {
     var cardBodyDiv = document.createElement("div");
     cardBodyDiv.classList.add("card-body");
 
-    var messageP = document.createElement("p");
-    messageP.classList.add("mb-0");
+    var messageDiv = document.createElement("div");
+    messageDiv.classList.add("mb-0");
+
+    if (stringifiedMessage.userId != idFromUrl) {
+        messageDiv.style.color = "#212529";
+        messageDiv.style.backgroundColor = "#d6d6d6";
+        messageDiv.style.padding = "1rem";
+        messageDiv.style.borderRadius = "5px";
+    }
 
     liElement.appendChild(cardDiv);
-
-    cardDiv.appendChild(usernameDiv);
-    usernameDiv.appendChild(usernameP);
-    usernameDiv.appendChild(sentTimeAgoP);
+    if (stringifiedMessage.userId == idFromUrl) {
+        cardDiv.appendChild(usernameDiv);
+        usernameDiv.appendChild(usernameP);
+        usernameDiv.appendChild(sentTimeAgoP);
+    }
 
     liElement.appendChild(cardBodyDiv);
 
-    cardBodyDiv.appendChild(messageP);
+    cardBodyDiv.appendChild(messageDiv);
 
     ulElement.appendChild(liElement);
 
     usernameP.textContent = `${stringifiedMessage.user.fullName}`;
-    messageP.textContent = `${stringifiedMessage.content}`;
+    messageDiv.textContent = `${stringifiedMessage.content}`;
+}
 
-    //Uncomment if I decide to load the messages on parts
+function ShowRecentChats(chat, timePassedSinceLastMessage, userFullName) {
 
-    //var lastMessageEl = document.getElementById("lastMessage");
+    var sender;
+    var otherChatParticipantId;
 
-    //var test = document.getElementById("messagesList");
+    chat.users.forEach((user) => {
+        if (user.fullName != userFullName) {
+            sender = user.fullName;
+            otherChatParticipantId = user.id;
+        }
+    })
 
-    //$(test).scroll(function () {
-    //    var hT = $('#lastMessage').offset().top,
-    //        hH = $('#lastMessage').outerHeight(),
-    //        wH = $(test).height(),
-    //        wS = $(this).scrollTop();
-    //    if (wS > (hT + hH - wH)) {
-    //        if (lastMessageEl != null) {
-    //            $(test).off('scroll');
-    //            lastMessageEl.style.backgroundColor = "yellow";
-    //        }
-    //    }
-    //});
+    if (chat.messages.length > 0) {
+        var lastMessage = chat.messages[chat.messages.length - 1].content;
+        var lastMessageSender = chat.messages[chat.messages.length - 1].user.fullName;
+
+        var recentMessagesDiv = document.getElementById("recentMessages");
+
+        var cardDiv = document.createElement("div");
+        cardDiv.classList.add("card");
+
+        var cardBodyDiv = document.createElement("div");
+        cardBodyDiv.classList.add("card-body");
+
+        var ulElement = document.createElement("ul");
+        ulElement.classList.add("list-unstyled");
+        ulElement.classList.add("mb-0");
+
+        var liElement = document.createElement("li");
+        liElement.classList.add("p-2");
+        liElement.classList.add("border-bottom");
+        liElement.style.backgroundColor = "#eee";
+
+        var anchorElement = document.createElement("a");
+        anchorElement.classList.add("d-flex");
+        anchorElement.classList.add("justify-content-between");
+
+        var innerCard = document.createElement("div");
+        innerCard.classList.add("d-flex");
+        innerCard.classList.add("flex-row");
+
+        var imgElement = document.createElement("img");
+        imgElement.src = "https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-8.webp";
+        imgElement.alt = "avatar";
+        imgElement.classList.add("rounded-circle");
+        imgElement.classList.add("d-flex");
+        imgElement.classList.add("align-self-center");
+        imgElement.classList.add("me-3");
+        imgElement.classList.add("shadow-1-strong");
+        imgElement.width = 60;
+
+        var userTitleAndMessageDiv = document.createElement("div");
+        userTitleAndMessageDiv.classList.add("pt-1");
+
+        var usernameP = document.createElement("p");
+        usernameP.classList.add("fw-bold");
+        usernameP.classList.add("mb-0");
+        usernameP.textContent = sender;
+
+        var messageOverviewP = document.createElement("p");
+        messageOverviewP.classList.add("small");
+        messageOverviewP.classList.add("text-muted");
+
+        if (lastMessage != null) {
+            if (lastMessage.length <= 50 && lastMessage.length > 0) {
+                if (lastMessageSender == userFullName) {
+                    messageOverviewP.textContent = 'You: ' + lastMessage;
+                } else {
+                    messageOverviewP.textContent = lastMessage;
+                }
+            } else {
+                if (lastMessageSender == userFullName) {
+                    messageOverviewP.textContent = 'You: ' + lastMessage.slice(0, 50) + "..";
+                } else {
+                    messageOverviewP.textContent = lastMessage.slice(0, 50) + "..";
+                }
+            }
+        }
+
+        var timeSentDiv = document.createElement("div");
+        timeSentDiv.classList.add("small");
+        timeSentDiv.classList.add("text-muted");
+        timeSentDiv.classList.add("mb-1");
+        timeSentDiv.textContent = timePassedSinceLastMessage;
+
+        var mainAnchorElement = document.createElement("a");
+        mainAnchorElement.href = otherChatParticipantId;
+
+        mainAnchorElement.appendChild(cardDiv);
+
+        cardDiv.appendChild(cardBodyDiv);
+
+        cardBodyDiv.appendChild(ulElement);
+
+        ulElement.appendChild(liElement);
+
+        liElement.appendChild(anchorElement);
+
+        anchorElement.appendChild(innerCard);
+
+        innerCard.appendChild(imgElement);
+
+        innerCard.appendChild(userTitleAndMessageDiv);
+
+        userTitleAndMessageDiv.appendChild(usernameP);
+        userTitleAndMessageDiv.appendChild(messageOverviewP);
+
+        anchorElement.appendChild(timeSentDiv);
+
+        recentMessagesDiv.appendChild(mainAnchorElement);
+    }
 }

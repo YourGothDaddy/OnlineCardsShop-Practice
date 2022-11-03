@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OnlineCardShop.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace OnlineCardShop.Data
 {
@@ -32,8 +28,6 @@ namespace OnlineCardShop.Data
         public DbSet<Chat> Chats { get; set; }
 
         public DbSet<Message> Messages { get; set; }
-
-        public DbSet<UserChat> UserChats { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder
@@ -83,31 +77,6 @@ namespace OnlineCardShop.Data
                 .HasOne(m => m.Chat)
                 .WithMany(c => c.Messages)
                 .HasForeignKey(m => m.ChatId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-                .Entity<Message>()
-                .HasOne(m => m.User)
-                .WithMany(u => u.Messages)
-                .HasForeignKey(m => m.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-                .Entity<UserChat>()
-                .HasKey(uc => new { uc.UserId, uc.ChatId });
-
-            builder
-                .Entity<UserChat>()
-                .HasOne<User>(u => u.User)
-                .WithMany(c => c.UserChats)
-                .HasForeignKey(uc => uc.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-                .Entity<UserChat>()
-                .HasOne<Chat>(uc => uc.Chat)
-                .WithMany(c => c.UserChats)
-                .HasForeignKey(uc => uc.ChatId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);

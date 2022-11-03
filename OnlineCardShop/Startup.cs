@@ -31,6 +31,11 @@ namespace OnlineCardShop
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddControllersWithViews()
+                        .AddJsonOptions(o => o.JsonSerializerOptions
+                        .ReferenceHandler = ReferenceHandler.Preserve);
+
             services.AddDbContext<OnlineCardShopDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -46,7 +51,6 @@ namespace OnlineCardShop
             })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<OnlineCardShopDbContext>();
-            services.AddControllersWithViews();
 
             services.AddSignalR(x =>
             {

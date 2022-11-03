@@ -1,0 +1,31 @@
+﻿@model UserDetailsServiceViewModel
+
+<div class="row ml-auto mr-auto" style="background-color:black; height:150px; max-width:85%;">
+    <div class="col text-center">
+        <img src="/@Model.ProfileImage" 
+        alt="Generic placeholder image" 
+        class="rounded-circle img-fluid img-thumbnail mt-4 mb-2" 
+        style="width: 150px; height:150px; z-index: 1">
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col text-center">
+        <h3>@Model.FullName</h3>
+    </div>
+</div>
+<div class="row mt-1">
+    <div class="col text-center">
+        <a class="btn btn-primary" asp-action="Chat" asp-controller="Users" asp-route-id="@Model.Id">Message</a>
+    </div>
+</div>
+<div class="row mt-5">
+    <div class="col text-center">
+        <h5>About Me</h5>
+        @if(@Model.AboutMe != null)
+        {
+           <p class="mr-auto ml-auto" style="max-width:50%; word-wrap:break-word;">@Model.AboutMe</p> 
+        }else{
+           <p class="mr-auto ml-auto" style="max-width:50%; word-wrap:break-word;">User is a boring dog!</p>
+        }
+    </div>
+</div>

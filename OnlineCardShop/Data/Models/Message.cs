@@ -1,6 +1,7 @@
 ﻿namespace OnlineCardShop.Data.Models
 {
     using System;
+    using System.Text.Json.Serialization;
 
     public class Message
     {
@@ -8,6 +9,7 @@
 
         public int ChatId { get; set; }
 
+        [JsonIgnore]
         public Chat Chat { get; set; }
 
         public string UserId { get; set; }

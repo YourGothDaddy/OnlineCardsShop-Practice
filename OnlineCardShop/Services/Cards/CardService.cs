@@ -336,5 +336,27 @@
                  })
                  .ToList();
         }
+
+        public AllCardsServiceModel GetCardsToAddOnPage(AllCardsServiceModel query, CardQueryServiceModel queryResult)
+        {
+            var cardsToAdd = queryResult.Cards
+                            .Select(c => new CardServiceModel
+                            {
+                                Id = c.Id,
+                                Title = c.Title,
+                                Description = c.Description,
+                                Category = c.Category,
+                                Condition = c.Condition,
+                                Price = c.Price,
+                                Path = c.Path,
+                                IsPublic = c.IsPublic
+                            })
+                            .ToList();
+
+            query.TotalCards = queryResult.TotalCards;
+            query.Cards = cardsToAdd;
+
+            return query;
+        }
     }
 }

@@ -34,5 +34,6 @@
 
         IEnumerable<CardConditionServiceViewModel> GetCardConditions();
 
+        public AllCardsServiceModel GetCardsToAddOnPage(AllCardsServiceModel query, CardQueryServiceModel queryResult);
     }
 }

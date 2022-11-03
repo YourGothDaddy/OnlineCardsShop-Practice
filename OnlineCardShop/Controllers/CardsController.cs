@@ -16,6 +16,7 @@
     using OnlineCardShop.Services.Dealers;
 
     using static WebConstants;
+    using static OnlineCardShop.Services.Cards.CardsControllerConstants;
     using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 
     public class CardsController : Controller
@@ -78,7 +79,7 @@
                 2,
                 query.Order);
 
-            CardsToAddOnPage(query, queryResult);
+            this.cards.GetCardsToAddOnPage(query, queryResult);
             SelectCurrentPage(currentPage);
 
             return View(query);
@@ -94,7 +95,7 @@
                 1,
                 query.Order);
 
-            CardsToAddOnPage(query, queryResult);
+            this.cards.GetCardsToAddOnPage(query, queryResult);
             SelectCurrentPage(currentPage);
             return View(query); ;
         }
@@ -109,7 +110,7 @@
                 null,
                 null);
 
-            CardsToAddOnPage(query, queryResult);
+            this.cards.GetCardsToAddOnPage(query, queryResult);
             SelectCurrentPage(currentPage);
 
             return View(query); ;
@@ -182,7 +183,7 @@
                 {
                     if (!ImageIsWithinDesiredRes(imageResized))
                     {
-                        this.ModelState.AddModelError(nameof(imageFile), "Image should be at least 1024x1024");
+                        this.ModelState.AddModelError(nameof(imageFile), "Image should be at least 836x696");
 
                         //The card object has null the categories and conditions, so I add them again
                         card.Categories = this.cards.GetCardCategories();
@@ -405,20 +406,20 @@
                     if (exifValue == "8")
                     {
                         imageResized.Mutate(i => i
-                        .Resize(418, 348));
+                        .Resize(418, minRenderedImageHeight));
                     }
                 }
                 else
                 {
                     imageResized.Mutate(i => i
-                    .Resize(348, 418));
+                    .Resize(minRenderedImageHeight, minRenderedImageWidth));
                 }
             }
             else
             {
                 imageResized.Mutate(i => i
             .Resize(imageResized.Width / 2, imageResized.Height / 2)
-            .Crop(new Rectangle((imageResized.Width - 348) / 2, (imageResized.Height - 418) / 2, 348, 418)));
+            .Crop(new Rectangle((imageResized.Width - minRenderedImageHeight) / 2, (imageResized.Height - minRenderedImageWidth) / 2, minRenderedImageHeight, minRenderedImageWidth)));
             }
 
             await SaveImage(imageResized, imageResizedPath);
@@ -436,7 +437,7 @@
 
         private static bool ImageIsWithinDesiredRes(Image image)
         {
-            return image.Height >= 836 && image.Width >= 696;
+            return image.Height >= minImageHeight && image.Width >= minImageWidth;
         }
 
         private bool UserIsDealer()
@@ -456,26 +457,6 @@
             {
                 ViewBag.CurrentPage = currentPage;
             }
-        }
-
-        private static void CardsToAddOnPage(AllCardsServiceModel query, CardQueryServiceModel queryResult)
-        {
-            var cardsToAdd = queryResult.Cards
-                            .Select(c => new CardServiceModel
-                            {
-                                Id = c.Id,
-                                Title = c.Title,
-                                Description = c.Description,
-                                Category = c.Category,
-                                Condition = c.Condition,
-                                Price = c.Price,
-                                Path = c.Path,
-                                IsPublic = c.IsPublic
-                            })
-                            .ToList();
-
-            query.TotalCards = queryResult.TotalCards;
-            query.Cards = cardsToAdd;
         }
     }
 }

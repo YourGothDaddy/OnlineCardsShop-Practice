@@ -167,7 +167,7 @@
             }
 
             var wwwPath = this.env.WebRootPath;
-            var imageDirectory = ControllersConstants.CardsController.imageDirectory;
+            var imageDirectory = WebConstants.imageDirectory;
 
             if (ImageIsWithinDesiredSize(imageFile))
             {
@@ -301,7 +301,7 @@
             }
 
             var wwwPath = this.env.WebRootPath;
-            var imageDirectory = ControllersConstants.CardsController.imageDirectory;
+            var imageDirectory = WebConstants.imageDirectory;
 
             Data.Models.Image newImage;
 

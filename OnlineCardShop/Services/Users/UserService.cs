@@ -1,8 +1,9 @@
 ﻿namespace OnlineCardShop.Services.Users
 {
+    using Microsoft.EntityFrameworkCore;
     using OnlineCardShop.Data;
     using OnlineCardShop.Data.Models;
-    using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     public class UserService : IUserService
@@ -97,6 +98,35 @@
         {
             this.data.ProfileImages.Add(profileImage);
             this.data.SaveChanges();
+        }
+
+        public List<string> GetRecentChatsSendersProfileImages(ICollection<Chat> recentChats, string userId)
+        {
+            var senderProfilesImages = new List<string>();
+
+            foreach (var chat in recentChats)
+            {
+                var currentSenderId = chat.Users
+                    .Where(u => u.Id != userId)
+                    .Select(u => u.Id)
+                    .FirstOrDefault();
+
+                if(currentSenderId != null)
+                {
+                    var currentSenderRawProfileImage = this.data
+                    .Users
+                    .Include(x => x.ProfileImage)
+                    .Where(u => u.Id == currentSenderId)
+                    .Select(u => u.ProfileImage.Path)
+                    .FirstOrDefault();
+
+                    var currentSenderProfileImage = currentSenderRawProfileImage.Replace("res", string.Empty);
+
+                    senderProfilesImages.Add(currentSenderProfileImage);
+                }
+            }
+
+            return senderProfilesImages;
         }
     }
 }

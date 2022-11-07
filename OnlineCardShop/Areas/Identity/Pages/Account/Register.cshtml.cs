@@ -81,7 +81,7 @@
             if (ModelState.IsValid)
             {
                 var wwwPath = this.env.WebRootPath;
-                var imageDirectory = ControllersConstants.CardsController.profileImageDirectory;
+                var imageDirectory = WebConstants.profileImageDirectory;
                 var profileImage = new ProfileImage();
 
                 if (ImageIsWithinDesiredSize(Input.ProfileImage))

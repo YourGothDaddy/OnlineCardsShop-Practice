@@ -55,8 +55,6 @@
 
             this.chats.SaveMessage(chatName, userId, message);
 
-            var chatId = this.chats.GetChatId(chatName);
-
             await Clients.Group(chatName).SendAsync("ReceiveMessage", userId, userFullName, message, receiverId);
         }
 
@@ -84,6 +82,8 @@
 
             var recentChats = this.chats.RetrieveRecentChats(userId);
 
+            var recentChatsSendersProfileImages = this.users.GetRecentChatsSendersProfileImages(recentChats, userId);
+
             var recentChatsTimesPassedSinceLastMessage = new List<string>();
 
             foreach (var chat in recentChats)
@@ -95,7 +95,7 @@
                 }
             }
 
-            await Clients.Client(Context.ConnectionId).SendAsync("ShowRecentChats", recentChats, recentChatsTimesPassedSinceLastMessage, userFullName);
+            await Clients.Client(Context.ConnectionId).SendAsync("ShowRecentChats", recentChats, recentChatsTimesPassedSinceLastMessage, userFullName, recentChatsSendersProfileImages);
         }
 
         public async Task RetrieveRecentChatsOfUser(string receiverId)
@@ -103,6 +103,8 @@
             var userFullName = this.users.GetUserFullName(receiverId);
 
             var recentChats = this.chats.RetrieveRecentChats(receiverId);
+
+            var recentChatsSendersProfileImages = this.users.GetRecentChatsSendersProfileImages(recentChats, receiverId);
 
             var recentChatsTimesPassedSinceLastMessage = new List<string>();
 
@@ -121,7 +123,7 @@
 
                 if (usersConnectionIds.Contains(receiverConnectionId))
                 {
-                    await Clients.Client(receiverConnectionId).SendAsync("ShowRecentChats", recentChats, recentChatsTimesPassedSinceLastMessage, userFullName);
+                    await Clients.Client(receiverConnectionId).SendAsync("ShowRecentChats", recentChats, recentChatsTimesPassedSinceLastMessage, userFullName, recentChatsSendersProfileImages);
                 }
             }
         }

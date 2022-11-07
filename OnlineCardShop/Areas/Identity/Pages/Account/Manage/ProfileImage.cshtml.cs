@@ -70,7 +70,7 @@ namespace OnlineCardShop.Areas.Identity.Pages.Account.Manage
             {
 
                 var wwwPath = this.env.WebRootPath;
-                var imageDirectory = ControllersConstants.CardsController.profileImageDirectory;
+                var imageDirectory = WebConstants.profileImageDirectory;
                 Data.Models.ProfileImage profileImage = new();
 
                 if (ImageIsWithinDesiredSize(Input.profileImageFile))

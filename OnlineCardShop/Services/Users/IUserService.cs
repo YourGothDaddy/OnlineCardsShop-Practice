@@ -1,6 +1,7 @@
 ﻿namespace OnlineCardShop.Services.Users
 {
     using OnlineCardShop.Data.Models;
+    using System.Collections.Generic;
 
     public interface IUserService
     {
@@ -19,5 +20,7 @@
         ProfileImage CreateProfileImage(string imageName, string imagePathForDb, string originalImageName);
 
         public void AddProfileImageToDB(ProfileImage profileImage);
+
+        public List<string> GetRecentChatsSendersProfileImages(ICollection<Chat> recentChats, string userId);
     }
 }

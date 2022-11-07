@@ -5,7 +5,10 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/chat").build();
 //Disable send button until connection is established
 document.getElementById("sendButton").disabled = true;
 
-connection.on("ReceiveMessage", function (userId, userFullName, message, receiverId, messagesCounter, messagesCount) {
+connection.on("ReceiveMessage", function (userId, userFullName, message, receiverId) {
+
+    var idFromUrl = location.pathname.split('/')[3];
+    console.log("My id is - " + userId);
 
     var ulElement = document.getElementById("messagesList");
 
@@ -15,6 +18,7 @@ connection.on("ReceiveMessage", function (userId, userFullName, message, receive
     liElement.classList.add("mb-4");
 
     var cardDiv = document.createElement("div");
+    cardDiv.style.backgroundColor = "white";
 
     var usernameDiv = document.createElement("div");
     usernameDiv.classList.add("card-header");
@@ -37,7 +41,7 @@ connection.on("ReceiveMessage", function (userId, userFullName, message, receive
     var messageDiv = document.createElement("p");
     messageDiv.classList.add("mb-0");
 
-    if (userId != receiverId) {
+    if (userId != idFromUrl) {
         messageDiv.style.color = "#212529";
         messageDiv.style.backgroundColor = "#d6d6d6";
         messageDiv.style.padding = "1rem";
@@ -46,13 +50,11 @@ connection.on("ReceiveMessage", function (userId, userFullName, message, receive
 
     liElement.appendChild(cardDiv);
 
-    if (userId == receiverId) {
+    if (userId == idFromUrl) {
         cardDiv.appendChild(usernameDiv);
         usernameDiv.appendChild(usernameP);
         usernameDiv.appendChild(sentTimeAgoP);
     }
-    usernameDiv.appendChild(usernameP);
-    usernameDiv.appendChild(sentTimeAgoP);
 
     liElement.appendChild(cardBodyDiv);
 
@@ -71,7 +73,7 @@ connection.on("ShowHistory", function (messages, idFromUrl) {
     }
 });
 
-connection.on("ShowRecentChats", function (chats, timePassedSinceLastMessage, userFullName) {
+connection.on("ShowRecentChats", function (chats, timePassedSinceLastMessage, userFullName, recentChatsSendersProfileImages) {
 
     var recentMessagesDiv = document.getElementById("recentMessages");
     recentMessagesDiv.innerHTML = '';
@@ -81,7 +83,7 @@ connection.on("ShowRecentChats", function (chats, timePassedSinceLastMessage, us
     chats.forEach((chat) => {
         i++;
         if (chat.users.length > 0) {
-            ShowRecentChats(chat, timePassedSinceLastMessage[i], userFullName);
+            ShowRecentChats(chat, timePassedSinceLastMessage[i], userFullName, recentChatsSendersProfileImages[i]);
         }
     });
     
@@ -202,7 +204,7 @@ function ShowChatHistory(message, idFromUrl, messagesCounter, messagesCount) {
     messageDiv.textContent = `${stringifiedMessage.content}`;
 }
 
-function ShowRecentChats(chat, timePassedSinceLastMessage, userFullName) {
+function ShowRecentChats(chat, timePassedSinceLastMessage, userFullName, userProfileImageName) {
 
     var sender;
     var otherChatParticipantId;
@@ -244,7 +246,7 @@ function ShowRecentChats(chat, timePassedSinceLastMessage, userFullName) {
         innerCard.classList.add("flex-row");
 
         var imgElement = document.createElement("img");
-        imgElement.src = "https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-8.webp";
+        imgElement.src = "/" + userProfileImageName;
         imgElement.alt = "avatar";
         imgElement.classList.add("rounded-circle");
         imgElement.classList.add("d-flex");
@@ -310,6 +312,77 @@ function ShowRecentChats(chat, timePassedSinceLastMessage, userFullName) {
         userTitleAndMessageDiv.appendChild(messageOverviewP);
 
         anchorElement.appendChild(timeSentDiv);
+
+        recentMessagesDiv.appendChild(mainAnchorElement);
+    } else {
+        var recentMessagesDiv = document.getElementById("recentMessages");
+
+        var cardDiv = document.createElement("div");
+        cardDiv.classList.add("card");
+
+        var cardBodyDiv = document.createElement("div");
+        cardBodyDiv.classList.add("card-body");
+
+        var ulElement = document.createElement("ul");
+        ulElement.classList.add("list-unstyled");
+        ulElement.classList.add("mb-0");
+
+        var liElement = document.createElement("li");
+        liElement.classList.add("p-2");
+        liElement.classList.add("border-bottom");
+        liElement.style.backgroundColor = "#eee";
+
+        var anchorElement = document.createElement("a");
+        anchorElement.classList.add("d-flex");
+        anchorElement.classList.add("justify-content-between");
+
+        var innerCard = document.createElement("div");
+        innerCard.classList.add("d-flex");
+        innerCard.classList.add("flex-row");
+
+        var imgElement = document.createElement("img");
+        imgElement.src = "/" + userProfileImageName;
+        imgElement.alt = "avatar";
+        imgElement.classList.add("rounded-circle");
+        imgElement.classList.add("d-flex");
+        imgElement.classList.add("align-self-center");
+        imgElement.classList.add("me-3");
+        imgElement.classList.add("shadow-1-strong");
+        imgElement.width = 60;
+
+        var userTitleAndMessageDiv = document.createElement("div");
+        userTitleAndMessageDiv.classList.add("pt-1");
+
+        var usernameP = document.createElement("p");
+        usernameP.classList.add("fw-bold");
+        usernameP.classList.add("mb-0");
+        usernameP.textContent = sender;
+
+        var messageOverviewP = document.createElement("p");
+        messageOverviewP.classList.add("small");
+        messageOverviewP.classList.add("text-muted");
+
+        var mainAnchorElement = document.createElement("a");
+        mainAnchorElement.href = otherChatParticipantId;
+
+        mainAnchorElement.appendChild(cardDiv);
+
+        cardDiv.appendChild(cardBodyDiv);
+
+        cardBodyDiv.appendChild(ulElement);
+
+        ulElement.appendChild(liElement);
+
+        liElement.appendChild(anchorElement);
+
+        anchorElement.appendChild(innerCard);
+
+        innerCard.appendChild(imgElement);
+
+        innerCard.appendChild(userTitleAndMessageDiv);
+
+        userTitleAndMessageDiv.appendChild(usernameP);
+        userTitleAndMessageDiv.appendChild(messageOverviewP);
 
         recentMessagesDiv.appendChild(mainAnchorElement);
     }

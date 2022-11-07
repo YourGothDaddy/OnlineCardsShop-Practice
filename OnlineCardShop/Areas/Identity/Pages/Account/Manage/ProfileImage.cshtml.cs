@@ -7,32 +7,28 @@ using OnlineCardShop.Controllers;
 using OnlineCardShop.Data.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using OnlineCardShop.Data.Models;
 using System.IO;
-using OnlineCardShop.Services.Cards;
 using OnlineCardShop.Data;
 using System.Linq;
+using OnlineCardShop.Services.Users;
 
 namespace OnlineCardShop.Areas.Identity.Pages.Account.Manage
 {
     public class ProfileImage : PageModel
     {
         private readonly UserManager<User> userManager;
-        private readonly SignInManager<User> signInManager;
         private readonly IWebHostEnvironment env;
-        private readonly ICardService cards;
+        private readonly IUserService users;
         private readonly OnlineCardShopDbContext data;
 
         public ProfileImage(UserManager<User> userManager,
-            SignInManager<User> signInManager,
             IWebHostEnvironment env,
-            ICardService cards,
+            IUserService users,
             OnlineCardShopDbContext data)
         {
             this.userManager = userManager;
-            this.signInManager = signInManager;
             this.env = env;
-            this.cards = cards;
+            this.users = users;
             this.data = data;
         }
 
@@ -83,7 +79,7 @@ namespace OnlineCardShop.Areas.Identity.Pages.Account.Manage
 
                     ProcessImageDetails(Input.profileImageFile, wwwPath, imageDirectory, out originalImageName, out imageName, out imagePath, out imagePathForDb);
 
-                    profileImage = this.cards.CreateProfileImage(imageName, imagePathForDb, originalImageName);
+                    profileImage = this.users.CreateProfileImage(imageName, imagePathForDb, originalImageName);
 
                     this.data.ProfileImages.Add(profileImage);
                     this.data.SaveChanges();

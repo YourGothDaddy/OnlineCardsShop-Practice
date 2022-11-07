@@ -10,10 +10,8 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using OnlineCardShop.Controllers;
-    using OnlineCardShop.Data;
     using OnlineCardShop.Data.Models;
-    using OnlineCardShop.Services.Cards;
-
+    using OnlineCardShop.Services.Users;
     using static OnlineCardShop.Data.DataConstants.User;
 
     [AllowAnonymous]
@@ -21,19 +19,16 @@
     {
         private readonly UserManager<User> userManager;
         private readonly IWebHostEnvironment env;
-        private readonly ICardService cards;
-        private readonly OnlineCardShopDbContext data;
+        private readonly IUserService users;
 
         public RegisterModel(
             UserManager<User> userManager,
-            OnlineCardShopDbContext data,
             IWebHostEnvironment env,
-            ICardService cards)
+            IUserService users)
         {
             this.userManager = userManager;
             this.env = env;
-            this.cards = cards;
-            this.data = data;
+            this.users = users;
         }
 
         [BindProperty]
@@ -83,22 +78,32 @@
                 this.ModelState.AddModelError(nameof(Input.ProfileImage), "There is no image selected");
             }
 
-                if (ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-
                 var wwwPath = this.env.WebRootPath;
                 var imageDirectory = ControllersConstants.CardsController.profileImageDirectory;
-                ProfileImage profileImage = new ProfileImage();
+                var profileImage = new ProfileImage();
 
                 if (ImageIsWithinDesiredSize(Input.ProfileImage))
                 {
-                    string originalImageName, imageName, imagePath, imagePathForDb;
+                    string originalImageName,
+                        imageName,
+                        imagePath,
+                        imagePathForDb;
 
-                    ProcessImageDetails(Input.ProfileImage, wwwPath, imageDirectory, out originalImageName, out imageName, out imagePath, out imagePathForDb);
+                    ProcessImageDetails(
+                        Input.ProfileImage,
+                        wwwPath,
+                        imageDirectory,
+                        out originalImageName,
+                        out imageName,
+                        out imagePath,
+                        out imagePathForDb
+                    );
 
-                    profileImage = this.cards.CreateProfileImage(imageName, imagePathForDb, originalImageName);
+                    profileImage = this.users.CreateProfileImage(imageName, imagePathForDb, originalImageName);
 
-                    this.data.ProfileImages.Add(profileImage);
+                    this.users.AddProfileImageToDB(profileImage);
 
                     using (var fileStream = System.IO.File.Create(imagePath))
                     {
@@ -115,12 +120,13 @@
                 };
 
                 var result = await userManager.CreateAsync(user, Input.Password);
-                
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+
 
             return Page();
         }

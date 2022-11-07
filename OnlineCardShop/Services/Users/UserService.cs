@@ -79,5 +79,24 @@
                 .Select(u => u.ConnectionId)
                 .FirstOrDefault();
         }
+
+        public ProfileImage CreateProfileImage(
+            string imageName,
+            string imagePathForDb,
+            string originalImageName)
+        {
+            return new ProfileImage
+            {
+                Name = imageName,
+                Path = imagePathForDb,
+                OriginalName = originalImageName
+            };
+        }
+
+        public void AddProfileImageToDB(ProfileImage profileImage)
+        {
+            this.data.ProfileImages.Add(profileImage);
+            this.data.SaveChanges();
+        }
     }
 }

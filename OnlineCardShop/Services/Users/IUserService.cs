@@ -15,5 +15,9 @@
         public bool UserHasConnectionIdSaved(string userId);
 
         public string GetUserConnectionId(string userId);
+
+        ProfileImage CreateProfileImage(string imageName, string imagePathForDb, string originalImageName);
+
+        public void AddProfileImageToDB(ProfileImage profileImage);
     }
 }

@@ -22,8 +22,6 @@
 
         Image CreateImage(string imageName, string imagePathForDb, string originalImageName);
 
-        ProfileImage CreateProfileImage(string imageName, string imagePathForDb, string originalImageName);
-
         Card CreateCard(string title, double price, string description, int categoryId, int conditionId, int dealerId, Image newImage);
 
         void DeleteCard(int id);

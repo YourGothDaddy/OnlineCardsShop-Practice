@@ -19,7 +19,17 @@
             return View(userDetails);
         }
 
-        public IActionResult Chat()
+        public IActionResult Chat([FromRoute] string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return RedirectToAction("NoChats");
+            }
+
+            return View();
+        }
+
+        public IActionResult NoChats()
         {
             return View();
         }

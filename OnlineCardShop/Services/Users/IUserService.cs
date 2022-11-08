@@ -23,5 +23,7 @@
         public void AddProfileImageToDB(ProfileImage profileImage);
 
         public List<string> GetRecentChatsSendersProfileImages(ICollection<Chat> recentChats, string userId);
+
+        public string IdOfReceiverOfMostRecentChat(string userId);
     }
 }

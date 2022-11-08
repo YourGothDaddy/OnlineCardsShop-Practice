@@ -7,7 +7,8 @@
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 @inject IDealerService Dealers
-@inject OnlineCardShopDbContext data;
+@inject OnlineCardShopDbContext data
+@inject IUserService Users
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
@@ -15,6 +16,7 @@
     var userId = User.GetId();
     var userIsDealer = Dealers.IsDealer(userId);
     var userIsAdmin = User.IsAdmin();
+    var idOfReceiverOfMostRecentChat = Users.IdOfReceiverOfMostRecentChat(userId);
 
     var currentUserProfileImagePath = new { path = string.Empty };
     string imagePath;
@@ -52,7 +54,7 @@
         </li>
     }
         <li class="nav-item">
-          <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Chat" asp-route-id="default">Messages</a>
+          <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Chat" asp-route-id="@(idOfReceiverOfMostRecentChat != null ? idOfReceiverOfMostRecentChat : string.Empty)">Messages</a>
         </li>
         <li class="nav-item">
             <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account</a>

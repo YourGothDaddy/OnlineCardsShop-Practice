@@ -3,16 +3,20 @@
     using Microsoft.EntityFrameworkCore;
     using OnlineCardShop.Data;
     using OnlineCardShop.Data.Models;
+    using OnlineCardShop.Services.Chats;
     using System.Collections.Generic;
     using System.Linq;
 
     public class UserService : IUserService
     {
         private readonly OnlineCardShopDbContext data;
+        private readonly IChatService chats;
 
-        public UserService(OnlineCardShopDbContext data)
+        public UserService(OnlineCardShopDbContext data,
+            IChatService chats)
         {
             this.data = data;
+            this.chats = chats;
         }
 
         public User GetUser(string id)
@@ -127,6 +131,28 @@
             }
 
             return senderProfilesImages;
+        }
+
+        public string IdOfReceiverOfMostRecentChat(string userId)
+        {
+            var mostRecentChatReceiverId = "";
+
+            var orderedRecentChats = this.chats.RetrieveRecentChats(userId);
+
+            if(orderedRecentChats.Count > 0)
+            {
+                var mostRecentChat = orderedRecentChats.FirstOrDefault();
+
+                mostRecentChatReceiverId = mostRecentChat
+                    .Users
+                    .Where(u => u.Id != userId)
+                    .Select(u => u.Id)
+                    .FirstOrDefault();
+
+                return mostRecentChatReceiverId;
+            }
+
+            return null;
         }
     }
 }

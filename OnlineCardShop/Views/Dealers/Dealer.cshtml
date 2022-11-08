@@ -78,7 +78,7 @@
                                     .Select(x => x.FullName)
                                     .FirstOrDefault();
                                 }
-                          <img src="/@submittersProfileImagePaths[y].ProfileImagePath" class="rounded-circle img-fluid shadow-1" style="height:135px; width:135px;"></div>
+                          <img src="/@submittersProfileImagePaths.Where(x => x.Id == currentSubmitter).Select(x => x.ProfileImagePath).FirstOrDefault()" class="rounded-circle img-fluid shadow-1" style="height:135px; width:135px;"></div>
                           <div class="col-lg-8">
                             <p class="text-muted fw-light mb-4">@review.Description</p>
                             <p class="fw-bold lead mb-2"><strong>@reviewSubmitterFullName</strong></p>

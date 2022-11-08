@@ -133,7 +133,7 @@ namespace OnlineCardShop.Services.Dealers
                 .Include(x => x.User.ProfileImage)
                 .Where(r => r.UserId == userId)
                 .Skip(totalReviewsCount - reviewsToSkip)
-                .OrderBy(r => r.SubmitterId)
+                .OrderByDescending(r => r.Id)
                 .ToList();
 
             return mostRecentReviews;

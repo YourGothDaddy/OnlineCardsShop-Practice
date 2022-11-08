@@ -75,7 +75,8 @@
 
             cardDealer.Reviews = currentDealerReviews;
             cardDealer.Submitters = submitters;
-            cardDealer.TotalRating = this.dealers.GetTotalRating(id); 
+            cardDealer.TotalRating = this.dealers.GetTotalRating(id);
+            cardDealer.TotalRaters = this.dealers.GetTotalRaters(id);
 
             return View(cardDealer);
         }
@@ -96,6 +97,21 @@
 
             if(!ModelState.IsValid)
             {
+                var cardDealerId = this.dealers.GetDealerId(id);
+
+                var cardDealer = this.dealers.GetDealer(cardDealerId);
+
+                var currentDealerReviews = this.dealers.GetReviews(id);
+
+                var submitters = this.dealers.GetSubmitters(currentDealerReviews);
+
+                ratingFormData = cardDealer;
+
+                ratingFormData.Reviews = currentDealerReviews;
+                ratingFormData.Submitters = submitters;
+                ratingFormData.TotalRating = this.dealers.GetTotalRating(id);
+                ratingFormData.TotalRaters = this.dealers.GetTotalRaters(id);
+
                 return View(ratingFormData);
             }
 

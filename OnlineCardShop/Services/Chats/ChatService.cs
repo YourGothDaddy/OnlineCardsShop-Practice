@@ -146,7 +146,35 @@
                 .Where(c => c.Users.Any(u => u.Id == userId))
                 .ToList();
 
-            return userChats;
+            var listOfMessages = new List<Message>();
+
+            foreach (var chat in userChats)
+            {
+                if (chat.Messages.Count > 0)
+                {
+                    var lastMessage = chat.Messages.LastOrDefault();
+                    listOfMessages.Add(lastMessage);
+                }
+            }
+
+            var ordered = listOfMessages.OrderByDescending(x => x.CreatedAt.Ticks).ToList();
+
+            var orderedUserChats = new List<Chat>();
+
+            foreach (var message in ordered)
+            {
+                foreach (var chat in userChats)
+                {
+                    if (chat.Messages.Contains(message))
+                    {
+                        orderedUserChats.Add(chat);
+                    }
+                }
+            }
+
+
+
+            return orderedUserChats;
         }
 
         public IDictionary<string, string> GetUsersAndMessages(IEnumerable<Message> messages)
@@ -222,6 +250,20 @@
             {
                 int years = Convert.ToInt32(Math.Floor((double)ts.Days / 365));
                 return years <= 1 ? "one year ago" : years + " years ago";
+            }
+        }
+
+        public void OrderChats(List<Chat> recentChats)
+        {
+            var lastMessages = new List<Message>();
+
+            foreach (var chat in recentChats)
+            {
+                if(chat.Messages.Count > 0)
+                {
+                    var lastMessage = chat.Messages.LastOrDefault();
+                    lastMessages.Add(lastMessage);
+                }
             }
         }
     }

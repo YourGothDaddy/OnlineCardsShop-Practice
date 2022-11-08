@@ -3,6 +3,7 @@
     using OnlineCardShop.Data.Models;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     public interface IChatService
     {
@@ -29,5 +30,7 @@
         public DateTime GetDateTimeOfLastMessage(int chatId);
 
         public string GetMessageSentTimeAgo(Chat chat);
+
+        public void OrderChats(List<Chat> recentChats);
     }
 }

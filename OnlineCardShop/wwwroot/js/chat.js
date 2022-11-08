@@ -8,7 +8,6 @@ document.getElementById("sendButton").disabled = true;
 connection.on("ReceiveMessage", function (userId, userFullName, message, receiverId) {
 
     var idFromUrl = location.pathname.split('/')[3];
-    console.log("My id is - " + userId);
 
     var ulElement = document.getElementById("messagesList");
 

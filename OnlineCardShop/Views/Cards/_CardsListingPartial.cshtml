@@ -24,7 +24,7 @@
         @if(card.IsPublic == false && card.IsDeleted == false){
             <h5 class="card-text" style="color:red;">Awaiting Approval</h5>
         }else if(card.IsDeleted == true){
-            <h5 class="card-text" style="color:red;">Deleted By Administrator</h5>
+            <h5 class="card-text" style="color:red;">Deleted</h5>
         }
         <h5 class="card-title">@card.Price€</h5>
         <p class="card-text" style="margin:0"><small class="text-muted">Condition: @card.Condition</small></p>
@@ -33,6 +33,9 @@
         <a asp-controller="Cards" asp-action="Details" asp-route-id="@card.Id" class="btn btn-primary">View More</a>
         @if(ViewBag.AllowCardEdit == true || User.IsAdmin()){
             <a asp-controller="Cards" asp-action="Edit" asp-route-id="@card.Id" class="btn btn-warning">Edit</a>
+            if(card.IsDeleted == false){
+                <a asp-controller="Cards" asp-action="Delete" asp-route-id="@card.Id" class="btn btn-danger">Delete</a>
+            }
         }
       </div>
     </div>

@@ -86,6 +86,7 @@
             cardData.CategoryId = categoryId;
             cardData.ConditionId = conditionId;
             cardData.IsPublic = false;
+            cardData.IsDeleted = false;
 
             if (newImage != null)
             {

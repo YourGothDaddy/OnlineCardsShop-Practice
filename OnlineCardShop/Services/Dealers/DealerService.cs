@@ -2,7 +2,6 @@
 
 namespace OnlineCardShop.Services.Dealers
 {
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using OnlineCardShop.Data;
     using OnlineCardShop.Data.Models;
@@ -31,6 +30,12 @@ namespace OnlineCardShop.Services.Dealers
                     PhoneNumber = d.PhoneNumber
                 })
                 .FirstOrDefault();
+        }
+
+        public void CreateDealer(Dealer dealer)
+        {
+            this.data.Dealers.Add(dealer);
+            this.data.SaveChanges();
         }
 
         public void AddReview(string description, int rating, string userId, ClaimsPrincipal user)

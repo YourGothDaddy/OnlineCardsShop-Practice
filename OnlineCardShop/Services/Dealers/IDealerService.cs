@@ -8,6 +8,8 @@
     {
         public bool IsDealer(string userId);
 
+        public void CreateDealer(Dealer dealer);
+
         public int GetDealerId(string userId);
 
         public DealerServiceViewModel GetDealer(int dealerId);

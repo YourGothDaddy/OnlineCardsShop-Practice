@@ -127,7 +127,7 @@
                 .Messages
                 .Where(m => m.ChatId == chatId)
                 .OrderBy(m => m.Id)
-                .Last();
+                .LastOrDefault();
 
             if (message != null)
             {
@@ -175,15 +175,6 @@
 
 
             return orderedUserChats;
-        }
-
-        public IDictionary<string, string> GetUsersAndMessages(IEnumerable<Message> messages)
-        {
-            var users = messages
-                .Select(m => m.User.FullName)
-                .ToList();
-
-            return null;
         }
 
         public int GetChatId(string chatName)

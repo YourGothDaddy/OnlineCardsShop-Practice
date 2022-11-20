@@ -37,31 +37,22 @@
     }
 
     if(!userIsDealer && !userIsAdmin){
-        <li class="nav-item">
-            <a  class="nav-link text-dark" asp-area="" asp-controller="Dealers" asp-action="Create">Become a Dealer</a>
-        </li>
+        <partial name="_nonDealerNonAdminPartial" />
     }else if(!userIsAdmin && userIsDealer){
-        <li class="nav-item">
-          <a class="nav-link text-dark" asp-area="" asp-controller="Cards" asp-action="Mine">My Cards</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-dark" asp-area="" asp-controller="Cards" asp-action="Add">Add Card</a>
-        </li>
+        <partial name="_nonAdminDealerPartial" />
     }else if (userIsAdmin)
     {
-        <li class="nav-item">
-            <a  class="nav-link text-dark" asp-area="Admin" asp-controller="Cards" asp-action="Index">Administration</a>
-        </li>
+        <partial name="_adminPartial" />
     }
         <li class="nav-item">
-          <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Chat" asp-route-id="@(idOfReceiverOfMostRecentChat != null ? idOfReceiverOfMostRecentChat : string.Empty)">Messages</a>
+            <a class="nav-link text-light" asp-area="" asp-controller="Chat" asp-action="Chat" asp-route-id="@(idOfReceiverOfMostRecentChat != null ? idOfReceiverOfMostRecentChat : string.Empty)">Messages</a>
         </li>
         <li class="nav-item">
-            <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account</a>
+            <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account</a>
         </li>
         <li class="nav-item">
             <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                <button type="submit" class="nav-link btn btn-link text-light">Logout</button>
             </form>
         </li>
         <li>
@@ -71,10 +62,10 @@
 else
 {
     <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Register">Register</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Login">Login</a>
     </li>
 }
 </ul>

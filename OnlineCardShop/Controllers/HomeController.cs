@@ -1,32 +1,23 @@
 ﻿namespace OnlineCardShop.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Logging;
-    using OnlineCardShop.Data;
     using OnlineCardShop.Models;
     using OnlineCardShop.Models.Home;
-    using OnlineCardShop.Services.Cards;
+    using OnlineCardShop.Services.Home;
     using System.Diagnostics;
-    using System.Linq;
 
     public class HomeController : Controller
     {
-        private readonly OnlineCardShopDbContext data;
+        private readonly IHomeService home;
 
-        public HomeController(OnlineCardShopDbContext data)
+        public HomeController(IHomeService home)
         {
-            this.data = data;
+            this.home = home;
         }
 
         public IActionResult Index()
         {
-            var categories = this.data
-                .Categories
-                .Select(c => new CardCategoryServiceViewModel
-                {
-                    Id = c.Id,
-                    Name = c.Name
-                });
+            var categories = this.home.GetCategories();
 
             return View(new AllCategoriesServiceViewModel
             {

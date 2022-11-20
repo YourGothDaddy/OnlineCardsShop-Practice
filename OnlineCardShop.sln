@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineCardShop", "OnlineCardShop\OnlineCardShop.csproj", "{D7EB47BB-0E0E-49DD-991B-0376DE296E6D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineCardShop.Tests", "OnlineCardShop.Tests\OnlineCardShop.Tests.csproj", "{1BAB2514-8B12-4E02-8C6C-1CF2B9F69D2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{D7EB47BB-0E0E-49DD-991B-0376DE296E6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7EB47BB-0E0E-49DD-991B-0376DE296E6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7EB47BB-0E0E-49DD-991B-0376DE296E6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BAB2514-8B12-4E02-8C6C-1CF2B9F69D2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BAB2514-8B12-4E02-8C6C-1CF2B9F69D2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BAB2514-8B12-4E02-8C6C-1CF2B9F69D2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BAB2514-8B12-4E02-8C6C-1CF2B9F69D2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

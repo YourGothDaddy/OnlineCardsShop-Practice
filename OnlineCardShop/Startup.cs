@@ -16,6 +16,7 @@ namespace OnlineCardShop
     using OnlineCardShop.Services.Cards;
     using OnlineCardShop.Services.Chats;
     using OnlineCardShop.Services.Dealers;
+    using OnlineCardShop.Services.Home;
     using OnlineCardShop.Services.Users;
     using System.Text.Json.Serialization;
 
@@ -62,6 +63,7 @@ namespace OnlineCardShop
             services.AddTransient<IAdminCardService, AdminCardService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IChatService, ChatService>();
+            services.AddTransient<IHomeService, HomeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

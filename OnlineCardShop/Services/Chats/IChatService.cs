@@ -21,8 +21,6 @@
 
         public Message GetLastMessage(string chatName);
 
-        public IDictionary<string, string> GetUsersAndMessages(IEnumerable<Message> messages);
-
         public ICollection<Chat> RetrieveRecentChats(string userId);
 
         public int GetChatId(string chatName);

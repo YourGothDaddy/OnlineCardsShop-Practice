@@ -1,92 +1,87 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-ul{
-    align-items:center;
+﻿ul {
+    align-items: center;
 }
 
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
 }
-
 /* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
+    color: #0366d6;
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+/* Sticky footer styles -------------------------------------------------- */
+html {
+    font-size: 14px;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  font-size: 14px;
-}
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .border-top {
-  border-top: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
 }
+
 .border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
 button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+    font-size: 1rem;
+    line-height: inherit;
 }
-
-/* Sticky footer styles
--------------------------------------------------- */
+/* Sticky footer styles -------------------------------------------------- */
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+    background-color:#111111;
+    font-family: 'Sora'!important;
+    transition: background 1s ease;
 }
+
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+    /* Vertically center the text there */
 }
 
-.category{
-    width:auto;
-    height:80%;
+.category {
+    width: auto;
+    height: 80%;
 }
-
 /* Rating Stars CSS*/
-
 .rate {
     border-bottom-right-radius: 12px;
     border-bottom-left-radius: 12px;
 }
-
-
 
 .rating {
     display: flex;
@@ -113,8 +108,7 @@ body {
             opacity: 0
         }
 
-        .rating > label:hover:before,
-        .rating > label:hover ~ label:before {
+        .rating > label:hover:before, .rating > label:hover ~ label:before {
             opacity: 1 !important
         }
 
@@ -126,12 +120,10 @@ body {
         opacity: 0.4
     }
 
-
 .buttons {
     top: 36px;
     position: relative;
 }
-
 
 .rating-submit {
     border-radius: 15px;
@@ -139,7 +131,155 @@ body {
     height: 49px;
 }
 
-
     .rating-submit:hover {
         color: #fff;
     }
+
+
+/* Custom CSS */
+.pt-6 {
+    padding-top: 6.5rem;
+}
+
+.nav-color{
+    background-color: #111111;
+}
+
+.gradient-overlay {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    text-decoration: none!important;
+    border-radius: 20px;
+    background-image: linear-gradient( to right, #111111, #111111 );
+    z-index: 1;
+}
+
+    .gradient-overlay::before {
+        position: absolute;
+        border-radius: 20px;
+        content: "";
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: linear-gradient(to bottom, #111111, #ff4446 80%, #fc0a0a);
+        z-index: -1;
+        transition: opacity 0.5s linear;
+        opacity: 0;
+    }
+
+    .gradient-overlay:hover::before {
+        opacity: 1;
+    }
+
+.widget-text{
+    color:#CACACA;
+    text-align:center;
+    transition: 0.7s;
+}
+
+.widget:hover .widget-text{
+    color: #111111;
+    font-size: 72px;
+    font-weight: 900;
+}
+
+.category-span {
+    color: white;
+}
+
+.widget {
+    background-color: #286ef1;
+    height: 532px;
+    border-radius: 20px;
+    border-bottom: 3px solid #fc0a0a;
+}
+
+    .widget:hover {
+        border: 0px solid #fc0a0a;
+        transition: 0.1s;
+    }
+
+#additional-section{
+    padding-top: 6.5rem!important;
+    height:950px;
+}
+
+#additionalSectionHeader {
+    background-color: #ff4446;
+    border-radius: 25px;
+    height: 150px;
+}
+
+#additionalSectionParagraph{
+    font-size: 16px;
+}
+
+@media only screen and (max-width: 1200px) {
+    .widget {
+        height: 442px;
+        width: 442px;
+    }
+}
+
+@media only screen and (max-width: 992px) {
+
+    .widget {
+        height: 322px;
+        width: 322px;
+    }
+
+    #additionalSectionHeader{
+        height: 100px;
+        font-size: 30px;
+    }
+
+    .widget:hover .widget-text {
+        color: #111111;
+        font-size: 52px;
+        font-weight: 900;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+
+    .widget {
+        height: 233px;
+        width: 233px;
+    }
+
+    #additionalSectionHeader {
+        height: 100px;
+        font-size: 22px;
+    }
+
+    .widget:hover .widget-text {
+        color: #111111;
+        font-size: 42px;
+        font-weight: 900;
+    }
+}
+
+@media only screen and (max-width: 577px) {
+
+    .widget {
+        height:90vw;
+        width:100%;
+    }
+
+    #bottom-widget{
+        padding-top:3rem!important;
+    }
+
+    #additionalSectionHeader {
+        height: 100px;
+        font-size: 16px;
+    }
+
+    .widget:hover .widget-text {
+        color: #111111;
+        font-size: 72px;
+        font-weight: 900;
+    }
+}

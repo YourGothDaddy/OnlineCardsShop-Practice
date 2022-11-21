@@ -6,10 +6,11 @@
     <title>@ViewData["Title"] - OnlineCardShop</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link href='https://fonts.googleapis.com/css?family=Sora' rel='stylesheet'>
 </head>
-<body>
+<body class="pt-6">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3"
+        <nav class="fixed-top navbar navbar-expand-sm navbar-light box-shadow mb-3"
         style="background-color: #111111;">
             <div class="container-fluid">
                 <a class="navbar-brand text-light" asp-area="" asp-controller="Home" asp-action="Index">OnlineCardShop</a>
@@ -22,7 +23,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link text-light dropdown-toggle" data-toggle="dropdown" href="#" role="button">Cards</a>
                             <ul class="navbar-nav flex-grow-1">
-                                <li class="nav-item dropdown-menu" style="background-color:#111111;">
+                                <li class="nav-item dropdown-menu nav-color">
                                     <a class="nav-link text-light" asp-area="" asp-controller="Cards" asp-action="All">All Cards</a>
                                     <a class="nav-link text-light" asp-area="" asp-controller="Cards" asp-action="Kpop">All Kpop Cards</a>
                                     <a class="nav-link text-light" asp-area="" asp-controller="Cards" asp-action="Game">All Game Cards</a>
@@ -42,7 +43,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer text-muted">
         <div class="container">
             &copy; @DateTime.UtcNow.Year - OnlineCardShop
         </div>

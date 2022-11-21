@@ -9,24 +9,61 @@
 {
     @if(category.Id == 1)
         {
-            <div class="col-6">
-                <a class="card bg-dark text-white category" asp-controller="Cards" asp-action="Kpop">
-                  <img class="card-img category" style="height:100%" src="~/kpopCategoryImage.jpg" alt="@category.Name Card image">
-                  <div class="card-img-overlay d-flex justify-content-center align-items-center">
-                    <h5 class="card-title"  style="background-color:black">@(category.Name.ToUpper())</h5>
-                  </div>
-                </a>
+            <div class="col-sm-6">
+                <div class="widget">
+                    <a class="gradient-overlay d-flex justify-content-center align-items-center" asp-controller="Cards" asp-action="Kpop">
+                        <h1 class="widget-text">
+                            BROWSE<br> <span class="category-span">@(category.Name.ToUpper())</span><br> CARDS
+                        </h1>
+                    </a>
+                </div>
             </div>
         }
         else{
-            <div class="col-6">
-                <a class="card bg-dark text-white category" asp-controller="Cards" asp-action="Game">
-                  <img class="card-img category" style="height:100%" src="~/gameCategoryImage.jpg" alt="@category.Name Card image">
-                  <div class="card-img-overlay d-flex justify-content-center align-items-center">
-                    <h5 class="card-title" style="background-color:black">@(category.Name.ToUpper())</h5>
-                  </div>
-                </a>
+            <div id="bottom-widget" class="col-sm-6">
+                <div class="widget">
+                    <a class="gradient-overlay d-flex justify-content-center align-items-center" asp-controller="Cards" asp-action="Game">
+                        <h1 class="widget-text">
+                            BROWSE<br> <span class="category-span">@(category.Name.ToUpper())</span><br> CARDS
+                        </h1>
+                    </a>
+                </div>
             </div>
         }
     }
 </div>
+
+<div id="additional-section" class="row">
+    <div style="height:200px;" class="col-12">
+        <h1 id="additionalSectionHeader" class="d-flex justify-content-center align-items-center">TAKE TRADING CARDS ON A NEW LEVEL</h1>
+        <p id="additionalSectionParagraph" class="d-flex justify-content-center align-items-center text-center">
+            WE LINK EVERYONE FROM KPOP FANATICS TO CASUAL BOARD GAME PLAYERS AT ONLINECARDSHOP<br />
+            EVERYONE FROM VENDORS AND PURCHASERS TO CASUAL INFORMATION NERDS CURIOUS ABOUT THE STATE OF THE CARD MARKET<br />
+            PLEASE FEEL FREE TO JOIN OUR RANKS NOW!
+        </p>
+    </div>
+</div>
+
+<script>
+    var body = document.getElementsByTagName('body')[0];
+    body.style.backgroundColor = '#111111';
+    
+    var additionalSectionHeaderElement = document.getElementById('additionalSectionHeader');
+    var additionalSectionParagraph = document.getElementById('additionalSectionParagraph');
+
+    // trigger this function every time the user scrolls
+    window.onscroll = function (event) {
+        var scroll = window.pageYOffset;
+        if (scroll < 569) {
+            // dark grey
+            body.style.backgroundColor = '#111111';
+            additionalSectionHeaderElement.style.backgroundColor = '#ff4446';
+            additionalSectionParagraph.style.visibility = 'hidden';
+        } else if (scroll >= 569) {
+            // white
+            body.style.backgroundColor = 'white';
+            additionalSectionHeaderElement.style.backgroundColor = 'white';
+            additionalSectionParagraph.style.visibility = 'visible';
+        }
+    }
+</script>

@@ -34,13 +34,97 @@
 </div>
 
 <div id="additional-section" class="row">
-    <div style="height:200px;" class="col-12">
+    <div class="col-12">
         <h1 id="additionalSectionHeader" class="d-flex justify-content-center align-items-center">TAKE TRADING CARDS ON A NEW LEVEL</h1>
         <p id="additionalSectionParagraph" class="d-flex justify-content-center align-items-center text-center">
             WE LINK EVERYONE FROM KPOP FANATICS TO CASUAL BOARD GAME PLAYERS AT ONLINECARDSHOP<br />
             EVERYONE FROM VENDORS AND PURCHASERS TO CASUAL INFORMATION NERDS CURIOUS ABOUT THE STATE OF THE CARD MARKET<br />
             PLEASE FEEL FREE TO JOIN OUR RANKS NOW!
         </p>
+    </div>
+</div>
+
+<div id="statistics" class="row text-center justify-content-center">
+    <div id="statisticsHeader" class="col-12 mb-5">
+        <h1>
+            OUR STATISTICS
+        </h1>
+    </div>
+    <div class="col-sm-6 statCard">
+        <div class="card card-overlay">
+            <div class="card-statistic-3 p-4">
+                <div class="mb-4">
+                    <h5 class="card-title mb-0">USERS</h5>
+                </div>
+                <div class="row align-items-center mb-2 d-flex">
+                    <div class="col-12 text-center">
+                        <h2>
+                            3,243
+                        </h2>
+                    </div>
+                </div>
+                <div class="progress mt-1 " data-height="8" style="height: 8px;">
+                    <div class="progress-bar-red l-bg-cyan" role="progressbar" data-width="100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 statCard">
+        <div class="card card-overlay">
+            <div class="card-statistic-3 p-4">
+                <div class="mb-4">
+                    <h5 class="card-title mb-0">DEALERS</h5>
+                </div>
+                <div class="row align-items-center mb-2 d-flex">
+                    <div class="col-12 text-center">
+                        <h2>
+                            3,243
+                        </h2>
+                    </div>
+                </div>
+                <div class="progress mt-1 " data-height="8" style="height: 8px;">
+                    <div class="progress-bar-red l-bg-cyan" role="progressbar" data-width="100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 statCard">
+        <div class="card card-overlay">
+            <div class="card-statistic-3 p-4">
+                <div class="mb-4">
+                    <h5 class="card-title mb-0">KPOP CARDS</h5>
+                </div>
+                <div class="row align-items-center mb-2 d-flex">
+                    <div class="col-12 text-center">
+                        <h2>
+                            3,243
+                        </h2>
+                    </div>
+                </div>
+                <div class="progress mt-1 " data-height="8" style="height: 8px;">
+                    <div class="progress-bar-red l-bg-cyan" role="progressbar" data-width="100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 statCard">
+        <div class="card card-overlay">
+            <div class="card-statistic-3 p-4">
+                <div class="mb-4">
+                    <h5 class="card-title mb-0">GAME CARDS</h5>
+                </div>
+                <div class="row align-items-center mb-2 d-flex">
+                    <div class="col-12 text-center">
+                        <h2>
+                            3,243
+                        </h2>
+                    </div>
+                </div>
+                <div class="progress mt-1 " data-height="8" style="height: 8px;">
+                    <div class="progress-bar-red l-bg-cyan" role="progressbar" data-width="100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -51,6 +135,12 @@
     var additionalSectionHeaderElement = document.getElementById('additionalSectionHeader');
     var additionalSectionParagraph = document.getElementById('additionalSectionParagraph');
 
+    var statisticsHeaderElement = document.getElementById('statisticsHeader');
+
+    var statisticCardsElements = document.getElementsByClassName('card-overlay');
+    var arr = Array.from(statisticCardsElements);
+
+
     // trigger this function every time the user scrolls
     window.onscroll = function (event) {
         var scroll = window.pageYOffset;
@@ -58,12 +148,49 @@
             // dark grey
             body.style.backgroundColor = '#111111';
             additionalSectionHeaderElement.style.backgroundColor = '#ff4446';
-            additionalSectionParagraph.style.visibility = 'hidden';
+            additionalSectionParagraph.style.color = '#CACACA';
+
+            statisticsHeaderElement.style.backgroundColor = '#ff4446';
+            statisticsHeaderElement.style.borderRadius = '20px';
+            statisticsHeaderElement.style.height = "50px";
+
+            arr.forEach(element => {
+
+                var progressBarElement = element.getElementsByClassName('l-bg-cyan');
+                var progressArr = Array.from(progressBarElement);
+
+                if (progressArr[0].classList.contains('progress-bar-black')) {
+                    progressArr[0].classList.remove('progress-bar-black');
+                    progressArr[0].classList.add('progress-bar-red');
+                }
+
+                if(element.classList.contains('card-overlay')){
+                    element.classList.remove('card-overlay');
+                    element.classList.add('card-overlay-black');
+                }
+            });
         } else if (scroll >= 569) {
             // white
             body.style.backgroundColor = 'white';
             additionalSectionHeaderElement.style.backgroundColor = 'white';
-            additionalSectionParagraph.style.visibility = 'visible';
+            additionalSectionParagraph.style.color = '#111111';
+
+            statisticsHeaderElement.style.backgroundColor = 'white';
+
+            arr.forEach(element => {
+                var progressBarElement = element.getElementsByClassName('l-bg-cyan');
+                var progressArr = Array.from(progressBarElement);
+
+                if (progressArr[0].classList.contains('progress-bar-red')) {
+                    progressArr[0].classList.remove('progress-bar-red');
+                    progressArr[0].classList.add('progress-bar-black');
+                }
+
+                if (element.classList.contains('card-overlay-black')) {
+                    element.classList.remove('card-overlay-black');
+                    element.classList.add('card-overlay');
+                }
+            });
         }
     }
 </script>

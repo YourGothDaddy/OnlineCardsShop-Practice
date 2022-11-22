@@ -208,12 +208,62 @@ body {
 
 #additionalSectionHeader {
     background-color: #ff4446;
-    border-radius: 25px;
+    border-radius: 20px;
     height: 150px;
 }
 
-#additionalSectionParagraph{
+.padb{
+    margin-bottom: 64px!important;
+}
+
+.additional-section-info-widgets {
+    position: relative;
+    bottom: 140px;
+}
+
+.inner-widget {
+    border-radius: 20px;
+    border: 3px solid #111111;
+    min-height: 250px;
+}
+
+#additionalSectionParagraph {
     font-size: 16px;
+}
+
+.progress-bar-red{
+    background-color: red;
+}
+
+.progress-bar-black {
+    background-color: #111111;
+}
+
+#statistics{
+    position: relative;
+    bottom: 530px;
+}
+
+/* Cards */
+.card {
+    background-color: #fff;
+    border-radius: 10px;
+    border: none;
+    position: relative;
+    margin-bottom: 30px;
+    box-shadow: 0 0.46875rem 2.1875rem rgba(90,97,105,0.1), 0 0.9375rem 1.40625rem rgba(90,97,105,0.1), 0 0.25rem 0.53125rem rgba(90,97,105,0.12), 0 0.125rem 0.1875rem rgba(90,97,105,0.1);
+}
+
+.card-overlay {
+    background: linear-gradient(to top, #F2F2F2, #FFFFFF) !important;
+    color: #111111;
+    transition: 2s;
+}
+
+.card-overlay-black {
+    background: #111111 !important;
+    color: #FAFAFA;
+    transition: 2s;
 }
 
 @media only screen and (max-width: 1200px) {

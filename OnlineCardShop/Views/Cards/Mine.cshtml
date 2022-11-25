@@ -5,6 +5,10 @@
     ViewBag.AllowCardEdit = true;
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/cards.css" />
+</head>
+
 <partial name="_CardsPaginationPartial" model="@Model" />
 
 @if (!Model.Cards.Any())

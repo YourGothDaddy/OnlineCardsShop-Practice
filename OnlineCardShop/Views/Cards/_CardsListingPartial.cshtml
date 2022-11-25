@@ -15,9 +15,9 @@
   var fullPath = "/" + @card.Path;
 
   <div class="col-md-4">
-    <div class="card" style="">
+    <div class="card card-radius zoom">
         <a asp-controller="Cards" asp-action="Details" asp-route-id="@card.Id">
-          <img class="card-img-top" src="@fullPath" alt="@card.Title">
+          <img class="card-img-top card-border-top-radius" src="@fullPath" alt="@card.Title">
         </a>
       <div class="card-body">
         <h4 class="card-title">@card.Title</h4>

@@ -1,31 +1,40 @@
 ﻿@model UserDetailsServiceViewModel
 
-<div class="row ml-auto mr-auto" style="background-color:black; height:150px; max-width:85%;">
-    <div class="col text-center">
-        <img src="/@Model.ProfileImage" 
-        alt="Generic placeholder image" 
-        class="rounded-circle img-fluid img-thumbnail mt-4 mb-2" 
-        style="width: 150px; height:150px; z-index: 1">
+<head>
+    <link rel="stylesheet" href="~/css/usersDetails.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<div id="main-row" class="row">
+    <div id="profile-div" class="col col-xs-12 zoom m-5 p-4">
+        <img id="profile-image" class="card-img-top" src="/@Model.ProfileImage" alt="Title">
     </div>
-</div>
-<div class="row mt-4">
-    <div class="col text-center">
-        <h3>@Model.FullName</h3>
-    </div>
-</div>
-<div class="row mt-1">
-    <div class="col text-center">
-        <a class="btn btn-primary" asp-action="Chat" asp-controller="Chat" asp-route-id="@Model.Id">Message</a>
-    </div>
-</div>
-<div class="row mt-5">
-    <div class="col text-center">
-        <h5>About Me</h5>
-        @if(@Model.AboutMe != null)
+    <div id="information" class="col-lg-5 col-sm-12 m-lg-5 m-sm-0">
+        <h2>@Model.FullName</h2>
+        <h5 class="pt-5">ABOUT ME</h5>
+        @if(Model.AboutMe != null)
         {
-           <p class="mr-auto ml-auto" style="max-width:50%; word-wrap:break-word;">@Model.AboutMe</p> 
-        }else{
-           <p class="mr-auto ml-auto" style="max-width:50%; word-wrap:break-word;">User is a boring dog!</p>
+            <p>@Model.AboutMe</p>
         }
+        else
+        {
+            <p>User is a boring dog!</p>
+        }
+        <p>JOINED ON 11/24/2022</p>
+    </div>
+</div>
+<div class="row">
+    <div id="icons-div" class="col-lg-6 col-sm-12">
+        <ul id="icons">
+                <li><a href="#" id="facebook-icon"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+                <li><a href="#" id="instagram-icon"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
+                <li><a href="#" id="twitter-icon"><i class="fab fa-twitter" aria-hidden="true"></i></a></li>
+                <li><a href="#" id="google-icon"><i class="fab fa-google-plus-g" aria-hidden="true"></i></a></li>
+                <li><a href="#" id="linkedin-icon"><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+            </ul>
+    </div>
+    <div id="buttons-div" class="col-lg-6 col-sm-12">
+        <a class="btn btn-primary btn-big" asp-action="Chat" asp-controller="Chat" asp-route-id="@Model.Id">Message</a>
+        <a class="btn btn-danger btn-big" asp-action="Chat" asp-controller="Chat" asp-route-id="@Model.Id">Report</a>
     </div>
 </div>

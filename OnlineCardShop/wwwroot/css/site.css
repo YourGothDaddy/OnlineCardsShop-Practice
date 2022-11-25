@@ -59,7 +59,6 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
-    background-color:#111111;
     font-family: 'Sora'!important;
     transition: background 1s ease;
 }
@@ -137,6 +136,10 @@ body {
 
 
 /* Custom CSS */
+.dark{
+    background-color: #111111;
+}
+
 .pt-6 {
     padding-top: 6.5rem;
 }
@@ -289,6 +292,18 @@ body {
         color: #111111;
         font-size: 52px;
         font-weight: 900;
+    }
+
+    body{
+        font-size: 0.75rem!important;
+    }
+
+    .btn{
+        font-size: 0.75rem!important;
+    }
+
+    .navbar-brand{
+        font-size: 1rem!important;
     }
 }
 

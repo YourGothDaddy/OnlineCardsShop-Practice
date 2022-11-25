@@ -9,10 +9,15 @@
     .Replace("res", string.Empty);
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/cards.css" />
+</head>
+
 <div class="row">
-  <div class="offset-3 col-6">
+    <div class="col-md-3"></div>
+  <div class="col-md-6 col-sm-12">
     <div class="card" style="">
-      <img class="card-img-top" src="/@Model.Path" alt="@Model.Title">
+      <img class="card-img-top card-border-top-radius" src="/@Model.Path" alt="@Model.Title">
       <div class="card-body">
         <h3 class="card-title">@Model.Title</h3>
         <h4 class="card-title">@Model.Price€</h4>
@@ -22,14 +27,12 @@
       </div>
     </div>
   </div>
-  <div class="col-2 text-left" style="margin-left:5%;">
+    <div class="col-md-3 col-sm-12">
       <div class="text-center">
           <a asp-controller="Dealers" asp-action="Dealer" asp-route-id="@Model.UserId">
-              <img class="rounded-circle z-depth-2" style="height:150px; width:150px;" src="/@imagePath" data-holder-rendered="true">
+              <img class="z-depth-2" style="height:150px; width:150px; border-radius: 20px;" src="/@imagePath" data-holder-rendered="true">
           </a>
           <h3 style="margin-bottom:5%;">@Model.DealerName</h3>
-
-          <h3 style="margin-top:10%;">Reviews</h3>
       </div>
   </div>
 </div>

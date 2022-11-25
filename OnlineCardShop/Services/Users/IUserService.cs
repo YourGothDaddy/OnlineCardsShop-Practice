@@ -2,7 +2,6 @@
 {
     using OnlineCardShop.Data.Models;
     using System.Collections.Generic;
-    using System.Linq;
 
     public interface IUserService
     {

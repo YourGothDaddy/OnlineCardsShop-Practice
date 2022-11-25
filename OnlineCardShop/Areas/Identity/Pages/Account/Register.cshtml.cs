@@ -1,5 +1,6 @@
 ﻿namespace OnlineCardShop.Areas.Identity.Pages.Account
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
     using System.IO;
     using System.Threading.Tasks;
@@ -116,7 +117,8 @@
                     UserName = Input.Email,
                     Email = Input.Email,
                     FullName = Input.FullName,
-                    ProfileImage = profileImage
+                    ProfileImage = profileImage,
+                    AccountCreated = DateTime.UtcNow
                 };
 
                 var result = await userManager.CreateAsync(user, Input.Password);

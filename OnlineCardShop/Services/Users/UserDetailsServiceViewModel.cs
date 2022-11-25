@@ -9,5 +9,7 @@
         public string ProfileImage { get; set; }
 
         public string AboutMe { get; set; }
+
+        public string AccountCreated { get; set; }
     }
 }

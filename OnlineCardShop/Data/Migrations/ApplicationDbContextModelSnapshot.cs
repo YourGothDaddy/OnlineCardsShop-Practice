@@ -384,6 +384,30 @@ namespace OnlineCardShop.Data.Migrations
                     b.ToTable("ProfileImages");
                 });
 
+            modelBuilder.Entity("OnlineCardShop.Data.Models.Report", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("Reports");
+                });
+
             modelBuilder.Entity("OnlineCardShop.Data.Models.Review", b =>
                 {
                     b.Property<int>("Id")
@@ -420,6 +444,9 @@ namespace OnlineCardShop.Data.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("AccountCreated")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -627,6 +654,15 @@ namespace OnlineCardShop.Data.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("Chat");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OnlineCardShop.Data.Models.Report", b =>
+                {
+                    b.HasOne("OnlineCardShop.Data.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("User");
                 });

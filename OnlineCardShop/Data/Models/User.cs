@@ -1,6 +1,7 @@
 ﻿namespace OnlineCardShop.Data.Models
 {
     using Microsoft.AspNetCore.Identity;
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Text.Json.Serialization;
@@ -28,5 +29,7 @@
 
         [JsonIgnore]
         public ICollection<Chat> Chats { get; set; } = new List<Chat>();
+
+        public DateTime AccountCreated { get; set; }
     }
 }

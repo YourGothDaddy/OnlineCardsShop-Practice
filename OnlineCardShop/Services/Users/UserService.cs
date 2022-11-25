@@ -48,7 +48,8 @@
                     Id = u.Id,
                     FullName = u.FullName,
                     ProfileImage = u.ProfileImage.Path.Replace("res", string.Empty),
-                    AboutMe = u.AboutMe
+                    AboutMe = u.AboutMe,
+                    AccountCreated = u.AccountCreated.ToString("dd/MM/yyyy")
                 })
                 .FirstOrDefault();
         }

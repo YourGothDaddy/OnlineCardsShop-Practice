@@ -24,5 +24,7 @@
         public List<string> GetRecentChatsSendersProfileImages(ICollection<Chat> recentChats, string userId);
 
         public string IdOfReceiverOfMostRecentChat(string userId);
+
+        public void SaveReport(string reportReason, string reportedUserId);
     }
 }

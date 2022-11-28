@@ -20,5 +20,16 @@
 
             return View(userDetails);
         }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult Details(UserDetailsServiceViewModel model, [FromRoute] string id)
+        {
+            var reportReason = model.ReportReason;
+
+            this.users.SaveReport(reportReason, id);
+
+            return View();
+        }
     }
 }

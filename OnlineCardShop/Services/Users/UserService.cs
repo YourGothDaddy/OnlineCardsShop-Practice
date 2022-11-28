@@ -155,5 +155,21 @@
 
             return null;
         }
+
+        public void SaveReport(string reportReason, string reportedUserId)
+        {
+            var reportedUser = this.data.Users
+                .Where(u => u.Id == reportedUserId)
+                .FirstOrDefault();
+
+            var report = new Report
+            {
+                Reason = reportReason,
+                User = reportedUser
+            };
+
+            this.data.Reports.Add(report);
+            this.data.SaveChanges();
+        }
     }
 }

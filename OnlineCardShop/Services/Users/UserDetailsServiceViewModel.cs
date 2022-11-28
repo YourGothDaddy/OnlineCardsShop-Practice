@@ -11,5 +11,7 @@
         public string AboutMe { get; set; }
 
         public string AccountCreated { get; set; }
+
+        public string ReportReason { get; set; }
     }
 }

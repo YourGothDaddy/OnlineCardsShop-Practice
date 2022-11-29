@@ -1,0 +1,54 @@
+﻿<div class="row">
+    <div class="offset-sm-1 col-sm-10" style="background-color: black; border-radius: 20px; padding-left: 0!important;">
+        <div class="row">
+            <div class="col-md-4">
+                <img id="profile-image" class="card-img-top" style="border-radius: 20px; border-right: 3px solid white; height: 300px; width: 300px; object-fit: cover; object-position: center;" src="https://i.redd.it/0ogdycyeqcu81.jpg" alt="Title">
+            </div>
+            <div class="col-md-8 pt-2" style="color: white;">
+                <h2>DESSITA</h2>
+                <h6>REPORTS: 52</h6>
+                <h6>CARDS: 3</h6>
+                <h6>REVIEWS: 12</h6>
+                <h6>TOTAL RATING: 52</h6>
+                <h6>TOTAL NUMBER OF RATERS: 52</h6>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <h2 style="margin-bottom:2%;">REPORTS</h2>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Reason</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td style="max-width: 500px;">This will be a bit long of a text, because I want to see how the table will behave if such a long text is brought to existence in my site called OnlineCardShop that is basically the copy shit of copy spat no primat iskam lapadagamagabaga pug!</td>
+                    <td>@(true ? "Active" : "Inactive")</td>
+                    <td>
+                        <a asp-area="" asp-controller="Cards" asp-action="Details" asp-route-id="1" class="btn btn-primary" style="color:white;">View More</a>
+                        <a asp-area="" asp-controller="Cards" asp-action="Edit" asp-route-id="1" class="btn btn-warning">Edit</a>
+                        @if (true == false && true == false)
+                        {
+                            <a asp-controller="Cards" asp-action="Approve" asp-route-id="1" class="btn btn-success">Approve</a>
+                        }
+                        else if (true == true && true == false)
+                        {
+                            <a asp-controller="Cards" asp-action="Hide" asp-route-id="1" class="btn btn-info">Hide</a>
+                        }
+
+                        @if (true)
+                        {
+                            <a asp-controller="Cards" asp-action="Delete" asp-route-id="1" class="btn btn-danger">Delete</a>
+                        }
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

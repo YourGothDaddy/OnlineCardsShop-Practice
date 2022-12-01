@@ -8,6 +8,12 @@
     {
         public bool IsDealer(string userId);
 
+        public int GetDealerReviewsCount(int dealerId);
+
+        public int GetDealerTotalRating(int dealerId);
+
+        public int GetDealerTotalRaters(int dealerId);
+
         public void CreateDealer(Dealer dealer);
 
         public int GetDealerId(string userId);

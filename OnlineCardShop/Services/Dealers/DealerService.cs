@@ -32,6 +32,34 @@ namespace OnlineCardShop.Services.Dealers
                 .FirstOrDefault();
         }
 
+        public int GetDealerReviewsCount(int dealerId)
+        {
+            return this.data
+                .Dealers
+                .Where(d => d.Id == dealerId)
+                .Select(d => d.User.Reviews.Count())
+                .FirstOrDefault();
+        }
+
+        public int GetDealerTotalRating(int dealerId)
+        {
+            return this.data
+                .Dealers
+                .Include(x => x.User)
+                .Where(d => d.Id == dealerId)
+                .Select(d => d.User.TotalRating)
+                .FirstOrDefault();
+        }
+
+        public int GetDealerTotalRaters(int dealerId)
+        {
+            return this.data
+                .Dealers
+                .Where(d => d.Id == dealerId)
+                .Select(d => d.User.TotalRaters)
+                .FirstOrDefault();
+        }
+
         public void CreateDealer(Dealer dealer)
         {
             this.data.Dealers.Add(dealer);

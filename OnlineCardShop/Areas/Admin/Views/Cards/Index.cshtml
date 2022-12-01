@@ -5,11 +5,11 @@
     ViewData["Title"] = "Home Page";
 
     @if (TempData.ContainsKey(GlobalMessage))
-{
-    <div class="alert alert-success" role="alert">
-        @TempData[GlobalMessage]
-    </div>
-}
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData[GlobalMessage]
+        </div>
+    }
 }
 
 <div class="row">
@@ -37,7 +37,7 @@
                   <td>@(@card.IsDeleted ? "Deleted" : "Public")</td>
                   <td>@(@card.IsPublic ? "Active" : "Inactive")</td>
                   <td>@card.Title</td>
-                  <td><a href="/Admin/Dealers/Dealer">@card.DealerId</a></td>
+                        <td><a href="/Admin/Dealers/Dealer/@card.DealerId">@card.DealerId</a></td>
                   <td>
                       <a asp-area="" asp-controller="Cards" asp-action="Details" asp-route-id="@card.Id" class="btn btn-primary" style="color:white;">View More</a>
                       <a asp-area="" asp-controller="Cards" asp-action="Edit" asp-route-id="@card.Id" class="btn btn-warning">Edit</a>

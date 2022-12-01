@@ -29,7 +29,7 @@
 
             this.users.SaveReport(reportReason, id);
 
-            return View();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

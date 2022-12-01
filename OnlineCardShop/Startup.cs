@@ -9,6 +9,8 @@ namespace OnlineCardShop
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using OnlineCardShop.Areas.Admin.Services;
+    using OnlineCardShop.Areas.Admin.Services.Dealers;
+    using OnlineCardShop.Areas.Admin.Services.Reports;
     using OnlineCardShop.Data;
     using OnlineCardShop.Data.Models;
     using OnlineCardShop.Hubs;
@@ -64,6 +66,8 @@ namespace OnlineCardShop
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IChatService, ChatService>();
             services.AddTransient<IHomeService, HomeService>();
+            services.AddTransient<IAdminDealerService, AdminDealerService>();
+            services.AddTransient<IAdminReportService, AdminReportService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

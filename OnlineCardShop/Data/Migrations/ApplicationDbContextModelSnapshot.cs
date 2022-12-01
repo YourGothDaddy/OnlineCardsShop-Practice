@@ -289,15 +289,9 @@ namespace OnlineCardShop.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserId1")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Dealers");
                 });
@@ -625,15 +619,11 @@ namespace OnlineCardShop.Data.Migrations
 
             modelBuilder.Entity("OnlineCardShop.Data.Models.Dealer", b =>
                 {
-                    b.HasOne("OnlineCardShop.Data.Models.User", null)
-                        .WithOne()
-                        .HasForeignKey("OnlineCardShop.Data.Models.Dealer", "UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("OnlineCardShop.Data.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

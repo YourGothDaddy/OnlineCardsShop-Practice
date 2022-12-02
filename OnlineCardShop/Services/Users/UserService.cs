@@ -23,6 +23,7 @@
         {
             return this.data
                 .Users
+                .Include(x => x.ProfileImage)
                 .Where(u => u.Id == id)
                 .FirstOrDefault();
         }

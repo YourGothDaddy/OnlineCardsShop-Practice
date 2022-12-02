@@ -5,20 +5,25 @@
     using OnlineCardShop.Areas.Admin.Services.Dealers;
     using OnlineCardShop.Areas.Admin.Services.Reports;
     using OnlineCardShop.Services.Dealers;
+    using OnlineCardShop.Services.Users;
 
     public class DealersController : AdminController
     {
         private readonly IAdminDealerService adminDealers;
         private readonly IDealerService dealers;
-        public readonly IAdminReportService reports;
+        private readonly IAdminReportService reports;
+        private readonly IUserService users;
+
 
         public DealersController(IAdminDealerService adminDealers,
             IDealerService dealers,
-            IAdminReportService reports)
+            IAdminReportService reports,
+            IUserService users)
         {
             this.adminDealers = adminDealers;
             this.dealers = dealers;
             this.reports = reports;
+            this.users = users;
         }
 
         public IActionResult Dealer([FromQuery] DealerAndReportsServiceModel query, [FromRoute]int id)
@@ -41,9 +46,11 @@
             data.TotalReports = reports.TotalReports;
             data.CurrentPage = reports.CurrentPage;
 
-            var userData = this.dealers.GetDealer(id);
+            var dealerData = this.dealers.GetDealer(id);
+            var userData = this.users.GetUser(dealerData.Id);
 
-            data.Username = userData.Name;
+            data.ProfileImage = userData.ProfileImage.Path.Replace("res", string.Empty);
+            data.Username = dealerData.Name;
             data.DealerId = id;
             data.TotalRating = this.dealers.GetDealerTotalRating(id);
             data.TotalNumberOfRaters = this.dealers.GetDealerTotalRaters(id);

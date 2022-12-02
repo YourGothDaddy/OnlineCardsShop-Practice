@@ -1,0 +1,44 @@
+﻿#profile-image {
+    border-radius: 20px;
+    border-right: 3px solid white;
+    height: 250px;
+    width: 250px;
+    object-fit: cover;
+    object-position: center;
+}
+
+#info-div {
+    color: #111111;
+}
+
+#reports-heading{
+    margin-bottom: 2%;
+}
+
+#td-reason {
+    max-width: 500px;
+}
+
+@media (min-width: 576px) {
+    #info-div{
+        padding-top: 2%;
+    }
+}
+
+@media (min-width: 768px) {
+    #info-div {
+        padding-top: 0;
+        padding-left: 4%;
+    }
+
+    #profile-image {
+        height: 300px;
+        width: 300px;
+    }
+}
+
+@media (min-width: 992px) {
+    #info-div {
+        padding-left: 0;
+    }
+}

@@ -247,7 +247,11 @@ function ShowRecentChats(chat, timePassedSinceLastMessage, userFullName, userPro
         var imgElement = document.createElement("img");
         imgElement.src = "/" + userProfileImageName;
         imgElement.alt = "avatar";
-        imgElement.classList.add("rounded-circle");
+        imgElement.style.borderRadius = "25px";
+        imgElement.style.maxHeight = "60px";
+        imgElement.style.maxWidth = "60px";
+        imgElement.style.objectFit = "cover";
+        imgElement.style.objectPosition = "center";
         imgElement.classList.add("d-flex");
         imgElement.classList.add("align-self-center");
         imgElement.classList.add("me-3");
@@ -342,7 +346,11 @@ function ShowRecentChats(chat, timePassedSinceLastMessage, userFullName, userPro
         var imgElement = document.createElement("img");
         imgElement.src = "/" + userProfileImageName;
         imgElement.alt = "avatar";
-        imgElement.classList.add("rounded-circle");
+        imgElement.style.borderRadius = "25px";
+        imgElement.style.maxHeight = "60px";
+        imgElement.style.maxWidth = "60px";
+        imgElement.style.objectFit = "cover";
+        imgElement.style.objectPosition = "center";
         imgElement.classList.add("d-flex");
         imgElement.classList.add("align-self-center");
         imgElement.classList.add("me-3");

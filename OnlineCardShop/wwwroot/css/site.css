@@ -246,6 +246,22 @@ body {
     bottom: 530px;
 }
 
+/* Login Partial */
+
+#login-partial-profile-img {
+    height: 70px;
+    width: 70px;
+    border-radius: 25px;
+}
+
+/* Card Listing Partial */
+#my-card-status{
+    color: red;
+}
+
+.p-condition{
+    margin: 0;
+}
 /* Cards */
 .card {
     background-color: #fff;

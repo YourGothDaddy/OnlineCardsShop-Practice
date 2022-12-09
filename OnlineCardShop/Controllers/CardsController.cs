@@ -22,7 +22,7 @@
     public class CardsController : Controller
     {
         private readonly OnlineCardShopDbContext data;
-        private readonly ICardService cards;
+        private readonly ICardService cards; 
         private readonly IWebHostEnvironment env;
         private readonly IDealerService dealers;
 

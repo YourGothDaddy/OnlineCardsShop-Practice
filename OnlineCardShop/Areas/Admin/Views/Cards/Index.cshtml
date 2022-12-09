@@ -12,13 +12,17 @@
     }
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/Areas/Admin/index.css" />
+</head>
+
 <div class="row">
   <div class="col text-center">
-    <h1 style="margin-bottom:5%;">Administration</h1>
+    <h1 id="administration-h1">Administration</h1>
 
 <partial name="_CardsPaginationPartial" model="@Model" />
 
-    <h2 style="margin-bottom:2%;">Cards</h2>
+    <h2 id="cards-h2">Cards</h2>
     <table class="table table-striped">
       <thead class="thead-dark">
         <tr>
@@ -39,7 +43,7 @@
                   <td>@card.Title</td>
                         <td><a href="/Admin/Dealers/Dealer/@card.DealerId">@card.DealerId</a></td>
                   <td>
-                      <a asp-area="" asp-controller="Cards" asp-action="Details" asp-route-id="@card.Id" class="btn btn-primary" style="color:white;">View More</a>
+                      <a asp-area="" asp-controller="Cards" asp-action="Details" asp-route-id="@card.Id" id="view-more-a" class="btn btn-primary">View More</a>
                       <a asp-area="" asp-controller="Cards" asp-action="Edit" asp-route-id="@card.Id" class="btn btn-warning">Edit</a>
                       @if(card.IsPublic == false && card.IsDeleted == false)
                       {

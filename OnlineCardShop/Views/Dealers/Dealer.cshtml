@@ -20,11 +20,15 @@
     .ToList();
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/dealers.css" />
+</head>
+
 <div class="row text-center">
     <div class="col-3">
-        <h3 style="margin-bottom:19%;">@Model.Name's Statistics</h3>
+        <h3 id="statistics-h3">@Model.Name's Statistics</h3>
 
-        <div class="row" style="margin-bottom:5%;">
+        <div id="total-rating-row" class="row">
             <div class="col">
             <div class="card">
               <div class="card-body">
@@ -60,13 +64,13 @@
         </div>
     </div>
     <div class="col-6">
-        <h3 style="margin-bottom:9%;">Most Recent Reviews</h3>
+        <h3 id="recent-reviews-h3">Most Recent Reviews</h3>
 
         @if(@Model.Reviews.Count() > 0 && submittersProfileImagePaths.Count() > 0)
         {
             @foreach(var review in @Model.Reviews)
             {
-                    <div class="card" style="margin-top:5%;">
+                    <div id="card-div" class="card">
                       <div class="card-body m-3">
                         <div class="row">
                           <div class="col-lg-4 d-flex justify-content-center align-items-center mb-4 mb-lg-0">
@@ -78,11 +82,11 @@
                                     .Select(x => x.FullName)
                                     .FirstOrDefault();
                                 }
-                          <img src="/@submittersProfileImagePaths.Where(x => x.Id == currentSubmitter).Select(x => x.ProfileImagePath).FirstOrDefault()" class="rounded-circle img-fluid shadow-1" style="height:135px; width:135px;"></div>
+                          <img id="profile-image-div" src="/@submittersProfileImagePaths.Where(x => x.Id == currentSubmitter).Select(x => x.ProfileImagePath).FirstOrDefault()" class="rounded-circle img-fluid shadow-1"></div>
                           <div class="col-lg-8">
                             <p class="text-muted fw-light mb-4">@review.Description</p>
                             <p class="fw-bold lead mb-2"><strong>@reviewSubmitterFullName</strong></p>
-                            <p class="fw-bold mb-0" style="color:gold; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;"><strong>@review.Rating☆</strong></p>
+                            <p id="stars-rating" class="fw-bold mb-0"><strong>@review.Rating☆</strong></p>
                           </div>
                         </div>
                       </div>
@@ -100,7 +104,7 @@
             <h4>@Model.PhoneNumber</h4>
             <a class="btn btn-primary" asp-action="Details" asp-controller="Users" asp-route-id="@Model.Id">Go To Page</a>
             <hr />
-            <h4 style="margin-top:10%; margin-bottom:5%;">Do you have experience with this dealer?</h4>
+            <h4 id="experience-dealer-h4">Do you have experience with this dealer?</h4>
             <h5>Share it!</h5>
             <form method="post">
                  <div class="rating">
@@ -111,10 +115,10 @@
                     }
                 </div>
                 <div class="form-outline">
-                  <textarea asp-for="Description" class="form-control" style="resize:none;" rows="8"></textarea>
+                  <textarea asp-for="Description" id="dealers-text-area" class="form-control" rows="8"></textarea>
                   <span asp-validation-for="Description" class="small text-danger"></span>
                 </div>
-                <input class="btn btn-primary" style="margin-top:5%;" type="submit" value="Submit"/>
+                <input id="submit-btn" class="btn btn-primary" type="submit" value="Submit"/>
             </form>
         </div>
     </div>

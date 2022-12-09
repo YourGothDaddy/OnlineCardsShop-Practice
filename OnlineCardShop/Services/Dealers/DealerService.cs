@@ -104,6 +104,8 @@ namespace OnlineCardShop.Services.Dealers
 
             var reviewsToSkip = 3;
 
+            var totalReviewers = totalReviewsCount;
+
             if (totalReviewsCount < reviewsToSkip)
             {
                 reviewsToSkip = 0;
@@ -125,7 +127,7 @@ namespace OnlineCardShop.Services.Dealers
                 .FirstOrDefault();
 
             currentUser.TotalRating = totalReviews.Sum();
-            currentUser.TotalRaters = totalReviewsCount;
+            currentUser.TotalRaters = totalReviewers;
 
             this.data.SaveChanges();
         }

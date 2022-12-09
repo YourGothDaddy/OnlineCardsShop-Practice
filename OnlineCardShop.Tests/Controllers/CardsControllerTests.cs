@@ -2,16 +2,21 @@
 {
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using Moq;
     using MyTested.AspNetCore.Mvc;
     using OnlineCardShop.Controllers;
+    using OnlineCardShop.Data;
     using OnlineCardShop.Data.Models;
     using OnlineCardShop.Models.Cards;
     using OnlineCardShop.Services.Cards;
+    using OnlineCardShop.Services.Dealers;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
     using Xunit;
 
     public class CardsControllerTests
     {
-
         [Fact]
         public void GetMineShouldBeForAuthorizedUsers()
         {
@@ -251,6 +256,5 @@
                 .View(view => view
                     .WithModelOfType<AddCardFormModel>());
         }
-
     }
 }

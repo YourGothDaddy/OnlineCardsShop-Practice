@@ -1,0 +1,8 @@
+﻿#messagesList {
+    overflow-y: scroll;
+    height: 500px;
+}
+
+#main-section {
+    background-color: #eee;
+}

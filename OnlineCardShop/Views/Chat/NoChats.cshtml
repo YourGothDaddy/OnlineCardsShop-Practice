@@ -1,0 +1,31 @@
+﻿<head>
+    <link rel="stylesheet" href="~/css/chat.css" />
+</head>
+
+<h3 class="text-center pb-3">You have no chats to display currently!</h3>
+
+<section id="main-section">
+  <div class="container py-5">
+    <div class="row">
+        @*Left Side 'Member'*@
+      <div class="col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0" id="recentMessages">
+      </div>
+      @*Left Side 'Member'*@
+      @*Right Side Chat*@
+      <div class="col-md-6 col-lg-7 col-xl-8">
+        <ul class="list-unstyled" id="messagesList">
+          @*Bottom Message*@
+          @*Bottom Message*@
+        </ul>
+
+        <div class="bg-white mb-3">
+            <div class="form-outline">
+              <input class="form-control" id="messageInput" />
+            </div>
+          </div>
+        <button disabled type="button" class="btn btn-info btn-rounded float-end"id="sendButton">Send</button>
+      </div>
+      @*Right Side Chat*@
+    </div>
+  </div>
+</section>

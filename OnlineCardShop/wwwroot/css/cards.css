@@ -1,0 +1,32 @@
+﻿.light{
+    background-color: white!important;
+    transition: none;
+}
+
+.card-border-top-radius{
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+}
+
+.card-radius{
+    border-radius: 20px;
+}
+
+.card{
+    transition:0.7s;
+}
+
+.zoom:hover{
+    transform: scale(1.1);
+    transition: 0.7s;
+}
+
+#dealer-profile-image {
+    height: 150px;
+    width: 150px;
+    border-radius: 20px;
+}
+
+#dealer-username {
+    margin-bottom: 5%;
+}

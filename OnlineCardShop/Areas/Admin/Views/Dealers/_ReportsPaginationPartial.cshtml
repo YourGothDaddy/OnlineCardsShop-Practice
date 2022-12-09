@@ -1,0 +1,108 @@
+﻿@model DealerAndReportsServiceModel
+
+@{
+    var previousPage = Model.CurrentPage - 1;
+    if (previousPage < 1)
+    {
+        previousPage = 1;
+    }
+
+    var totalPages = Math.Ceiling((double)Model.TotalReports / DealerAndReportsServiceModel.ReportsPerPage);
+    var maxShownPages = 5;
+    double maxCurrentlyShownPage = 1;
+}
+
+<div class="row">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+        <ul class="pagination justify-content-center">
+            <li class="page-item">
+                <a class="
+              page-link
+              @(Model.CurrentPage == 1 ? "invisible" : string.Empty)"
+                   asp-controller="Dealers"
+                   asp-action="@ViewContext.RouteData.Values["action"]"
+                   asp-route-currentPage="@previousPage">Prev</a>
+            </li>
+            @if (totalPages > maxShownPages)
+            {
+                @if (ViewBag.CurrentPage > 1)
+                {
+                    maxCurrentlyShownPage = 4 + ViewBag.CurrentPage;
+                    if (maxCurrentlyShownPage >= totalPages)
+                    {
+                        maxCurrentlyShownPage = totalPages;
+                        for (double currentPage = totalPages - maxShownPages + 1; currentPage <= maxCurrentlyShownPage; currentPage++)
+                        {
+                            <li class="page-item">
+                                <a class="page-link @(Model.CurrentPage == currentPage ? "bg-warning" : string.Empty)"
+                   asp-controller="Dealers"
+                   asp-action="@ViewContext.RouteData.Values["action"]"
+                   asp-route-currentPage="@currentPage">
+                                    @currentPage
+                                </a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        @for (int currentPage = ViewBag.CurrentPage; currentPage <= maxCurrentlyShownPage; currentPage++)
+                        {
+                            <li class="page-item">
+                                <a class="page-link @(Model.CurrentPage == currentPage ? "bg-warning" : string.Empty)"
+                   asp-controller="Dealers"
+                   asp-action="@ViewContext.RouteData.Values["action"]"
+                   asp-route-currentPage="@currentPage">
+                                    @currentPage
+                                </a>
+                            </li>
+                        }
+                    }
+                }
+                else
+                {
+                    maxCurrentlyShownPage = 5;
+                    @for (int currentPage = ViewBag.CurrentPage; currentPage <= maxCurrentlyShownPage; currentPage++)
+                    {
+                        <li class="page-item">
+                            <a class="page-link  @(Model.CurrentPage == currentPage ? "bg-warning" : string.Empty)"
+                   asp-controller="Dealers"
+                   asp-action="@ViewContext.RouteData.Values["action"]"
+                   asp-route-currentPage="@currentPage">
+                                @currentPage
+                            </a>
+                        </li>
+                    }
+                }
+            }
+            else
+            {
+                @for (int currentPage = 1; currentPage <= totalPages; currentPage++)
+                {
+                    <li class="page-item">
+                        <a class="page-link @(Model.CurrentPage == currentPage ? "bg-warning" : string.Empty)"
+                   asp-controller="Dealers"
+                   asp-action="@ViewContext.RouteData.Values["action"]"
+                   asp-route-currentPage="@currentPage">
+                            @currentPage
+                        </a>
+                    </li>
+                }
+
+            }
+
+            <li class="page-item">
+                <a class="
+              page-link
+              float-right
+              @(Model.CurrentPage == totalPages || totalPages == 0 ? "invisible" : string.Empty)"
+                   asp-controller="Dealers"
+                   asp-action="@ViewContext.RouteData.Values["action"]"
+                   asp-route-currentPage="@(Model.CurrentPage + 1)">Next</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+    </div>
+</div>

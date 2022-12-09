@@ -1,0 +1,124 @@
+﻿#main-row {
+    background: #f5f5f5;
+    border-bottom: 5px solid #111111;
+    border-radius: 20px;
+}
+
+#profile-div {
+    border-radius: 20px;
+    backdrop-filter: blur(13px);
+    -webkit-backdrop-filter: blur(13px);
+    transition: 0.7s;
+}
+
+#profile-image {
+    object-fit: cover;
+    object-position: center;
+    height: 350px;
+    border-radius: 20px;
+    border-bottom: 5px solid #111111;
+}
+
+#information{
+    color: white;
+}
+
+    #information h2, h5, p{
+        color: #111111;
+    }
+
+    #information h2, h5, p {
+        color: #111111;
+    }
+
+.zoom:hover {
+    transform: scale(1.1);
+    transition: 0.7s;
+}
+
+#icons {
+    position: relative;
+    padding-inline-start: 0px!important;
+    display: flex;
+}
+
+#icons-div{
+    padding-left: 0;
+}
+
+    #icons li {
+        list-style: none;
+        padding-top: 0.7rem;
+    }
+
+        #icons li a {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            display: block;
+            text-align: center;
+            margin-right: .6rem;
+            border-radius: 50%;
+            padding: 6px;
+            box-sizing: border-box;
+            text-decoration: none;
+            box-shadow: 0 10px 15px rgba(0,0,0,0.3);
+            background: linear-gradient(0deg, #ddd, #fff);
+            transition: .5s;
+        }
+
+            #icons li a:hover {
+                box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                text-decoration: none;
+            }
+
+            #icons li a .fab {
+                width: 100%;
+                height: 100%;
+                display: block;
+                background: linear-gradient(0deg, #fff, #ddd);
+                border-radius: 50%;
+                line-height: calc(60px - 12px);
+                font-size: 24px;
+                color: #262626;
+                transition: .5s;
+            }
+
+#facebook-icon:hover .fab {
+            color: #3b5998;
+        }
+
+#instagram-icon:hover .fab {
+            color: #FD1D1D;
+        }
+
+#twitter-icon:hover .fab {
+    color: #1DA1F2;
+}
+
+#google-icon:hover .fab {
+    color: #dd4b39;
+}
+
+#linkedin-icon:hover .fab {
+    color: #0072b1;
+}
+
+#buttons-div {
+    padding-top: 1.4rem;
+}
+
+.btn-big {
+    height: 50px;
+    width: 110px;
+    text-align: center;
+    line-height: 36px;
+    color: #fff!important;
+}
+
+@media only screen and (max-width: 577px) {
+    #main-row{
+        width: 85%;
+        margin-left: 7.5%;
+    }
+}

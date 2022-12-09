@@ -19,17 +19,14 @@ namespace OnlineCardShop.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<User> userManager;
         private readonly IWebHostEnvironment env;
         private readonly IUserService users;
-        private readonly OnlineCardShopDbContext data;
 
         public ProfileImage(UserManager<User> userManager,
             IWebHostEnvironment env,
-            IUserService users,
-            OnlineCardShopDbContext data)
+            IUserService users)
         {
             this.userManager = userManager;
             this.env = env;
             this.users = users;
-            this.data = data;
         }
 
         public class ChangeProfileImageFormModel
@@ -81,29 +78,23 @@ namespace OnlineCardShop.Areas.Identity.Pages.Account.Manage
 
                     profileImage = this.users.CreateProfileImage(imageName, imagePathForDb, originalImageName);
 
-                    this.data.ProfileImages.Add(profileImage);
-                    this.data.SaveChanges();
+                    var currentUserId = userManager.GetUserId(User);
+
+                    var currentProfileImagePath = this.users.GetProfileImagePath(currentUserId).Split('/');
+
+                    System.IO.File.Delete(Path.Combine(wwwPath, currentProfileImagePath[0], currentProfileImagePath[1].Replace("res", string.Empty)));
+                    System.IO.File.Delete(Path.Combine(wwwPath, currentProfileImagePath[0], currentProfileImagePath[1]));
+
+                    this.users.AddProfileImageToDB(profileImage);
 
                     using (var fileStream = System.IO.File.Create(imagePath))
                     {
                         await Input.profileImageFile.CopyToAsync(fileStream);
                     }
 
-                    var currentUserId = userManager.GetUserId(User);
-                    var currentUser = this.data
-                        .Users
-                        .Where(u => u.Id == currentUserId);
+                    var currentUser = this.users.GetUser(currentUserId);
 
-                    foreach (var property in currentUser)
-                    {
-                        if (property.ProfileImageId != profileImage.Id)
-                        {
-                            property.ProfileImageId = profileImage.Id;
-                            break;
-                        }
-                    }
-
-                    this.data.SaveChanges();
+                    this.users.ChangeProfileImage(currentUser, profileImage.Id);
                 }
             }
             return Page();

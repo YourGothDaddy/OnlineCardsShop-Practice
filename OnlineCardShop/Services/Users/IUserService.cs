@@ -26,5 +26,9 @@
         public string IdOfReceiverOfMostRecentChat(string userId);
 
         public void SaveReport(string reportReason, string reportedUserId);
+
+        public void ChangeProfileImage(User user, int id);
+
+        public string GetProfileImagePath(string userId);
     }
 }

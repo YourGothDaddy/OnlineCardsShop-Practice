@@ -172,5 +172,25 @@
             this.data.Reports.Add(report);
             this.data.SaveChanges();
         }
+
+        public void ChangeProfileImage(User user, int id)
+        {
+            if (user.ProfileImageId != id)
+            {
+                user.ProfileImageId = id;
+            }
+
+            this.data.SaveChanges();
+        }
+
+        public string GetProfileImagePath(string userId)
+        {
+            return this.data
+                .Users
+                .Include(x => x.ProfileImage)
+                .Where(u => u.Id == userId)
+                .Select(u => u.ProfileImage.Path)
+                .FirstOrDefault();
+        }
     }
 }

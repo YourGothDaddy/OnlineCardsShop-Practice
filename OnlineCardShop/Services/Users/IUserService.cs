@@ -30,5 +30,9 @@
         public void ChangeProfileImage(User user, int id);
 
         public string GetProfileImagePath(string userId);
+
+        public string GetAboutMe(string userId);
+
+        public void SetAboutMe(string userId, string content);
     }
 }

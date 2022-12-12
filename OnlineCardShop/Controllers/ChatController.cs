@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using OnlineCardShop.Infrastructure;
 
     public class ChatController : Controller
     {
@@ -13,11 +14,22 @@
                 return RedirectToAction("NoChats");
             }
 
+            if (User.GetId() == id)
+            {
+                return RedirectToAction("Error");
+            }
+
             return View();
         }
 
         [Authorize]
         public IActionResult NoChats()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult Error()
         {
             return View();
         }

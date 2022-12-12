@@ -192,5 +192,26 @@
                 .Select(u => u.ProfileImage.Path)
                 .FirstOrDefault();
         }
+
+        public string GetAboutMe(string userId)
+        {
+            return this.data
+                .Users
+                .Where(u => u.Id == userId)
+                .Select(u => u.AboutMe)
+                .FirstOrDefault();
+        }
+
+        public void SetAboutMe(string userId, string content)
+        {
+            var user = this.data
+                .Users
+                .Where(u => u.Id == userId)
+                .FirstOrDefault();
+
+            user.AboutMe = content;
+
+            this.data.SaveChanges();
+        }
     }
 }

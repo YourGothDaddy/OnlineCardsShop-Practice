@@ -29,7 +29,7 @@
         <h5 class="card-title">@card.Price€</h5>
         <p class="card-text p-condition"><small class="text-muted">Condition: @card.Condition</small></p>
         <p class="card-text"><small class="text-muted">Category: @card.Category</small></p>
-        <a asp-controller="Cards" asp-action="Details" asp-route-id="@card.Id" class="btn btn-primary">View More</a>
+                    <a asp-controller="Cards" asp-action="Details" asp-route-id="@card.Id" class="btn btn-info">View More</a>
         @if(ViewBag.AllowCardEdit == true || User.IsAdmin()){
             <a asp-controller="Cards" asp-action="Edit" asp-route-id="@card.Id" class="btn btn-warning">Edit</a>
             if(card.IsDeleted == false){

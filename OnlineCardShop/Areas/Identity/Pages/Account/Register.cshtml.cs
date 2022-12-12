@@ -10,7 +10,6 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
-    using OnlineCardShop.Controllers;
     using OnlineCardShop.Data.Models;
     using OnlineCardShop.Services.Users;
     using static OnlineCardShop.Data.DataConstants.User;

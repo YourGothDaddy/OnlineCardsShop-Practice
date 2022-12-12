@@ -1,4 +1,17 @@
-﻿@model UserDetailsServiceViewModel
+﻿@using Microsoft.AspNetCore.Identity;
+@using OnlineCardShop.Data.Models;
+@using OnlineCardShop.Infrastructure
+@model UserDetailsServiceViewModel
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@inject IDealerService Dealers
+@inject IUserService Users
+
+@{
+    var userId = User.GetId();
+    var loggedUserIsTheSameUserAsThePageUser = Model.Id == userId;
+}
 
 <head>
     <link rel="stylesheet" href="~/css/usersDetails.css" />
@@ -24,18 +37,19 @@
     </div>
 </div>
 <div class="row">
-    <div id="icons-div" class="col-lg-6 col-sm-12">
-        <ul id="icons">
-                <li><a href="#" id="facebook-icon"><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
-                <li><a href="#" id="instagram-icon"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
-                <li><a href="#" id="twitter-icon"><i class="fab fa-twitter" aria-hidden="true"></i></a></li>
-                <li><a href="#" id="google-icon"><i class="fab fa-google-plus-g" aria-hidden="true"></i></a></li>
-                <li><a href="#" id="linkedin-icon"><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
-            </ul>
+    <div class="col-lg-6 ">
+
     </div>
-    <div id="buttons-div" class="col-lg-6 col-sm-12">
-        <a class="btn btn-primary btn-big"  asp-action="Chat" asp-controller="Chat" asp-route-id="@Model.Id">Message</a>
-        <a class="btn btn-danger btn-big" data-toggle="modal" data-target="#exampleModal">Report</a>
+    <div id="buttons-div"class="col-lg-6 col-sm-12">
+        @if (!loggedUserIsTheSameUserAsThePageUser)
+        {
+            <a class="btn btn-info btn-big" asp-action="Chat" asp-controller="Chat" asp-route-id="@Model.Id">Message</a>
+            <a class="btn btn-danger btn-big" data-toggle="modal" data-target="#exampleModal">Report</a>
+        }
+        else
+        {
+            <a class="btn btn-warning btn-big" asp-area="Identity" asp-action="Manage" asp-controller="Account">Edit</a>
+        }
     </div>
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -54,7 +68,7 @@
                         </div>
 
                         <div class="modal-footer text-center">
-                            <input class="btn btn-primary" type="submit" value="SEND" />
+                            <input class="btn btn-info" type="submit" value="SEND" />
                         </div>
                     </form>
                 </div>

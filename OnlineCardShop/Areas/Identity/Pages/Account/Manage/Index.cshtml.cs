@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OnlineCardShop.Data.Models;
+using OnlineCardShop.Services.Users;
 
 namespace OnlineCardShop.Areas.Identity.Pages.Account.Manage
 {
@@ -11,13 +13,16 @@ namespace OnlineCardShop.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IUserService users;
 
         public IndexModel(
             UserManager<User> userManager,
-            SignInManager<User> signInManager)
+            SignInManager<User> signInManager,
+            IUserService users)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            this.users = users;
         }
 
         public string Username { get; set; }
@@ -33,18 +38,23 @@ namespace OnlineCardShop.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "About Me")]
+            public string AboutMe { get; set; }
         }
 
         private async Task LoadAsync(User user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var aboutMe = this.users.GetAboutMe(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
             Username = userName;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                AboutMe = aboutMe
             };
         }
 
@@ -83,6 +93,12 @@ namespace OnlineCardShop.Areas.Identity.Pages.Account.Manage
                     StatusMessage = "Unexpected error when trying to set phone number.";
                     return RedirectToPage();
                 }
+            }
+
+            var currentAboutMe = this.users.GetAboutMe(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (Input.AboutMe != currentAboutMe)
+            {
+                this.users.SetAboutMe(User.FindFirstValue(ClaimTypes.NameIdentifier), Input.AboutMe);
             }
 
             await _signInManager.RefreshSignInAsync(user);

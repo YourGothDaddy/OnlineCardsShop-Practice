@@ -260,6 +260,7 @@ function ShowRecentChats(chat, timePassedSinceLastMessage, userFullName, userPro
 
         var userTitleAndMessageDiv = document.createElement("div");
         userTitleAndMessageDiv.classList.add("pt-1");
+        userTitleAndMessageDiv.style.wordWrap = "anywhere";
 
         var usernameP = document.createElement("p");
         usernameP.classList.add("fw-bold");
@@ -359,6 +360,7 @@ function ShowRecentChats(chat, timePassedSinceLastMessage, userFullName, userPro
 
         var userTitleAndMessageDiv = document.createElement("div");
         userTitleAndMessageDiv.classList.add("pt-1");
+        userTitleAndMessageDiv.style.wordWrap = "anywhere";
 
         var usernameP = document.createElement("p");
         usernameP.classList.add("fw-bold");

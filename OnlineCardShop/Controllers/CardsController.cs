@@ -379,7 +379,7 @@
             }
         }
 
-        private static void ProcessImageDetails(IFormFile imageFile, string wwwPath, string imageDirectory, out string originalImageName, out string imageName, out string imagePath, out string imagePathForDb)
+        public static void ProcessImageDetails(IFormFile imageFile, string wwwPath, string imageDirectory, out string originalImageName, out string imageName, out string imagePath, out string imagePathForDb)
         {
             var imageExtension = Path.GetExtension(imageFile.FileName);
 

@@ -3,6 +3,7 @@
     using MyTested.AspNetCore.Mvc;
     using OnlineCardShop.Controllers;
     using Shouldly;
+    using System.Dynamic;
     using Xunit;
 
     public class ChatControllerTests
@@ -50,11 +51,32 @@
         }
 
         [Fact]
+        public void GetChatShouldReturnRedirectToActionIfWithTheSameId()
+        {
+            MyController<ChatController>
+                .Instance(x => x
+                    .WithUser())
+                .Calling(c => c.Chat("TestId"))
+                .ShouldReturn()
+                .RedirectToAction("Error");
+        }
+
+        [Fact]
         public void GetNoChatsShouldReturnView()
         {
             MyController<ChatController>
                 .Instance()
                 .Calling(c => c.NoChats())
+                .ShouldReturn()
+                .View();
+        }
+
+        [Fact]
+        public void ErrorShouldReturnView()
+        {
+            MyController<ChatController>
+                .Instance()
+                .Calling(c => c.Error())
                 .ShouldReturn()
                 .View();
         }

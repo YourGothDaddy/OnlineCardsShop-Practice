@@ -5,23 +5,20 @@
     using Moq;
     using MyTested.AspNetCore.Mvc;
     using OnlineCardShop.Controllers;
-    using OnlineCardShop.Data;
     using OnlineCardShop.Data.Models;
     using OnlineCardShop.Models.Cards;
     using OnlineCardShop.Services.Cards;
     using OnlineCardShop.Services.Dealers;
-    using Shouldly;
-    using SixLabors.ImageSharp;
-    using SixLabors.ImageSharp.PixelFormats;
-    using System.Text.RegularExpressions;
-    using System;
-    using Xunit;
-    using Image = SixLabors.ImageSharp.Image;
-    using System.Collections.Generic;
     using System.IO;
+    using Xunit;
+    using System.Collections.Generic;
     using Microsoft.AspNetCore.Mvc;
     using System.Security.Claims;
     using OnlineCardShop.Tests.Mocks;
+    using SixLabors.ImageSharp.PixelFormats;
+    using SixLabors.ImageSharp;
+    using SixLabors.ImageSharp.Processing;
+    using System.Linq;
 
     public class CardsControllerTests
     {
@@ -407,6 +404,209 @@
             //Assert.True(model.Categories != null && model.Conditions != null && !result.ViewData.ModelState.IsValid);
         }
 
+        [Fact]
+        public async void EditAsyncShouldReturnViewResultWithInvalidModelStateWhenConditionIdIsInvalid()
+        {
+            // Arrange
+            using var data = DatabaseMock.Instance;
+
+            data.Categories.Add(new Category { Id = 1, Name = "test" });
+            data.Conditions.Add(new Condition { Id = 1, Name = "test" });
+            data.SaveChanges();
+
+            var cardConditionServiceViewModel = new CardConditionServiceViewModel
+            {
+                Id = 1,
+                Name = "test"
+            };
+
+            var cardCategoryServiceViewModel = new CardCategoryServiceViewModel
+            {
+                Id = 1,
+                Name = "test"
+            };
+
+            var cardFormModel = new AddCardFormModel
+            {
+                ConditionId = 999,
+                Conditions = new List<CardConditionServiceViewModel>(),
+                Categories = new List<CardCategoryServiceViewModel>()
+            };
+            var imageFile = new FormFile(new MemoryStream(), 0, 0, "file", "file");
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, "1"),
+                new Claim(ClaimTypes.Name, "username"),
+            };
+
+            var identity = new ClaimsIdentity(claims, "TestAuthType");
+            var claimsPrincipal = new ClaimsPrincipal(identity);
+
+            var dealerServiceMock = new Mock<IDealerService>();
+            dealerServiceMock
+                .Setup(service => service.GetDealerId(It.IsAny<string>()))
+                .Returns(1);
+
+            var categoriesServiceViewModel = new List<CardCategoryServiceViewModel> { cardCategoryServiceViewModel };
+            var conditionsServiceViewModel = new List<CardConditionServiceViewModel> { cardConditionServiceViewModel };
+
+            var cardsServiceMock = new Mock<ICardService>();
+            cardsServiceMock
+                .Setup(service => service.GetCardCategories())
+                .Returns(categoriesServiceViewModel);
+
+            cardsServiceMock
+                .Setup(service => service.GetCardConditions())
+                .Returns(conditionsServiceViewModel);
+
+            var controller = new CardsController(cardsServiceMock.Object, dealerServiceMock.Object, null, data);
+
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = claimsPrincipal
+                }
+            };
+
+            // Act
+            var result = await controller.EditAsync(1, cardFormModel, imageFile);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.IsType<AddCardFormModel>(viewResult.Model);
+            
+        }
+
+        [Fact]
+        public async void EditAsyncShouldReturnBadRequestIfGivenCardIsNotByDealerAndUserIsNotAnAdmin()
+        {
+            // Arrange
+            using var data = DatabaseMock.Instance;
+
+            data.Categories.Add(new Category { Id = 1, Name = "test" });
+            data.Conditions.Add(new Condition { Id = 1, Name = "test" });
+
+            data.SaveChanges();
+
+            var cardFormModel = new AddCardFormModel
+            {
+                ConditionId = 1,
+                CategoryId = 1
+            };
+
+            var imageFile = new FormFile(new MemoryStream(), 0, 0, "file", "file");
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, "1"),
+                new Claim(ClaimTypes.Name, "username")
+            };
+
+            var identity = new ClaimsIdentity(claims, "TestAuthType");
+            var claimsPrincipal = new ClaimsPrincipal(identity);
+
+            var dealerServiceMock = new Mock<IDealerService>();
+            dealerServiceMock
+                .Setup(service => service.GetDealerId(It.IsAny<string>()))
+                .Returns(1);
+
+            var cardsServiceMock = new Mock<ICardService>();
+            cardsServiceMock
+                .Setup(service => service.CardIsByDealer(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(false);
+
+            var controller = new CardsController(cardsServiceMock.Object, dealerServiceMock.Object, null, data);
+
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = claimsPrincipal
+                }
+            };
+
+            // Act
+            var result = await controller.EditAsync(1, cardFormModel, imageFile);
+
+            //Assert
+            Assert.IsType<BadRequestResult>(result);
+            Assert.True(controller.ModelState.IsValid);
+        }
+
+        [Fact]
+        public async void EditAsyncShouldReturnViewWithAnInvalidModelStateAndAMessageRegardingTheSizeOfTheImage()
+        {
+            // Arrange
+            using var data = DatabaseMock.Instance;
+
+            data.Categories.Add(new Category { Id = 1, Name = "test" });
+            data.Conditions.Add(new Condition { Id = 1, Name = "test" });
+
+            data.SaveChanges();
+
+            var cardFormModel = new AddCardFormModel
+            {
+                ConditionId = 1,
+                CategoryId = 1
+            };
+
+            var path = "D:\\AlexDoNotTouch\\Coding\\repos\\OnlineCardShop\\OnlineCardShop\\wwwroot\\ProfileImages\\admin.png";
+
+            // Open the image file as a stream
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            // Create a new IFormFile object to hold the image
+            IFormFile imageFile = new FormFile(stream, 0, stream.Length, "image", Path.GetFileName(path));
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, "1"),
+                new Claim(ClaimTypes.Name, "username")
+            };
+
+            var identity = new ClaimsIdentity(claims, "TestAuthType");
+            var claimsPrincipal = new ClaimsPrincipal(identity);
+
+            var dealerServiceMock = new Mock<IDealerService>();
+            dealerServiceMock
+                .Setup(service => service.GetDealerId(It.IsAny<string>()))
+                .Returns(1);
+
+            var cardsServiceMock = new Mock<ICardService>();
+            cardsServiceMock
+                .Setup(service => service.CreateImage(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(new Data.Models.Image { Name = "admin", Path = path, OriginalName = "admin.png" });
+
+            cardsServiceMock
+                .Setup(service => service.CardIsByDealer(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(true);
+
+            var webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
+            webHostEnvironmentMock
+                .Setup(env => env.WebRootPath)
+                .Returns("/test/www/test");
+
+            var controller = new CardsController(cardsServiceMock.Object, dealerServiceMock.Object, webHostEnvironmentMock.Object, data);
+
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = claimsPrincipal
+                }
+            };
+
+            // Act
+            var result = await controller.EditAsync(1, cardFormModel, imageFile);
+            var errorMessage = controller.ModelState.Values.FirstOrDefault().Errors.FirstOrDefault().ErrorMessage;
+
+            //Assert
+            Assert.False(controller.ModelState.IsValid);
+            Assert.True(errorMessage == "Image should be at least 1024x1024");
+            Assert.IsType<ViewResult>(result);
+        }
 
     }
 }

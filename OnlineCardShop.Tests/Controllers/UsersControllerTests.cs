@@ -2,6 +2,7 @@
 {
     using MyTested.AspNetCore.Mvc;
     using OnlineCardShop.Controllers;
+    using OnlineCardShop.Services.Users;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -30,6 +31,18 @@
                 .Calling(c => c.Details("testId"))
                 .ShouldReturn()
                 .View();
+        }
+
+
+        [Fact]
+        public void PostDetailsShouldReturnView()
+        {
+            MyController<UsersController>
+                .Instance()
+                .Calling(c => c
+                    .Details(new UserDetailsServiceViewModel { ReportReason = "testReason" }, "test"))
+                .ShouldReturn()
+                .RedirectToAction("Index", "Home");
         }
     }
 }

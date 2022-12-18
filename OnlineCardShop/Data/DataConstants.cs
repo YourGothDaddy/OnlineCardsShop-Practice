@@ -46,8 +46,8 @@
 
         public static class Message
         {
-            public const int MinContentLength = 2;
-            public const int MaxContentLength = 5;
+            public const int MinContentLength = 1;
+            public const int MaxContentLength = 200;
         }
 
         public static class Report

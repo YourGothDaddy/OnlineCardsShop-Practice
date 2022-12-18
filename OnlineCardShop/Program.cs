@@ -1,6 +1,7 @@
 namespace OnlineCardShop
 {
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     public class Program
     {
@@ -13,6 +14,7 @@ namespace OnlineCardShop
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.ConfigureServices(s => s.AddAntiforgery());
                     webBuilder.UseStartup<Startup>();
                 });
     }

@@ -1,6 +1,5 @@
 ﻿namespace OnlineCardShop.Services.Cards
 {
-    using OnlineCardShop.Data.Models;
 
     public class CardServiceModel : CardDetailsServiceModel
     {

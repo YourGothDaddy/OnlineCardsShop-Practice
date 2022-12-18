@@ -254,7 +254,8 @@
                     Path = c.Image.Path.Replace("res", string.Empty),
                     DealerId = c.DealerId,
                     DealerName = c.Dealer.Name,
-                    UserId = c.Dealer.UserId
+                    UserId = c.Dealer.UserId,
+                    IsPublic = c.IsPublic
                 })
                 .FirstOrDefault();
 
@@ -345,6 +346,45 @@
             query.Cards = cardsToAdd;
 
             return query;
+        }
+
+        public bool CategoryExist(int categoryId)
+        {
+            return this.data
+                .Categories
+                .Any(c => c.Id == categoryId);
+        }
+
+        public bool ConditionExist(int conditionId)
+        {
+            return this.data
+                .Conditions
+                .Any(c => c.Id == conditionId);
+        }
+
+        public void AddImageToDB(Image image)
+        {
+            this.data
+                .Images
+                .Add(image);
+
+            this.data.SaveChanges();
+        }
+
+        public void AddCardToDB(Card card)
+        {
+            this.data
+                .Cards
+                .Add(card);
+
+            this.data.SaveChanges();
+        }
+
+        public bool UserIsDealer(string userId)
+        {
+            return this.data
+                .Dealers
+                .Any(d => d.UserId == userId);
         }
     }
 }

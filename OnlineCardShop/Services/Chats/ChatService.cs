@@ -101,6 +101,11 @@
                 .Select(c => c.Id)
                 .FirstOrDefault();
 
+            var test = this.data
+                .Messages
+                .ToList();
+
+
             var messages = this.data
                 .Messages
                 .Include(x => x.User)

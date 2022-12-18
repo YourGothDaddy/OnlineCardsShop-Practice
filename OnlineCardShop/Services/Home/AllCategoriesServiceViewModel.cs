@@ -9,5 +9,7 @@
         public IEnumerable<CardCategoryServiceViewModel> Categories { get; set; }
 
         public ProfileImage ProfileImage { get; set; }
+
+        public StatisticsViewModel Statistics { get; set; }
     }
 }

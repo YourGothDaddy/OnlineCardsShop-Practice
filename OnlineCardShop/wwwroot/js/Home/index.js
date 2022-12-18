@@ -9,6 +9,8 @@ var statisticsHeaderElement = document.getElementById('statisticsHeader');
 var statisticCardsElements = document.getElementsByClassName('card-overlay');
 var arr = Array.from(statisticCardsElements);
 
+var finalMessage = document.getElementById('final-message');
+
 
 // trigger this function every time the user scrolls
 window.onscroll = function (event) {
@@ -18,6 +20,7 @@ window.onscroll = function (event) {
         body.style.backgroundColor = '#111111';
         additionalSectionHeaderElement.style.backgroundColor = '#ff4446';
         additionalSectionParagraph.style.color = '#CACACA';
+        finalMessage.style.color = 'white';
 
         statisticsHeaderElement.style.backgroundColor = '#ff4446';
         statisticsHeaderElement.style.borderRadius = '20px';
@@ -43,6 +46,7 @@ window.onscroll = function (event) {
         body.style.backgroundColor = 'white';
         additionalSectionHeaderElement.style.backgroundColor = 'white';
         additionalSectionParagraph.style.color = '#111111';
+        finalMessage.style.color = '#111111';
 
         statisticsHeaderElement.style.backgroundColor = 'white';
 

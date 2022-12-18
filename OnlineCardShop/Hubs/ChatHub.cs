@@ -53,9 +53,13 @@
 
             var userFullName = this.users.GetUserFullName(userId);
 
-            this.chats.SaveMessage(chatName, userId, message);
+            if(message.Length > 0)
+            {
+                this.chats.SaveMessage(chatName, userId, message);
 
-            await Clients.Group(chatName).SendAsync("ReceiveMessage", userId, userFullName, message, receiverId);
+                await Clients.Group(chatName).SendAsync("ReceiveMessage", userId, userFullName, message, receiverId);
+            }
+
         }
 
         public async Task RetrieveChatHistory(string receiverId)

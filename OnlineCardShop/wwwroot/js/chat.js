@@ -5,7 +5,7 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/chat").build();
 //Disable send button until connection is established
 document.getElementById("sendButton").disabled = true;
 
-connection.on("ReceiveMessage", function (userId, userFullName, message, receiverId) {
+connection.on("ReceiveMessage", function (userId, userFullName, message) {
 
     var idFromUrl = location.pathname.split('/')[3];
 
@@ -136,6 +136,8 @@ document.getElementById("sendButton").addEventListener("click", function (event)
     connection.invoke("RetrieveRecentChatsOfUser", idFromUrl).catch(function (err) {
         return console.error(err.toString());
     });
+
+    document.getElementById("messageInput").value = '';
 
     event.preventDefault();
 });

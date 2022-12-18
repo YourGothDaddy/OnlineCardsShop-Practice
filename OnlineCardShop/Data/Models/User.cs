@@ -10,8 +10,13 @@
 
     public class User : IdentityUser
     {
-        [MaxLength(MaxNameLength)]
+        [Required]
+        [StringLength(MaxNameLength,
+            MinimumLength = MinNameLength)]
         public string FullName { get; set; }
+
+        [StringLength(MaxAboutMeLength,
+            MinimumLength = MinAboutMeLength)]
 
         public string AboutMe { get; set; }
 

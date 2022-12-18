@@ -1,7 +1,5 @@
 ﻿namespace OnlineCardShop.Services.Cards
 {
-    using OnlineCardShop.Data.Models;
-    using System.Collections.Generic;
 
     public class CardDetailsServiceModel
     {
@@ -28,5 +26,7 @@
         public string cardUser { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public bool IsPublic { get; set; }
     }
 }

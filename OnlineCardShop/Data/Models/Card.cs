@@ -1,6 +1,5 @@
 ﻿namespace OnlineCardShop.Data.Models
 {
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using static DataConstants.Card;
     public class Card
@@ -8,8 +7,8 @@
         public int Id { get; set; }
 
         [Required]
-        [MinLength(MinTitleLength)]
-        [MaxLength(MaxTitleLength)]
+        [StringLength(MaxTitleLength, 
+            MinimumLength = MinTitleLength)]
         public string Title { get; set; }
 
         [Range(double.MinValue, double.MaxValue)]
@@ -19,8 +18,8 @@
         public Image Image { get; set; }
 
         [Required]
-        [MinLength(MinDescriptionLength)]
-        [MaxLength(MaxDescriptionLength)]
+        [StringLength(MaxDescriptionLength,
+            MinimumLength = MinDescriptionLength)]
         public string Description { get; set; }
 
         public int ConditionId { get; set; }

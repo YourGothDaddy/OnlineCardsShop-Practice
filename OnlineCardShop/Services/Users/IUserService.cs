@@ -34,5 +34,9 @@
         public string GetAboutMe(string userId);
 
         public void SetAboutMe(string userId, string content);
+
+        public void ChangePhonenumber(string userId, string phoneNumber);
+
+        public string GetPhonenumber(string userId);
     }
 }

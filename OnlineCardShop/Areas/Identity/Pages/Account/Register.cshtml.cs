@@ -18,15 +18,18 @@
     public class RegisterModel : PageModel
     {
         private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signManager;
         private readonly IWebHostEnvironment env;
         private readonly IUserService users;
 
         public RegisterModel(
             UserManager<User> userManager,
+            SignInManager<User> signManager,
             IWebHostEnvironment env,
             IUserService users)
         {
             this.userManager = userManager;
+            this.signManager = signManager;
             this.env = env;
             this.users = users;
         }
@@ -122,6 +125,8 @@
 
                 var result = await userManager.CreateAsync(user, Input.Password);
 
+                await signManager.SignInAsync(user, isPersistent: false);
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
@@ -129,7 +134,7 @@
             }
 
 
-            return Page();
+            return RedirectToAction("Index", "Home", new {area = ""});
         }
 
         private static bool ImageIsWithinDesiredSize(IFormFile imageFile)

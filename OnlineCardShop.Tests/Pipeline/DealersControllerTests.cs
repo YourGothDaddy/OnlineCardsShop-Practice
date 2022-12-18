@@ -30,42 +30,6 @@
         }
 
         [Theory]
-        [InlineData("userTest", "0882713110")]
-        public void PostCreateShouldHaveValidModelStateAndReturnRedirectToAction(
-            string dealerName,
-            string phoneNumber)
-        {
-            MyPipeline
-                .Configuration()
-                .ShouldMap(request => request
-                    .WithPath("/Dealers/Create")
-                    .WithMethod(HttpMethod.Post)
-                    .WithFormFields(new
-                    {
-                        Name = dealerName,
-                        PhoneNUmber = phoneNumber
-                    })
-                    .WithUser())
-                .To<DealersController>(c => c.Create(new BecomeDealerFormModel
-                {
-                    Name = dealerName,
-                    PhoneNumber = phoneNumber
-                }))
-                .Which()
-                .ShouldHave()
-                .ValidModelState()
-                .Data(data => data
-                    .WithSet<Dealer>(dealers => dealers
-                        .Any(d =>
-                        d.Name == dealerName &&
-                        d.PhoneNumber == phoneNumber &&
-                        d.UserId == TestUser.Identifier)))
-                .AndAlso()
-                .ShouldReturn()
-                .RedirectToAction("Index", "Home");
-        }
-
-        [Theory]
         [InlineData(null, 1, "TestName", "0000000000", null, null)]
         public void GetDealerShouldBeForAuthroizedUsersAndReturnView(
             List<Card> cards,
@@ -87,7 +51,6 @@
                         Cards = cards,
                         Id = id,
                         Name = name,
-                        PhoneNumber = phoneNumber,
                         User = dealer,
                         UserId = userId
                     }))

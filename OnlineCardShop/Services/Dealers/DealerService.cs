@@ -26,8 +26,7 @@ namespace OnlineCardShop.Services.Dealers
                 .Select(d => new DealerServiceViewModel
                 {
                     Id = d.UserId,
-                    Name = d.Name,
-                    PhoneNumber = d.PhoneNumber
+                    Name = d.Name
                 })
                 .FirstOrDefault();
         }

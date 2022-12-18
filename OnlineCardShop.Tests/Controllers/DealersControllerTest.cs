@@ -1,6 +1,5 @@
 ﻿namespace OnlineCardShop.Tests.Controllers
 {
-    using System.Linq;
     using MyTested.AspNetCore.Mvc;
     using Xunit;
     using OnlineCardShop.Controllers;
@@ -8,6 +7,13 @@
     using OnlineCardShop.Data.Models;
     using System.Collections.Generic;
     using OnlineCardShop.Services.Dealers;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Http;
+    using Moq;
+    using System.Security.Claims;
+    using OnlineCardShop.Infrastructure;
+    using Microsoft.AspNetCore.Identity;
+    using OnlineCardShop.Services.Users;
 
     public class DealersControllerTest
     {
@@ -49,33 +55,6 @@
 
         [Theory]
         [InlineData("Dealer", "0882713110")]
-        public void PostCreateShouldHaveValidModelStateAndReturnRedirectToAction(
-            string dealerName,
-            string phoneNumber)
-        {
-            MyController<DealersController>
-                .Instance(controller => controller
-                    .WithUser())
-                .Calling(c => c.Create(new BecomeDealerFormModel
-                {
-                    Name = dealerName,
-                    PhoneNumber = phoneNumber
-                }))
-                .ShouldHave()
-                .ValidModelState()
-                .Data(data => data
-                    .WithSet<Dealer>(dealers => dealers
-                        .Any(d =>
-                        d.Name == dealerName &&
-                        d.PhoneNumber == phoneNumber &&
-                        d.UserId == TestUser.Identifier)))
-                .AndAlso()
-                .ShouldReturn()
-                .RedirectToAction("Index", "Home");
-        }
-
-        [Theory]
-        [InlineData("Dealer", "0882713110")]
         public void PostCreateShouldReturnBadRequest(
             string dealerName,
             string phoneNumber)
@@ -85,8 +64,7 @@
                     .WithData(new Dealer
                     {
                         UserId = "TestId",
-                        Name = dealerName,
-                        PhoneNumber = phoneNumber
+                        Name = dealerName
                     })
                     .WithUser())
                 .Calling(c => c.Create(new BecomeDealerFormModel
@@ -115,7 +93,6 @@
                         Cards = cards,
                         Id  = id,
                         Name = name,
-                        PhoneNumber = phoneNumber,
                         User = dealer,
                         UserId = userId
                     }))
@@ -142,7 +119,6 @@
                         Cards = cards,
                         Id = id,
                         Name = name,
-                        PhoneNumber = phoneNumber,
                         User = dealer,
                         UserId = userId
                     }))
@@ -168,7 +144,6 @@
                         Cards = cards,
                         Id = id,
                         Name = name,
-                        PhoneNumber = phoneNumber,
                         User = dealer,
                         UserId = userId
                     }))

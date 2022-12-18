@@ -1,6 +1,5 @@
 ﻿namespace OnlineCardShop.Data.Models
 {
-    using Microsoft.AspNetCore.Identity;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
@@ -11,12 +10,8 @@
         public int Id { get; init; }
 
         [Required]
-        [MaxLength(MaxNameLength)]
+        [StringLength(MaxNameLength)]
         public string Name { get; set; }
-
-        [Required]
-        [MaxLength(PhoneNumberMaxLength)]
-        public string PhoneNumber { get; set; }
 
         [Required]
         public string UserId { get; set; }

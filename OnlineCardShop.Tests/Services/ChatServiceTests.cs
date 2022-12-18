@@ -205,7 +205,9 @@
 
             data.Chats.Add(new Chat { Id = 1, Name = chatName });
 
-            data.Messages.Add(new Message { ChatId = 1 });
+            data.Messages.Add(new Message { ChatId = 1, UserId = "TestId" });
+
+            data.Users.Add(new User { Id = "TestId" });
 
             data.SaveChanges();
 

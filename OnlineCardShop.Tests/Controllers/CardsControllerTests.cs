@@ -14,11 +14,8 @@
     using System.Collections.Generic;
     using Microsoft.AspNetCore.Mvc;
     using System.Security.Claims;
-    using OnlineCardShop.Tests.Mocks;
-    using SixLabors.ImageSharp.PixelFormats;
-    using SixLabors.ImageSharp;
-    using SixLabors.ImageSharp.Processing;
     using System.Linq;
+    using OnlineCardShop.Tests.Mocks;
 
     public class CardsControllerTests
     {

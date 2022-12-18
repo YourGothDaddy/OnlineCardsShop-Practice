@@ -213,5 +213,26 @@
 
             this.data.SaveChanges();
         }
+
+        public void ChangePhonenumber(string userId, string phoneNumber)
+        {
+            var user = this.data
+                .Users
+                .Where(u => u.Id == userId)
+                .FirstOrDefault();
+
+            user.PhoneNumber = phoneNumber;
+
+            data.SaveChanges();
+        }
+
+        public string GetPhonenumber(string userId)
+        {
+            return this.data
+                .Users
+                .Where(u => u.Id == userId)
+                .Select(u => u.PhoneNumber)
+                .FirstOrDefault();
+        }
     }
 }

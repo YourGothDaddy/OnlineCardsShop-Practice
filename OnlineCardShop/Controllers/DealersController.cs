@@ -1,21 +1,28 @@
 ﻿namespace OnlineCardShop.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using OnlineCardShop.Data.Models;
     using OnlineCardShop.Infrastructure;
     using OnlineCardShop.Models.Dealers;
     using OnlineCardShop.Services.Dealers;
-
+    using OnlineCardShop.Services.Users;
     using static WebConstants;
 
     public class DealersController : Controller
     {
         private readonly IDealerService dealers;
+        private readonly IUserService users;
+        private readonly UserManager<User> userManager;
 
-        public DealersController(IDealerService dealers)
+        public DealersController(IDealerService dealers,
+            IUserService users,
+            UserManager<User> userManager)
         {
             this.dealers = dealers;
+            this.users = users;
+            this.userManager = userManager;
         }
 
         [Authorize]
@@ -45,10 +52,10 @@
             var currentDealer = new Dealer
             {
                 Name = dealer.Name,
-                PhoneNumber = dealer.PhoneNumber,
                 UserId = userId
             };
 
+            this.users.ChangePhonenumber(userId, dealer.PhoneNumber);
             this.dealers.CreateDealer(currentDealer);
 
             return RedirectToAction("Index", "Home");
@@ -69,6 +76,7 @@
             cardDealer.Submitters = submitters;
             cardDealer.TotalRating = this.dealers.GetTotalRating(id);
             cardDealer.TotalRaters = this.dealers.GetTotalRaters(id);
+            cardDealer.PhoneNumber = this.users.GetPhonenumber(id);
 
             return View(cardDealer);
         }

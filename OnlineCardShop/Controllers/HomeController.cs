@@ -18,10 +18,12 @@
         public IActionResult Index()
         {
             var categories = this.home.GetCategories();
+            var statistics = this.home.GetStatistics();
 
             return View(new AllCategoriesServiceViewModel
             {
-                Categories = categories
+                Categories = categories,
+                Statistics = statistics
             });
         }
 

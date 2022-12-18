@@ -1,9 +1,5 @@
 ﻿namespace OnlineCardShop.Tests.Services
 {
-    using Microsoft.AspNetCore.Cors.Infrastructure;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-    using OnlineCardShop.Data;
     using OnlineCardShop.Data.Models;
     using OnlineCardShop.Data.Models.Enums;
     using OnlineCardShop.Services.Cards;
@@ -12,7 +8,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using Xunit;
-    using Xunit.Sdk;
 
     public class CardServiceTests
     {

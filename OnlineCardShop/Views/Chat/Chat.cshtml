@@ -1,4 +1,6 @@
-﻿@{
+﻿@model SendMessageFormModel
+
+@{
     ViewData["Title"] = "Chats";
 }
 
@@ -23,7 +25,7 @@
 
         <div class="bg-white mb-3">
             <div class="form-outline">
-              <input class="form-control" id="messageInput" />
+              <input asp-for="@Model.Content" class="form-control" id="messageInput" />
             </div>
           </div>
         <button type="button" class="btn btn-info btn-rounded float-end" id="sendButton">Send</button>
@@ -33,6 +35,6 @@
   </div>
 </section>
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/chat.js"></script>

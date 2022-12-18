@@ -4,24 +4,24 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-    using OnlineCardShop.Data;
-    using OnlineCardShop.Infrastructure;
-    using OnlineCardShop.Models.Cards;
-    using OnlineCardShop.Services.Cards;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using SixLabors.ImageSharp;
     using SixLabors.ImageSharp.Processing;
+    using SixLabors.ImageSharp.Metadata.Profiles.Exif;
     using OnlineCardShop.Services.Dealers;
+    using OnlineCardShop.Data;
+    using OnlineCardShop.Infrastructure;
+    using OnlineCardShop.Models.Cards;
+    using OnlineCardShop.Services.Cards;
 
     using static WebConstants;
     using static OnlineCardShop.Services.Cards.CardsControllerConstants;
-    using SixLabors.ImageSharp.Metadata.Profiles.Exif;
+    using Image = SixLabors.ImageSharp.Image;
 
     public class CardsController : Controller
     {
-        private readonly OnlineCardShopDbContext data;
         private readonly ICardService cards; 
         private readonly IWebHostEnvironment env;
         private readonly IDealerService dealers;
@@ -29,11 +29,9 @@
         public CardsController(
             ICardService cards,
             IDealerService dealers, 
-            IWebHostEnvironment env, 
-            OnlineCardShopDbContext data)
+            IWebHostEnvironment env)
         {
             this.cards = cards;
-            this.data = data;
             this.env = env;
             this.dealers = dealers;
         }
@@ -55,11 +53,26 @@
             return View(myCards);
         }
 
+        [Authorize]
         public IActionResult Details([FromRoute] CardDetailsServiceModel query)
         {
             var requestingUserId = this.User.GetId();
 
             var card = this.cards.CardByUser(query.Id, requestingUserId);
+
+            var requestingUserIsNotTheUserCreatedTheCard = requestingUserId != card.UserId;
+
+            if (card.IsDeleted || !card.IsPublic)
+            {
+                if(requestingUserIsNotTheUserCreatedTheCard && !User.IsAdmin())
+                {
+                    return View("~/Views/Shared/_userError.cshtml");
+                }
+                else
+                {
+                    return View(card);
+                }
+            }
 
             if(card == null)
             {
@@ -119,7 +132,7 @@
         [Authorize]
         public IActionResult Add()
         {
-            if (!this.UserIsDealer())
+            if (!this.cards.UserIsDealer(this.User.GetId()))
             {
                 return RedirectToAction(nameof(DealersController.Create), "Dealers");
             }
@@ -142,12 +155,12 @@
                 return RedirectToAction(nameof(DealersController.Create), "Dealers");
             }
 
-            if (!this.data.Categories.Any(c => c.Id == card.CategoryId))
+            if (!this.cards.CategoryExist(card.CategoryId))
             {
                 this.ModelState.AddModelError(nameof(card.CategoryId), "Category does not exist");
             }
 
-            if (!this.data.Conditions.Any(c => c.Id == card.ConditionId))
+            if (!this.cards.ConditionExist(card.ConditionId))
             {
                 this.ModelState.AddModelError(nameof(card.ConditionId), "Condition does not exist");
             }
@@ -177,7 +190,7 @@
 
                 var newImage = this.cards.CreateImage(imageName, imagePathForDb, originalImageName);
 
-                this.data.Images.Add(newImage);
+                this.cards.AddImageToDB(newImage);
 
                 using (var imageResized = Image.Load(imageFile.OpenReadStream()))
                 {
@@ -208,8 +221,7 @@
                     dealerId,
                     newImage);
 
-                this.data.Cards.Add(newCard);
-                this.data.SaveChanges();
+                this.cards.AddCardToDB(newCard);
             }
             else
             {
@@ -276,12 +288,12 @@
                 return RedirectToAction(nameof(DealersController.Create), "Dealers");
             }
 
-            if (!this.data.Categories.Any(c => c.Id == card.CategoryId))
+            if (!this.cards.CategoryExist(card.CategoryId))
             {
                 this.ModelState.AddModelError(nameof(card.CategoryId), "Category does not exist");
             }
 
-            if (!this.data.Conditions.Any(c => c.Id == card.ConditionId))
+            if (!this.cards.ConditionExist(card.ConditionId))
             {
                 this.ModelState.AddModelError(nameof(card.ConditionId), "Condition does not exist");
             }
@@ -315,7 +327,7 @@
 
                     newImage = this.cards.CreateImage(imageName, imagePathForDb, originalImageName);
 
-                    this.data.Images.Add(newImage);
+                    this.cards.AddImageToDB(newImage);
 
                     using (var imageResized = Image.Load(imageFile.OpenReadStream()))
                     {
@@ -438,13 +450,6 @@
         private static bool ImageIsWithinDesiredRes(Image image)
         {
             return image.Height >= minImageHeight && image.Width >= minImageWidth;
-        }
-
-        private bool UserIsDealer()
-        {
-            return this.data
-                .Dealers
-                .Any(d => d.UserId == this.User.GetId());
         }
 
         private void SelectCurrentPage(int currentPage)

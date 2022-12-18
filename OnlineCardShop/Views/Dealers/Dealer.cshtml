@@ -1,7 +1,11 @@
 ﻿@model DealerServiceViewModel
 
+@using Microsoft.AspNetCore.Identity;
 @using OnlineCardShop.Data
+@using OnlineCardShop.Data.Models;
+@using OnlineCardShop.Infrastructure;
 
+@inject UserManager<User> UserManager
 @inject OnlineCardShopDbContext data;
 
 @{
@@ -82,7 +86,7 @@
                                     .Select(x => x.FullName)
                                     .FirstOrDefault();
                                 }
-                          <img id="profile-image-div" src="/@submittersProfileImagePaths.Where(x => x.Id == currentSubmitter).Select(x => x.ProfileImagePath).FirstOrDefault()" class="rounded-circle img-fluid shadow-1"></div>
+                                <img id="profile-image-div" src="/@submittersProfileImagePaths.Where(x => x.Id == currentSubmitter).Select(x => x.ProfileImagePath).FirstOrDefault()" class="rounded-circle img-fluid shadow-1"></div>
                           <div class="col-lg-8">
                             <p class="text-muted fw-light mb-4">@review.Description</p>
                             <p class="fw-bold lead mb-2"><strong>@reviewSubmitterFullName</strong></p>
@@ -101,7 +105,14 @@
     <div class="col text-left">
         <div class="text-center">
             <h3>@Model.Name</h3>
-            <h4>@Model.PhoneNumber</h4>
+            @if(Model.PhoneNumber != null)
+            {
+                <h4>@Model.PhoneNumber</h4>
+            }
+            else
+            {
+                <h4>NO PHONE NUMBER TO SHOW</h4>
+            }
             <a class="btn btn-info" asp-action="Details" asp-controller="Users" asp-route-id="@Model.Id">Go To Page</a>
             <hr />
             <h4 id="experience-dealer-h4">Do you have experience with this dealer?</h4>

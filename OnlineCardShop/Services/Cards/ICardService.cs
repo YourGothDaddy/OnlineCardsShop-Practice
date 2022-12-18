@@ -33,5 +33,15 @@
         IEnumerable<CardConditionServiceViewModel> GetCardConditions();
 
         public AllCardsServiceModel GetCardsToAddOnPage(AllCardsServiceModel query, CardQueryServiceModel queryResult);
+
+        public bool CategoryExist(int categoryId);
+
+        public bool ConditionExist(int categoryId);
+
+        public void AddImageToDB(Image image);
+
+        public void AddCardToDB(Card card);
+
+        public bool UserIsDealer(string userId);
     }
 }

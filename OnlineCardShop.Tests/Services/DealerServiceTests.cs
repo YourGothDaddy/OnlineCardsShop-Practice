@@ -64,8 +64,7 @@
             var dealer = new Dealer
             {
                 UserId = userId,
-                Name = name,
-                PhoneNumber = phoneNumber
+                Name = name
             };
 
             var dealerService = new DealerService(data);

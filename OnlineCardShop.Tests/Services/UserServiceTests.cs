@@ -1,10 +1,12 @@
 ﻿namespace OnlineCardShop.Tests.Services
 {
+    using Microsoft.EntityFrameworkCore;
     using OnlineCardShop.Data.Models;
     using OnlineCardShop.Services.Chats;
     using OnlineCardShop.Services.Users;
     using OnlineCardShop.Tests.Mocks;
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Xunit;
     using static TestConstants;
@@ -288,6 +290,192 @@
 
             // Assert
             Assert.NotNull(result);
+        }
+
+        [Fact]
+        public void SaveReportShouldAddAReportToDB()
+        {
+            // Arrange
+            using var data = DatabaseMock.Instance;
+
+            data.Users.Add(new User { Id = "testId" });
+
+            data.SaveChanges();
+
+            var userService = new UserService(data, new ChatService(data));
+
+
+            //Act
+            userService.SaveReport("testReason", "testId");
+
+            var user = data.Users.Where(u => u.Id == "testId").FirstOrDefault();
+
+            var result = data.Reports.Contains(new Report 
+            {
+                Id = 1,
+                Reason = "testReason",
+                User = user
+            });
+
+            //Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void ChangeProfileImageShouldChangeTheIdOfUsersProfileImage()
+        {
+            // Arrange
+            using var data = DatabaseMock.Instance;
+
+            data.Users.Add(new User { Id = "testId", ProfileImageId = 1 });
+
+            data.SaveChanges();
+
+            var userService = new UserService(data, new ChatService(data));
+
+            var user = data.Users.Where(u => u.Id == "testId").FirstOrDefault();
+
+            //Act
+            userService.ChangeProfileImage(user, 2);
+
+            var result = user.ProfileImageId == 2;
+
+            //Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void GetProfileImagePathShouldReturnTheCorrectPath()
+        {
+            // Arrange
+            using var data = DatabaseMock.Instance;
+
+            data.ProfileImages.Add(new ProfileImage
+            {
+                UserId = 1,
+                Path = "testPath"
+            });
+
+            data.Users.Add(new User 
+            { 
+                Id = "testId", 
+                ProfileImageId = 1 
+            });
+
+            data.SaveChanges();
+
+            var userService = new UserService(data, new ChatService(data));
+
+            // Act
+            var result = userService.GetProfileImagePath("testId");
+
+            // Assert
+            Assert.True(result == "testPath");
+        }
+
+        [Fact]
+        public void GetAboutMeShouldReturnTheCorrectAboutMe()
+        {
+            // Arrange
+            using var data = DatabaseMock.Instance;
+
+            data.Users.Add(new User { Id = "testId", AboutMe = "testAboutMe" });
+
+            data.SaveChanges();
+
+            var userService = new UserService(data, new ChatService(data));
+
+            // Act
+            var result = userService.GetAboutMe("testId");
+
+            // Assert
+            Assert.True(result == "testAboutMe");
+        }
+
+        [Fact]
+        public void SetAboutMeShouldSetTheAboutMe()
+        {
+            // Arrange
+            using var data = DatabaseMock.Instance;
+
+            data.Users.Add(new User { Id = "testId" });
+
+            data.SaveChanges();
+
+            var userService = new UserService(data, new ChatService(data));
+
+            // Act
+            userService.SetAboutMe("testId", "testContent");
+
+            var result = data.Users
+                .Where(u => u.Id == "testId")
+                .Select(u => u.AboutMe)
+                .FirstOrDefault();
+
+            // Assert
+            Assert.True(result == "testContent");
+        }
+
+        [Fact]
+        public void GetRecentChatsSendersProfileImagesShouldReturnCorrectProfileImages()
+        {
+            // Arrange
+            using var data = DatabaseMock.Instance;
+
+            var testUser = new User { Id = "testId" };
+            var testUser2 = new User { Id = "testId2" };
+
+            data.ProfileImages.Add(new ProfileImage
+            {
+                Path = "resTestPath"
+            });
+
+            data.SaveChanges();
+
+            var profileImage = data.ProfileImages.Where(pi => pi.Path == "resTestPath").FirstOrDefault();
+
+            testUser.ProfileImage = profileImage;
+
+            data.ProfileImages.Add(new ProfileImage
+            {
+                Path = "resTestPath2"
+            });
+
+            data.SaveChanges();
+
+            var profileImage2 = data.ProfileImages.Where(pi => pi.Path == "resTestPath2").FirstOrDefault();
+
+            testUser2.ProfileImage = profileImage2;
+
+            var userList = new List<User> { testUser, testUser2 };
+
+            var testChat = new Chat
+            {
+                Id = 1,
+                Name = "testChatName",
+                Users = userList
+            };
+
+            data.Users.Add(testUser);
+            data.Users.Add(testUser2);
+            data.Chats.Add(testChat);
+
+
+
+            data.SaveChanges();
+
+            var userService = new UserService(data, new ChatService(data));
+
+            var recentChat = data.Chats
+                .Include(x => x.Users)
+                .Where(c => c.Id == 1)
+                .ToList();
+
+            // Act
+            var result = userService.GetRecentChatsSendersProfileImages(recentChat, "fakeId");
+
+            // Assert
+            Assert.True(result.FirstOrDefault() == "TestPath");
         }
     }
 }
